@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AkunController;
 use App\Http\Controllers\Admin\BlogsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController; // tambahkan use statement untuk FrontendController
@@ -64,6 +65,8 @@ Route::middleware(['guest'])->group(function () {
 
 Route::group(['middleware' => ['can:admin']], function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin']);
+    Route::get('/admin/customer', [AkunController::class, 'customer']);
+    Route::get('/admin/toko-penjual', [AkunController::class, 'penjual']);
     Route::get('/admin/blog-test', [BlogsController::class, 'index']);
     Route::put('/admin/blog-test/edit/{id}', [BlogsController::class, 'edit']);
 });

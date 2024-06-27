@@ -5,8 +5,8 @@
         <i class="sidebar-toggle ri-arrow-left-circle-line ms-auto fs-5 d-none d-md-block" id="sidebarToggle"></i>
     </div>
     <ul class="sidebar-menu d-flex flex-column p-3 m-0 mb-0 h-100">
-        <li class="sidebar-menu-item">
-            <a href="index.html">
+        <li class="sidebar-menu-item {{ request()->is('admin/dashboard') ? 'active' : 'collapsed' }}">
+            <a href="{{url('admin/dashboard/')}}">
                 <i class="ri-dashboard-line sidebar-menu-item-icon"></i>
                 Dashboard
             </a>
@@ -34,20 +34,21 @@
                 </li>
             </ul>
         </li>
-        <li class="sidebar-menu-item has-dropdown">
+        <li
+            class="sidebar-menu-item has-dropdown {{ request()->is('admin/customer', 'admin/toko-penjual') ? '' : 'collapsed' }}">
             <a href="#">
                 <i class="ri-user-line sidebar-menu-item-icon"></i>
                 Akun
                 <i class="ri-arrow-down-s-line sidebar-menu-item-accordion ms-auto"></i>
             </a>
-            <ul class="sidebar-dropdown-menu">
-                <li class="sidebar-dropdown-menu-item">
-                    <a href="Tcustom.html">
+            <ul class="sidebar-dropdown-menu {{ request()->is('admin/customer', 'admin/toko-penjual') ? '' : 'collapse' }}">
+                <li class="sidebar-dropdown-menu-item {{ request()->is('admin/customer') ? 'active' : 'collapsed' }}">
+                    <a href="{{ url('/admin/customer') }}">
                         Customer
                     </a>
                 </li>
-                <li class="sidebar-dropdown-menu-item">
-                    <a href="Tpenjual.html">
+                <li class="sidebar-dropdown-menu-item {{ request()->is('admin/toko-penjual') ? 'active' : 'collapsed' }}">
+                    <a href="{{ url('admin/toko-penjual') }}">
                         Toko / Penjual
                     </a>
                 </li>
