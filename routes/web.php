@@ -67,6 +67,10 @@ Route::group(['middleware' => ['can:admin']], function () {
 
 Route::group(['middleware' => ['can:penjual']], function () {
     Route::get('/penjual/dashboard', [DashboardController::class, 'penjual']);
-    Route::get('/penjual/produk', [ProdukController::class, 'index']);
+    Route::get('/penjual/produk/index', [ProdukController::class, 'index']);
+    Route::get('/penjual/produk/create', [ProdukController::class, 'create']);
     Route::post('/penjual/produk', [ProdukController::class, 'store']);
+    Route::get('/penjual/produk/edit/{id}', [ProdukController::class, 'edit']);
+    Route::put('/penjual/produk/update/{id}', [ProdukController::class, 'update']);
+    Route::delete('/penjual/produk/delete/{id}', [ProdukController::class, 'destroy']);
 });
