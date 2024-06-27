@@ -27,9 +27,12 @@
                 <i class="ri-menu-line sidebar-toggle me-3 d-block d-md-none"></i>
                 <h5 class="fw-bold mb-0 me-auto">Pages</h5>
                 <div class="dropdown">
-                    <div class="d-flex align-items-center cursor-pointer dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="d-flex align-items-center cursor-pointer dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
                         <span class="me-2 d-none d-sm-block">John Doe</span>
-                        <img class="navbar-profile-image" src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="Image">
+                        <img class="navbar-profile-image"
+                            src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                            alt="Image">
                     </div>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="#">Chat</a></li>
@@ -43,30 +46,49 @@
             <div class="py-4">
                 <div class="container">
                     <h2>Upload Produk</h2>
-                    <form>
+                    <form action="{{ url('/penjual/produk') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
                         <div class="mb-3">
                             <label for="foto-produk" class="form-label">Tambahkan Foto</label>
                             <input type="file" class="form-control" id="foto-produk">
+                        </div>
+                        <div class="mb-3">
+                            <label for="namaProduk" class="form-label">Nama Produk</label>
+                            <input type="text" class="form-control" id="namaProduk">
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="kategori" class="form-label">Kategori</label>
-                                    <input type="text" class="form-control" id="kategori">
+                                    <select name="kategoriProduk" id="kategoriProduk" class="form-select"
+                                        aria-label="Default select example">
+                                        <option value="--pilih--">-- Pilih --</option>
+                                        <option value="kaos-gambar">Kaos Bergambar</option>
+                                        <option value="kaos-polos">Kaos Polo</option>
+                                        <option value="kemeja">Kemeja</option>
+                                        <option value="jake">Jake</option>
+                                        <option value="sweter">Sweter</option>
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="ukuran" class="form-label">Ukuran</label>
-                                    <input type="text" class="form-control" id="ukuran">
+                                    <select name="ukuran" id="ukuran" class="form-select"
+                                        aria-label="Default select example">
+                                        <option value="s">S</option>
+                                        <option value="m">M</option>
+                                        <option value="xl">XL</option>
+                                        <option value="xxl">XXL</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="harga" class="form-label">Harga</label>
-                                    <input type="number" class="form-control" id="harga">
+                                    <input type="number" class="form-control" id="harga" name="harga">
                                 </div>
                                 <div class="mb-3">
                                     <label for="deskripsi" class="form-label">Deskripsi Produk</label>
-                                    <textarea class="form-control" id="deskripsi" rows="3"></textarea>
+                                    <textarea class="form-control" id="deskripsi" rows="3" name="deskripsiProduk"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +103,9 @@
 
     <!-- start: JS -->
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js" integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"
+        integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/script.js') }}"></script>
     <!-- end: JS -->

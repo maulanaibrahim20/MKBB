@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('gambar');
+            $table->integer('user_id');
+            $table->string('gambar')->nullable();
             $table->text('alamat');
             $table->string('noTelp');
-            $table->enum('status', ['pemilik', 'pembeli']);
+            $table->enum('status', ['penjual', 'pembeli'])->default('pembeli');
             $table->timestamps();
         });
     }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Penjual\ProdukController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -29,8 +30,10 @@ Route::get('/product', [FrontendController::class, 'product'])->name('product');
 Route::get('/info', [FrontendController::class, 'info'])->name('info');
 Route::get('/blogs', [FrontendController::class, 'blogs'])->name('blogs');
 
-Route::get('/penjual', [PenjualController::class, 'penjual'])->name('penjual');
-Route::get('/penjualan', [PenjualController::class, 'penjualan'])->name('penjualan');
+// Route::get('/penjual', function () {
+//     return view('penjual.penjual');
+// });
+// Route::get('/penjualan', [PenjualController::class, 'penjualan'])->name('penjualan');
 Route::get('/pesanan', [PenjualController::class, 'pesanan'])->name('pesanan');
 Route::get('/pesanan2', [PenjualController::class, 'pesanan2'])->name('pesanan2');
 Route::get('/produk', [PenjualController::class, 'produk'])->name('produk');
@@ -62,6 +65,8 @@ Route::group(['middleware' => ['can:admin']], function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin']);
 });
 
-Route::group(['middleware' => ['can:customer']], function () {
-    // Route::get('/customer/dashboard', [DashboardController::class, 'customer']);
+Route::group(['middleware' => ['can:penjual']], function () {
+    Route::get('/penjual/dashboard', [DashboardController::class, 'penjual']);
+    Route::get('/penjual/produk', [ProdukController::class, 'index']);
+    Route::post('/penjual/produk', [ProdukController::class, 'store']);
 });

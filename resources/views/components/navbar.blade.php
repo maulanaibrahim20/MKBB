@@ -49,10 +49,12 @@
                 <i class="bi bi-cart text-dark"></i>
             </a>
             @auth
-                @if (Auth::user()->role == 'customer')
-                    <a href="{{ route('penjual') }}" class="btn border">
-                        <i class="bi bi-shop text-dark"></i>
-                    </a>
+                @if (Auth::user()->role == '2')
+                    @if (Auth::user()->customer->status == 'penjual')
+                        <a href="{{ url('/penjual/dashboard') }}" class="btn border">
+                            <i class="bi bi-shop text-dark"></i>
+                        </a>
+                    @endif
                 @endif
             @endauth
         </div>

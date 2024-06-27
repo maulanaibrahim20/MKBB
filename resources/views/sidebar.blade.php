@@ -1,12 +1,13 @@
 <!-- start: Sidebar -->
 <div class="sidebar position-fixed top-0 bottom-0 bg-white border-end">
     <div class="d-flex align-items-center p-3">
-        <a href="#" class="sidebar-logo text-uppercase fw-bold text-decoration-none text-indigo fs-4">DSH Pelapak</a>
+        <a href="#" class="sidebar-logo text-uppercase fw-bold text-decoration-none text-indigo fs-4">DSH
+            Pelapak</a>
         <i class="sidebar-toggle ri-arrow-left-circle-line ms-auto fs-5 d-none d-md-block"></i>
     </div>
     <ul class="sidebar-menu d-flex flex-column p-3 m-0 mb-0 h-100">
         <li class="sidebar-menu-item">
-            <a href="{{ route('penjual')}}">
+            <a href="{{ url('penjual/dashboard') }}">
                 <i class="ri-dashboard-line sidebar-menu-item-icon"></i>
                 Dashboard
             </a>
@@ -20,7 +21,7 @@
             </a>
             <ul class="sidebar-dropdown-menu">
                 <li class="sidebar-dropdown-menu-item">
-                    <a href="{{ route('produk')}}">
+                    <a href="{{ url('penjual/produk') }}">
                         Uplod produk
                     </a>
                 </li>
@@ -31,17 +32,17 @@
                     </a>
                     <ul class="sidebar-dropdown-menu">
                         <li class="sidebar-dropdown-menu-item">
-                            <a href="{{ route('pesanan')}}">
+                            <a href="{{ route('pesanan') }}">
                                 Pesanan masuk
                             </a>
                         </li>
                         <li class="sidebar-dropdown-menu-item">
-                            <a href="{{ route('pesanan2')}}">
+                            <a href="{{ route('pesanan2') }}">
                                 Pesanan Dikirim
                             </a>
                         </li>
                         <li class="sidebar-dropdown-menu-item">
-                            <a href="{{ route('riwayat')}}">
+                            <a href="{{ route('riwayat') }}">
                                 Riwayat pesanan
                             </a>
                         </li>
@@ -52,12 +53,12 @@
         <li class="sidebar-menu-item has-dropdown">
             <a href="#">
                 <i class="ri-wallet-line sidebar-menu-item-icon"></i>
-                    Dompet
+                Dompet
                 <i class="ri-arrow-down-s-line sidebar-menu-item-accordion ms-auto"></i>
             </a>
             <ul class="sidebar-dropdown-menu">
                 <li class="sidebar-dropdown-menu-item">
-                    <a href="{{ route('penjualan')}}">
+                    <a href="{{ url('/penjualan') }}">
                         Riwayat penjualan
                     </a>
                 </li>
@@ -69,7 +70,7 @@
             </ul>
         </li>
         <li class="sidebar-menu-item">
-            <a href="{{ route('profil')}}">
+            <a href="{{ route('profil') }}">
                 <i class="ri-user-line sidebar-menu-item-icon"></i>
                 Edit profil
             </a>
