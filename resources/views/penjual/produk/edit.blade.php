@@ -45,7 +45,7 @@
             <!-- start: Content -->
             <div class="py-4">
                 <div class="container">
-                    <h2>Upload Produk</h2>
+                    <h2>Edit Produk</h2>
                     @if (session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}

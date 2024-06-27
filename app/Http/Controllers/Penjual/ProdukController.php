@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Penjual;
 
 use App\Http\Controllers\Controller;
+use App\Models\Gambar;
 use App\Models\Produk;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
@@ -45,7 +47,7 @@ class ProdukController extends Controller
             DB::beginTransaction();
             $fotoProduk = $this->uploadFotoProduk($request);
 
-            Produk::create([
+            $produk = Produk::create([
                 'toko_id' => Auth::user()->customer->toko->id,
                 'kategoriProduk' => $request->kategoriProduk,
                 'namaProduk' => $request->namaProduk,
@@ -56,17 +58,20 @@ class ProdukController extends Controller
                 'stok' => $request->stok,
                 'warnaProduk' => $request->warnaProduk,
                 'statusProduk' => 'tersedia',
-                'fotoProduk' => $fotoProduk,
+            ]);
+
+            Gambar::create([
+                'produk_id' => $produk->id,
+                'gambar' => $fotoProduk,
             ]);
 
             DB::commit();
-            return redirect()->back()->with('success', 'Produk berhasil ditambahkan');
+            return redirect('/penjual/produk/index')->with('success', 'Produk berhasil ditambahkan');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
-
 
     private function uploadFotoProduk($request)
     {
@@ -79,7 +84,6 @@ class ProdukController extends Controller
 
         throw new \Exception('Gambar produk tidak ditemukan');
     }
-
 
     public function edit($id)
     {
@@ -103,10 +107,11 @@ class ProdukController extends Controller
         try {
             DB::beginTransaction();
             $produk = $this->produk->findOrFail($request->id);
-            $fotoProduk = $produk->fotoProduk;
+            $fotoProduk = $produk->gambar->gambar; // Ambil nama file gambar lama
 
             if ($request->hasFile('foto-produk')) {
-                $this->deleteFotoProduk($produk->fotoProduk);
+                // Jika ada file gambar baru, hapus gambar lama
+                $this->deleteFotoProduk($produk->gambar->gambar);
                 $fotoProduk = $this->uploadFotoProduk($request);
             }
 
@@ -120,7 +125,11 @@ class ProdukController extends Controller
                 'stok' => $request->stok,
                 'warnaProduk' => $request->warnaProduk,
                 'statusProduk' => 'tersedia',
-                'fotoProduk' => $fotoProduk,
+            ]);
+
+            // Update nama gambar di tabel Gambar
+            $produk->gambar()->update([
+                'gambar' => $fotoProduk,
             ]);
 
             DB::commit();
@@ -131,12 +140,21 @@ class ProdukController extends Controller
         }
     }
 
+    private function deleteFotoProduk($filename)
+    {
+        Storage::disk('public')->delete('produk/' . $filename);
+    }
+
+
     public function destroy($id)
     {
         try {
             DB::beginTransaction();
             $produk = $this->produk->findOrFail($id);
-            // $this->deleteFotoProduk($produk->fotoProduk);
+
+            // Hapus gambar terlebih dahulu jika diperlukan
+            $this->deleteFotoProduk($produk->gambar->gambar);
+
             $produk->delete();
             DB::commit();
             return redirect()->back()->with('success', 'Produk berhasil dihapus');
