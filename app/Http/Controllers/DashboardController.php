@@ -10,8 +10,4 @@ class DashboardController extends Controller
     {
         return view('Admin.admin');
     }
-    public function customer()
-    {
-        return view('');
-    }
 }

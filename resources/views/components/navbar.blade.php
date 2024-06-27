@@ -48,9 +48,13 @@
             <a href="{{ route('cart') }}" class="btn border">
                 <i class="bi bi-cart text-dark"></i>
             </a>
-            <a href="{{ route('penjual') }}" class="btn border">
-                <i class="bi bi-shop text-dark"></i>
-            </a>
+            @auth
+                @if (Auth::user()->role == 'customer')
+                    <a href="{{ route('penjual') }}" class="btn border">
+                        <i class="bi bi-shop text-dark"></i>
+                    </a>
+                @endif
+            @endauth
         </div>
     </div>
 </div>
@@ -98,19 +102,15 @@
                     </div>
                     <div class="navbar-nav ms-auto">
                         @guest
-                            <a href="{{ route('login') }}" class="nav-item nav-link">Login</a>
-                            <a href="{{ route('register') }}" class="nav-item nav-link">Register</a>
+                            <a href="{{ url('/login') }}" class="nav-item nav-link">Login</a>
+                            <a href="{{ url('/register') }}" class="nav-item nav-link">Register</a>
                         @else
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle"
                                     data-bs-toggle="dropdown">{{ Auth::user()->name }}</a>
                                 <div class="dropdown-menu bg-light border-0 rounded-0 rounded-bottom m-0">
                                     <a href="#" class="dropdown-item">Profil</a>
-                                    <a href="{{ url('logout') }}" class="dropdown-item"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
+                                    <a href="{{ url('logout') }}" class="dropdown-item">Logout</a>
                                 </div>
                             </div>
                         @endauth
