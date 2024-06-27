@@ -21,21 +21,15 @@
                 <div class="col-lg-8">
                     <!-- News Detail Start -->
                     <div class="position-relative mb-3">
-                        <img class="img-fluid w-100" src="{{ asset('images/13.jpg') }}" style="object-fit: cover;">
+                        <img class="img-fluid w-100" src="{{ asset('storage/'.blogs()->gambar) }}" style="object-fit: cover;">
                         <div class="bg-white border border-top-0 p-4">
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
                                     href="">Business</a>
                                 <a class="text-body" href="">Jan 01, 2045</a>
-                            </div>
-                            <h1 class="mb-3 text-secondary text-uppercase font-weight-bold">Impor pakaian bekas ilegal: Indonesia ‘menjadi penampung sampah’ dan dianggap ‘tidak punya martabat’</h1>
-                            <p>Kementerian Perdagangan gencar menyita pakaian bekas impor bernilai miliaran rupiah. Namun aksi ini masih kalah cepat dengan peredaran produk ilegal itu di pasaran. Jual-beli pakaian bekas impor masih marak di sejumlah daerah di Indonesia, salah satunya di Kota Bandung.
-
-                                Bangunan lusuh serupa gudang dengan tulisan “Pasar Cimol Gedebage” tampak sesak. Pengunjung dan pembeli berjubel, berbagi ruang dengan deretan pakaian beragam merek, dan hanya menyisakan lorong sempit untuk berlalu-lalang.  
-                                
-                                Para pedagang penuh semangat menawarkan barangnya, berteriak saling bersahutan, ”Dipilih… dipilih… dipilih.” 
-                                
-                                Di sebuah akhir pekan pada Agustus 2022 itu, suasana di Pasar Cimol tampak ramai, setelah hampir dua tahun ke belakang sepi akibat pandemi Covid-19.</p>
+                            </div> --}}
+                            <h1 class="mb-3 text-secondary text-uppercase font-weight-bold">{{blogs()->judul}}</h1>
+                            <p>{{blogs()->deskripsi}}</p>
                         </div>
                     </div>
                     <!-- News Detail End -->
@@ -116,4 +110,3 @@
 
 @endsection
 
-    

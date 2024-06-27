@@ -19,13 +19,6 @@ class BlogsController extends Controller
     }
     public function edit(Request $request, $id)
     {
-        // dd($id);
-        // $request->validate([
-        //     'jenis_sampah' => 'required|string|max:25',
-        //     'berat_sampah' => 'required|integer|max:100|min:1',
-        //     'poin_sampah' => 'required|integer|max:1000000',
-        // ]);
-
         $params1 = $request->all();
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
