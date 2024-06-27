@@ -47,47 +47,37 @@
                 <div class="container">
                     <h2>Edit Produk</h2>
                     @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
                     @endif
 
                     @if (session('error'))
-                    <div class="alert alert-danger">
-                        {{ session('error') }}
-                    </div>
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
                     @endif
 
                     @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     @endif
                     <form action="{{ url('/penjual/produk/update/' . $produk['id']) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        {{-- <div class="mb-3">
-                            @foreach (gambarproduk($produk['id']) as $gambars )
-                            <img src="{{asset('storage/'.$gambars->gambar)}}" alt="">
-                            @endforeach
-                        </div> --}}
                         <div class="mb-3">
                             <label for="foto-produk" class="form-label">Tambahkan Foto</label>
-                            <input type="file" class="form-control" id="foto-produk" name="foto-produk">
-                            <!-- Tampilkan foto produk jika tersedia -->
-                            {{-- @if (isset($produk['fotoProduk']))
-                            <img src="{{ asset($produk['fotoProduk']) }}" alt="Foto Produk" style="max-width: 100px;">
-                            @endif --}}
-
-                            @foreach (gambarproduk($produk['id']) as $gambars )
-                            <img src="{{asset('storage/'.$gambars->gambar)}}" alt="">
+                            <input type="file" class="form-control" id="foto-produk" name="gambar">
+                            @foreach (gambarproduk($produk['id']) as $gambars)
+                                <img src="{{ asset('storage/' . $gambars->gambar) }}" style="height: 100px; width:auto;"
+                                    alt="">
                             @endforeach
-
                         </div>
                         <div class="mb-3">
                             <label for="namaProduk" class="form-label">Nama Produk</label>
@@ -116,19 +106,22 @@
                                     <label for="kategoriProduk" class="form-label">Kategori</label>
                                     <select name="kategoriProduk" id="kategoriProduk" class="form-select">
                                         <option value="">-- Pilih --</option>
-                                        <option value="kaos-gambar" {{ $produk['kategoriProduk']=='kaos-gambar'
-                                            ? 'selected' : '' }}>Kaos
+                                        <option value="kaos-gambar"
+                                            {{ $produk['kategoriProduk'] == 'kaos-gambar' ? 'selected' : '' }}>
+                                            Kaos
                                             Bergambar</option>
-                                        <option value="kaos-polos" {{ $produk['kategoriProduk']=='kaos-polos'
-                                            ? 'selected' : '' }}>Kaos Polo
+                                        <option value="kaos-polos"
+                                            {{ $produk['kategoriProduk'] == 'kaos-polos' ? 'selected' : '' }}>
+                                            Kaos Polo
                                         </option>
-                                        <option value="kemeja" {{ $produk['kategoriProduk']=='kemeja' ? 'selected' : ''
-                                            }}>Kemeja
+                                        <option value="kemeja"
+                                            {{ $produk['kategoriProduk'] == 'kemeja' ? 'selected' : '' }}>Kemeja
                                         </option>
-                                        <option value="jake" {{ $produk['kategoriProduk']=='jake' ? 'selected' : '' }}>
+                                        <option value="jake"
+                                            {{ $produk['kategoriProduk'] == 'jake' ? 'selected' : '' }}>
                                             Jaket</option>
-                                        <option value="sweter" {{ $produk['kategoriProduk']=='sweter' ? 'selected' : ''
-                                            }}>Sweter
+                                        <option value="sweter"
+                                            {{ $produk['kategoriProduk'] == 'sweter' ? 'selected' : '' }}>Sweter
                                         </option>
                                     </select>
                                 </div>
@@ -136,15 +129,15 @@
                                     <label for="ukuran" class="form-label">Ukuran</label>
                                     <select name="ukuran" id="ukuran" class="form-select">
                                         <option value="">-- Pilih --</option>
-                                        <option value="S" {{ $produk['ukuran']=='S' ? 'selected' : '' }}>S
+                                        <option value="S" {{ $produk['ukuran'] == 'S' ? 'selected' : '' }}>S
                                         </option>
-                                        <option value="M" {{ $produk['ukuran']=='M' ? 'selected' : '' }}>M
+                                        <option value="M" {{ $produk['ukuran'] == 'M' ? 'selected' : '' }}>M
                                         </option>
-                                        <option value="L" {{ $produk['ukuran']=='L' ? 'selected' : '' }}>L
+                                        <option value="L" {{ $produk['ukuran'] == 'L' ? 'selected' : '' }}>L
                                         </option>
-                                        <option value="XL" {{ $produk['ukuran']=='XL' ? 'selected' : '' }}>XL
+                                        <option value="XL" {{ $produk['ukuran'] == 'XL' ? 'selected' : '' }}>XL
                                         </option>
-                                        <option value="XXL" {{ $produk['ukuran']=='XXL' ? 'selected' : '' }}>XXL
+                                        <option value="XXL" {{ $produk['ukuran'] == 'XXL' ? 'selected' : '' }}>XXL
                                         </option>
                                     </select>
                                 </div>
@@ -157,8 +150,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="deskripsi" class="form-label">Deskripsi Produk</label>
-                                    <textarea class="form-control" id="deskripsi" rows="3"
-                                        name="deskripsiProduk">{{ $produk['deskripsiProduk'] }}</textarea>
+                                    <textarea class="form-control" id="deskripsi" rows="3" name="deskripsiProduk">{{ $produk['deskripsiProduk'] }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -181,21 +173,21 @@
     <script src="{{ asset('assets/js/script.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
-    <script type="text/javascript">
-        Swal.fire({
+        <script type="text/javascript">
+            Swal.fire({
                 title: "Berhasil",
                 text: "{{ session('success') }}",
                 icon: "success"
             });
-    </script>
+        </script>
     @endif
     @if (session('error'))
-    <script type="text/javascript">
-        Swal.fire({
+        <script type="text/javascript">
+            Swal.fire({
                 title: "{{ session('error') }}",
                 icon: "error"
             });
-    </script>
+        </script>
     @endif
     <!-- end: JS -->
 

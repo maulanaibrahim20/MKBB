@@ -72,7 +72,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="foto-produk" class="form-label">Tambahkan Foto</label>
-                            <input type="file" class="form-control" id="foto-produk" name="foto-produk">
+                            <input type="file" class="form-control" id="foto-produk" name="gambar">
                         </div>
                         <div class="mb-3">
                             <label for="namaProduk" class="form-label">Nama Produk</label>

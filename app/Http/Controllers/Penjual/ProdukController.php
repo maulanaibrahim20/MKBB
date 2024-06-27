@@ -40,7 +40,7 @@ class ProdukController extends Controller
             'ukuran' => 'required|in:S,M,L,XL,XXL',
             'stok' => 'required|integer',
             'warnaProduk' => 'required|string|max:7',
-            'foto-produk' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
@@ -75,8 +75,8 @@ class ProdukController extends Controller
 
     private function uploadFotoProduk($request)
     {
-        if ($request->hasFile('foto-produk')) {
-            $file = $request->file('foto-produk');
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
             $filename = time() . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('produk', $filename, 'public');
             return $path;
@@ -91,7 +91,7 @@ class ProdukController extends Controller
         return view('penjual.produk.edit', $data);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'kategoriProduk' => 'required|in:kaos-gambar,kaos-polos,kemeja,jaket,sweter',
@@ -101,20 +101,25 @@ class ProdukController extends Controller
             'ukuran' => 'required|in:S,M,L,XL,XXL',
             'stok' => 'required|integer',
             'warnaProduk' => 'required|string|max:7',
-            'foto-produk' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         try {
             DB::beginTransaction();
-            $produk = $this->produk->findOrFail($request->id);
-            $fotoProduk = $produk->gambar->gambar; // Ambil nama file gambar lama
 
-            if ($request->hasFile('foto-produk')) {
-                // Jika ada file gambar baru, hapus gambar lama
-                $this->deleteFotoProduk($produk->gambar->gambar);
+            // Ambil produk berdasarkan ID
+            $produk = Produk::findOrFail($id);
+
+            // Simpan nama file gambar lama
+            $fotoProduk = $produk->gambar; // Misalnya 'gambar_produk.jpg'
+
+            // Jika ada gambar baru diunggah, hapus gambar lama
+            if ($request->hasFile('gambar')) {
+                $this->deleteFotoProduk($fotoProduk);
                 $fotoProduk = $this->uploadFotoProduk($request);
             }
 
+            // Update informasi produk
             $produk->update([
                 'kategoriProduk' => $request->kategoriProduk,
                 'namaProduk' => $request->namaProduk,
@@ -127,8 +132,7 @@ class ProdukController extends Controller
                 'statusProduk' => 'tersedia',
             ]);
 
-            // Update nama gambar di tabel Gambar
-            $produk->gambar()->update([
+            Gambar::where('produk_id', $produk->id)->update([
                 'gambar' => $fotoProduk,
             ]);
 
@@ -150,12 +154,19 @@ class ProdukController extends Controller
     {
         try {
             DB::beginTransaction();
-            $produk = $this->produk->findOrFail($id);
 
-            // Hapus gambar terlebih dahulu jika diperlukan
-            $this->deleteFotoProduk($produk->gambar->gambar);
+            // Ambil produk berdasarkan ID
+            $produk = Produk::findOrFail($id);
 
+            // Hapus gambar terlebih dahulu jika ada
+            $gambar = Gambar::where('produk_id', $produk->id)->first();
+            if ($gambar) {
+                $this->deleteFotoProduk($gambar->gambar);
+            }
+
+            // Hapus produk dari database
             $produk->delete();
+
             DB::commit();
             return redirect()->back()->with('success', 'Produk berhasil dihapus');
         } catch (\Exception $e) {
