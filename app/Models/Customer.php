@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasFactory;
-    protected $table = 'gambars';
+
     protected $guarded = [''];
+
+    public function toko()
+    {
+        return $this->hasOne(Toko::class, 'id_customer');
+    }
 }

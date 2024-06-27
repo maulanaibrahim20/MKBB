@@ -46,38 +46,74 @@
             <div class="py-4">
                 <div class="container">
                     <h2>Upload Produk</h2>
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form action="{{ url('/penjual/produk') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="foto-produk" class="form-label">Tambahkan Foto</label>
-                            <input type="file" class="form-control" id="foto-produk">
+                            <input type="file" class="form-control" id="foto-produk" name="foto-produk">
                         </div>
                         <div class="mb-3">
                             <label for="namaProduk" class="form-label">Nama Produk</label>
-                            <input type="text" class="form-control" id="namaProduk">
+                            <input type="text" class="form-control" id="namaProduk" name="namaProduk">
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="kategori" class="form-label">Kategori</label>
-                                    <select name="kategoriProduk" id="kategoriProduk" class="form-select"
-                                        aria-label="Default select example">
-                                        <option value="--pilih--">-- Pilih --</option>
+                                    <label for="stok" class="form-label">Stok</label>
+                                    <input type="number" class="form-control" id="stok" name="stok">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="warna" class="form-label">Warna</label>
+                                    <input type="color" class="form-control" id="warna" name="warnaProduk">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="kategoriProduk" class="form-label">Kategori</label>
+                                    <select name="kategoriProduk" id="kategoriProduk" class="form-select">
+                                        <option value="">-- Pilih --</option>
                                         <option value="kaos-gambar">Kaos Bergambar</option>
                                         <option value="kaos-polos">Kaos Polo</option>
                                         <option value="kemeja">Kemeja</option>
-                                        <option value="jake">Jake</option>
+                                        <option value="jake">Jaket</option>
                                         <option value="sweter">Sweter</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="ukuran" class="form-label">Ukuran</label>
-                                    <select name="ukuran" id="ukuran" class="form-select"
-                                        aria-label="Default select example">
-                                        <option value="s">S</option>
-                                        <option value="m">M</option>
-                                        <option value="xl">XL</option>
-                                        <option value="xxl">XXL</option>
+                                    <select name="ukuran" id="ukuran" class="form-select">
+                                        <option value="">-- Pilih --</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL</option>
                                     </select>
                                 </div>
                             </div>
@@ -108,6 +144,24 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script type="text/javascript">
+            Swal.fire({
+                title: "Berhasil",
+                text: "{{ session('success') }}",
+                icon: "success"
+            });
+        </script>
+    @endif
+    @if (session('error'))
+        <script type="text/javascript">
+            Swal.fire({
+                title: "{{ session('error') }}",
+                icon: "error"
+            });
+        </script>
+    @endif
     <!-- end: JS -->
 
 </body>

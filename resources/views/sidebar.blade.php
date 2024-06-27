@@ -20,9 +20,9 @@
                 <i class="ri-arrow-down-s-line sidebar-menu-item-accordion ms-auto"></i>
             </a>
             <ul class="sidebar-dropdown-menu">
-                <li class="sidebar-dropdown-menu-item">
-                    <a href="{{ url('penjual/produk') }}">
-                        Uplod produk
+                <li class="sidebar-dropdown-menu-item {{ Request::segment(3) == 'index' ? 'active' : '' }}">
+                    <a href="{{ url('penjual/produk/index') }}">
+                        produk
                     </a>
                 </li>
                 <li class="sidebar-dropdown-menu-item has-dropdown">
@@ -31,17 +31,17 @@
                         <i class="ri-arrow-down-s-line sidebar-menu-item-accordion ms-auto"></i>
                     </a>
                     <ul class="sidebar-dropdown-menu">
-                        <li class="sidebar-dropdown-menu-item">
+                        <li class="sidebar-dropdown-menu-item {{ request()->routeIs('pesanan') ? 'active' : '' }}">
                             <a href="{{ route('pesanan') }}">
                                 Pesanan masuk
                             </a>
                         </li>
-                        <li class="sidebar-dropdown-menu-item">
+                        <li class="sidebar-dropdown-menu-item {{ request()->routeIs('pesanan2') ? 'active' : '' }}">
                             <a href="{{ route('pesanan2') }}">
                                 Pesanan Dikirim
                             </a>
                         </li>
-                        <li class="sidebar-dropdown-menu-item">
+                        <li class="sidebar-dropdown-menu-item {{ request()->routeIs('riwayat') ? 'active' : '' }}">
                             <a href="{{ route('riwayat') }}">
                                 Riwayat pesanan
                             </a>
@@ -50,6 +50,7 @@
                 </li>
             </ul>
         </li>
+
         <li class="sidebar-menu-item has-dropdown">
             <a href="#">
                 <i class="ri-wallet-line sidebar-menu-item-icon"></i>

@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-
+        //customer sekaligus penjual
         $user = User::create([
             'name' => 'customer',
             'email' => 'customer@gmail.com',
@@ -42,5 +42,7 @@ class UserSeeder extends Seeder
             'alamat' => 'Jl. Raya No. 1',
             'noTelpToko' => '081234567890',
         ]);
+
+        // customer only
     }
 }
