@@ -53,11 +53,10 @@
                 </li>
             </ul>
         </li>
-        <li class="sidebar-menu-item">
-            <a href="blog.html">
+        <li class="sidebar-menu-item {{ request()->is('admin/blog-test') ? 'active' : 'collapsed' }}">
+            <a href="{{ url('admin/blog-test') }}">
                 <i class="ri-pencil-line sidebar-menu-item-icon"></i>
-                Blogs
-                test
+                Blogs test
             </a>
         </li>
         <!-- Element spacer untuk mendorong elemen logout ke bawah -->
