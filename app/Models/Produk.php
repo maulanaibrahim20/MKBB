@@ -8,5 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Produk extends Model
 {
     use HasFactory;
+
     protected $guarded = [''];
+
+    public function gambar()
+    {
+        return $this->hasMany(Gambar::class, 'produk_id', 'id');
+    }
 }
