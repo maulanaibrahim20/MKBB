@@ -37,7 +37,7 @@
         <li class="sidebar-menu-item has-dropdown">
             <a href="#">
                 <i class="ri-user-line sidebar-menu-item-icon"></i>
-                    Akun
+                Akun
                 <i class="ri-arrow-down-s-line sidebar-menu-item-accordion ms-auto"></i>
             </a>
             <ul class="sidebar-dropdown-menu">
@@ -57,12 +57,13 @@
             <a href="blog.html">
                 <i class="ri-pencil-line sidebar-menu-item-icon"></i>
                 Blogs
+                test
             </a>
         </li>
         <!-- Element spacer untuk mendorong elemen logout ke bawah -->
         <div class="flex-grow-1"></div>
         <li class="sidebar-menu-item">
-            <a href="{{ route('Tlogin') }}">
+            <a href="{{ url('/logout') }}">
                 <i class="ri-settings-line sidebar-menu-item-icon"></i>
                 Logout
             </a>

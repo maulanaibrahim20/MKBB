@@ -9,70 +9,36 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register()
+    protected $user;
+
+    public function __construct(User $user)
     {
-        return view('auth.register');
+        $this->user = $user;
     }
-
-    public function registerPost(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        // Membuat user baru
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
-
-        return back()->with('success', 'Register Berhasil');
-    }
-
     public function login()
     {
         return view('auth.login');
     }
 
-    public function loginPost(Request $request)
+    public function loginProccess(Request $request)
     {
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password,
-        ];
-
-        if (Auth::attempt($credentials)) {
-            return redirect('/')->with('success', 'Login Berhasil');
+        $user = $this->user->whereEmail($request->email)->first();
+        if (!$user) {
+            return redirect('/login')->with('error', 'Periksa kembali Email dan Password Anda!');
+        }
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->with('error', 'Periksa kembali Email dan Password Anda!');
         }
 
-        return back()->with('error', 'Email atau Kata Sandi salah');
-    }
+        if (Auth::attempt(["email" => $request->email, "password" => $request->password])) {
+            $request->session()->regenerate();
 
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('login')->with('success', 'Logout Berhasil');
-    }
-
-    public function adminLogin()
-    {
-        return view('admin.Tlogin');
-    }
-
-    public function adminLoginPost(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials) && Auth::user()->email === 'admin@gmail.com') {
-            return redirect()->intended('/admin');
+            if ($user->role == 1) {
+                return redirect()->to('/admin/dashboard')->with('success', 'Anda Berhasil Login. Selamat Datang, ' . Auth::user()->nama);
+            } elseif ($user->role == 2) {
+                return redirect('/')->with('success', 'Anda Berhasil Login. Selamat Datang, ' . Auth::user()->nama);
+            }
         }
-
-        return redirect()->back()->withErrors(['email' => 'Invalid credentials or not an admin'])->withInput();
+        return back()->with('error', 'Gagal melakukan autentikasi');
     }
 }

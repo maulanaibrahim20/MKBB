@@ -45,10 +45,10 @@
             <a href="" class="btn border">
                 <i class="bi bi-heart text-dark"></i>
             </a>
-            <a href="{{ route('cart')}}" class="btn border">
+            <a href="{{ route('cart') }}" class="btn border">
                 <i class="bi bi-cart text-dark"></i>
             </a>
-            <a href="{{ route('penjual')}}" class="btn border">
+            <a href="{{ route('penjual') }}" class="btn border">
                 <i class="bi bi-shop text-dark"></i>
             </a>
         </div>
@@ -59,17 +59,17 @@
 <!-- Navbar Start -->
 <div class="container-fluid mb-5">
     <div class="row border-top px-xl-5">
-        @if(Request::is('/'))
+        @if (Request::is('/'))
             @guest
                 <div class="col-lg-3 d-none d-lg-block">
                     <a class="btn shadow-none d-flex align-items-center justify-content-between bg-dark text-white w-100"
-                       data-bs-toggle="collapse" href="#navbar-vertical" role="button" aria-expanded="false"
-                       aria-controls="navbar-vertical" style="height: 65px; margin-top: -1px; padding: 0 30px;">
+                        data-bs-toggle="collapse" href="#navbar-vertical" role="button" aria-expanded="false"
+                        aria-controls="navbar-vertical" style="height: 65px; margin-top: -1px; padding: 0 30px;">
                         <h6 class="m-0">Categories</h6>
                         <i class="bi bi-chevron-down text-white"></i>
                     </a>
                     <nav class="collapse navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0"
-                         id="navbar-vertical">
+                        id="navbar-vertical">
                         <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
                             <a href="" class="nav-item nav-link">Kaos</a>
                             <a href="" class="nav-item nav-link">Jaket</a>
@@ -80,20 +80,21 @@
                 </div>
             @endguest
         @endif
-        <div class="@if(Request::is('/') && !Auth::check()) col-lg-9 @else col-12 @endif">
+        <div class="@if (Request::is('/') && !Auth::check()) col-lg-9 @else col-12 @endif">
             <nav class="navbar navbar-expand-lg bg-white navbar-light">
                 <a href="" class="text-decoration-none d-block d-lg-none">
                     <h1 class="m-0 display-5 font-weight-semi-bold text-dark"><strong>MKB</strong></h1>
                 </a>
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav me-auto">
-                        <a href="{{ route('home')}}" class="nav-item nav-link active">Home</a>
-                        <a href="{{ route('product')}}" class="nav-item nav-link">Produk</a>
-                        <a href="{{ route('detail')}}" class="nav-item nav-link">Shop Detail</a>
-                        <a href="{{ route('blogs')}}" class="nav-item nav-link">Blogs</a>
+                        <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
+                        <a href="{{ route('product') }}" class="nav-item nav-link">Produk</a>
+                        <a href="{{ route('detail') }}" class="nav-item nav-link">Shop Detail</a>
+                        <a href="{{ route('blogs') }}" class="nav-item nav-link">Blogs</a>
                     </div>
                     <div class="navbar-nav ms-auto">
                         @guest
@@ -101,12 +102,13 @@
                             <a href="{{ route('register') }}" class="nav-item nav-link">Register</a>
                         @else
                             <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ Auth::user()->name }}</a>
+                                <a href="#" class="nav-link dropdown-toggle"
+                                    data-bs-toggle="dropdown">{{ Auth::user()->name }}</a>
                                 <div class="dropdown-menu bg-light border-0 rounded-0 rounded-bottom m-0">
                                     <a href="#" class="dropdown-item">Profil</a>
-                                    <a href="{{ route('logout') }}" class="dropdown-item"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <a href="{{ url('logout') }}" class="dropdown-item"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                 </div>
@@ -115,7 +117,7 @@
                     </div>
                 </div>
             </nav>
-            @if(Request::is('/') && !Auth::check())
+            @if (Request::is('/') && !Auth::check())
                 <!-- Carousel Start -->
                 <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">

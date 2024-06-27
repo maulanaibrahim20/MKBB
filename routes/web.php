@@ -4,7 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController; // tambahkan use statement untuk FrontendController
 use App\Http\Controllers\PenjualController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -32,19 +37,31 @@ Route::get('/produk', [PenjualController::class, 'produk'])->name('produk');
 Route::get('/profil', [PenjualController::class, 'profil'])->name('profil');
 Route::get('/riwayat', [PenjualController::class, 'riwayat'])->name('riwayat');
 
-Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/register', [AuthController::class, 'registerPost'])->name('register.post');
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'loginPost'])->name('login.post');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
 // Route::middleware(['auth'])->group(function () {
-Route::get('/admin', [AdminController::class, 'admin'])->name('admin')->middleware('admin');
+// Route::get('/admin', [AdminController::class, 'admin'])->name('admin')->middleware('admin');
 Route::get('/blog', [AdminController::class, 'blog'])->name('blog');
 Route::get('/Tcustom', [AdminController::class, 'Tcustom'])->name('Tcustom');
 Route::get('/Tpenjual', [AdminController::class, 'Tpenjual'])->name('Tpenjual');
 Route::get('/Tproduk', [AdminController::class, 'Tproduk'])->name('Tproduk');
 // });
 
-Route::get('/Tlogin', [AuthController::class, 'adminLogin'])->name('Tlogin');
-Route::post('/Tlogin', [AuthController::class, 'adminLoginPost'])->name('Tlogin.post');
+Route::middleware(['auth'])->name('web.')->group(function () {
+    Route::get('/logout', LogoutController::class)
+        ->name('auth.logout');
+});
+
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/loginProccess', [AuthController::class, 'loginProccess'])->name('login.post');
+
+    Route::get('/register', [RegisterController::class, 'index']);
+    Route::post('/register', [RegisterController::class, 'registerProccess']);
+});
+
+Route::group(['middleware' => ['can:admin']], function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'admin']);
+});
+
+Route::group(['middleware' => ['can:customer']], function () {
+    // Route::get('/customer/dashboard', [DashboardController::class, 'customer']);
+});
