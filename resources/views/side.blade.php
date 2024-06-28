@@ -26,7 +26,7 @@
                     </a>
                     <ul class="sidebar-dropdown-menu">
                         <li class="sidebar-dropdown-menu-item">
-                            <a href="produk.html">
+                            <a href="{{url('admin/produk')}}">
                                 Table Produk
                             </a>
                         </li>
@@ -34,27 +34,28 @@
                 </li>
             </ul>
         </li>
-        <li class="sidebar-menu-item has-dropdown">
+        <li
+            class="sidebar-menu-item has-dropdown {{ request()->is('admin/customer', 'admin/toko-penjual') ? '' : 'collapsed' }}">
             <a href="#">
                 <i class="ri-user-line sidebar-menu-item-icon"></i>
                 Akun
                 <i class="ri-arrow-down-s-line sidebar-menu-item-accordion ms-auto"></i>
             </a>
-            <ul class="sidebar-dropdown-menu">
-                <li class="sidebar-dropdown-menu-item">
-                    <a href="Tcustom.html">
+            <ul class="sidebar-dropdown-menu {{ request()->is('admin/customer', 'admin/toko-penjual') ? '' : 'collapse' }}">
+                <li class="sidebar-dropdown-menu-item {{ request()->is('admin/customer') ? 'active' : 'collapsed' }}">
+                    <a href="{{ url('/admin/customer') }}">
                         Customer
                     </a>
                 </li>
-                <li class="sidebar-dropdown-menu-item">
-                    <a href="Tpenjual.html">
+                <li class="sidebar-dropdown-menu-item {{ request()->is('admin/toko-penjual') ? 'active' : 'collapsed' }}">
+                    <a href="{{ url('admin/toko-penjual') }}">
                         Toko / Penjual
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="sidebar-menu-item {{ request()->is('admin/blog-test') ? 'active' : 'collapsed' }}">
-            <a href="{{ url('admin/blog-test') }}">
+        <li class="sidebar-menu-item {{ request()->is('admin/blog-test/*') ? 'active' : 'collapsed' }}">
+            <a href="{{ url('admin/blog-test/index') }}">
                 <i class="ri-pencil-line sidebar-menu-item-icon"></i>
                 Blogs test
             </a>

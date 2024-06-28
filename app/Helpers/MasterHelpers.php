@@ -18,3 +18,17 @@ if (!function_exists('gambarproduk')) {
         return $results;
     }
 }
+
+if (!function_exists('truncateToSentences')) {
+    function truncateToSentences($text, $numSentences = 2)
+    {
+        // Pecah teks menjadi array kalimat menggunakan preg_split
+        $sentences = preg_split('/(?<=[.?!])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+
+        // Ambil 10 kalimat pertama
+        $truncated = array_slice($sentences, 0, $numSentences);
+
+        // Gabungkan kembali menjadi satu string
+        return implode(' ', $truncated);
+    }
+}

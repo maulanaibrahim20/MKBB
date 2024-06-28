@@ -15,4 +15,8 @@ class Customer extends Model
     {
         return $this->hasOne(Toko::class, 'id_customer');
     }
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 }

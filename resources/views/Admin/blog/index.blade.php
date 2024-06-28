@@ -26,7 +26,7 @@
             <!-- start: Navbar -->
             <nav class="px-3 py-2 bg-white rounded shadow-sm">
                 <i class="ri-menu-line sidebar-toggle me-3 d-block d-md-none"></i>
-                <h5 class="fw-bold mb-0 me-auto">Akun Customer</h5>
+                <h5 class="fw-bold mb-0 me-auto">Data Blog</h5>
                 <div class="dropdown">
                     <div class="d-flex align-items-center cursor-pointer dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -46,32 +46,47 @@
             <!-- start: Content -->
             <div class="py-4">
                 <div class="container">
-                    <h2>Data Customer</h2>
+                    <h2>Data Blog</h2>
                     <div class="card shadow-sm">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Data Customer</h5>
-                            {{-- <a href="{{ url('/penjual/produk/create') }}" class="btn btn-primary">Tambah Produk</a> --}}
+                            <h5 class="mb-0">Data Blog</h5>
+                            <a href="{{ url('/admin/blog-test/create') }}" class="btn btn-primary">Tambah Blog</a>
                         </div>
                         <div class="card-body">
                             <table id="myTable" class="display">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Customer</th>
-                                        <th>Email</th>
-                                        <th>No Telepon</th>
-                                        <th>Alamat</th>
+                                        <th>Gambar</th>
+                                        <th>Judul</th>
+                                        <th>Deskripsi</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($customer as $data)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $data->user->name }}</td>
-                                            <td>{{ $data->user->email }}</td>
-                                            <td>{{ $data->noTelp }}</td>
-                                            <td>{{ $data->alamat }}</td>
-                                        </tr>
+                                    @foreach ($blogs as $data)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td><img src="{{ asset('storage/'.$data->gambar) }}"
+                                                style="height: 100px; width: 100px; " alt=""></td>
+                                        <td>{{ $data->judul }}</td>
+                                        <td>{{ truncateToSentences($data->deskripsi) }}</td>
+                                        <td>
+                                            <a href="{{ url('/admin/blog-test/edit/' . Crypt::encrypt($data->id)) }}"
+                                                type="button" class="btn br-7 btn-warning">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <form id="deleteForm{{ $data->id }}"
+                                                action="{{ url('/admin/blog-test/delete/' . Crypt::encrypt($data->id)) }}"
+                                                style="display: inline;" method="POST">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button type="button" class="btn btn-danger deleteBtn"
+                                                    data-id="{{ $data->id }}"><i
+                                                        class="fa fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
                                     @endforeach
 
                                 </tbody>
@@ -123,21 +138,21 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
-        <script type="text/javascript">
-            Swal.fire({
+    <script type="text/javascript">
+        Swal.fire({
                 title: "Berhasil",
                 text: "{{ session('success') }}",
                 icon: "success"
             });
-        </script>
+    </script>
     @endif
     @if (session('error'))
-        <script type="text/javascript">
-            Swal.fire({
+    <script type="text/javascript">
+        Swal.fire({
                 title: "{{ session('error') }}",
                 icon: "error"
             });
-        </script>
+    </script>
     @endif
     <!-- end: JS -->
 
