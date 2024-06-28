@@ -22,7 +22,12 @@ class FrontendController extends Controller
 
     public function cart()
     {
-        $data['keranjang'] = KeranjangProduk::where('customer_id', Auth::user()->customer->id)->get();
+        $data['keranjang'] = KeranjangProduk::select('keranjang_produks.*')
+            ->join('keranjangs', 'keranjang_produks.keranjang_id', '=', 'keranjangs.id')
+            ->where('keranjangs.status', 'keranjang')
+            ->where('keranjang_produks.customer_id', Auth::user()->customer->id)
+            ->get();
+
         return view('frontend.cart', $data);
     }
 
@@ -55,20 +60,19 @@ class FrontendController extends Controller
     }
     public function pluscart(Request $request, $id)
     {
-        // dd($request->quantity);
-        $produk = Produk::where('id', $id)->first();
-        $keranjang = KeranjangProduk::where('produk_id', $id)->first();
+        $produk = Produk::pluck('harga')->first();
+        $keranjang = KeranjangProduk::where('keranjang_id', $id)->first();
         $params['qty'] = $keranjang->qty + 1;
-        $params['harga'] = $keranjang->harga + $produk->harga;
+        $params['harga'] = $keranjang->harga + $produk;
         $keranjang->update($params);
         return back()->with('success', 'success');
     }
     public function minuscart(Request $request, $id)
     {
-        $keranjang = KeranjangProduk::where('produk_id', $id)->first();
-        $produk = Produk::where('id', $id)->first();
+        $keranjang = KeranjangProduk::where('keranjang_id', $id)->first();
+        $produk = Produk::pluck('harga')->first();
         $params['qty'] = $keranjang->qty - 1;
-        $params['harga'] = $keranjang->harga - $produk->harga;
+        $params['harga'] = $keranjang->harga - $produk;
         $keranjang->update($params);
         return back()->with('success', 'success');
     }
@@ -112,6 +116,10 @@ class FrontendController extends Controller
                 'hargaProduk' => $qtyProduk->produk->harga,
             ]);
         }
+        // Update status keranjang menjadi 'checkout'
+        $keranjang->update(['status' => 'checkout']);
+        
+
 
         return back()->with('success', 'success');
     }

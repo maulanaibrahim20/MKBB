@@ -15,4 +15,9 @@ class Keranjang extends Model
     {
         return $this->hasMany(KeranjangProduk::class, 'keranjang_id', 'id');
     }
+
+    public function checkout()
+    {
+        return $this->hasOne(Checkout::class);
+    }
 }

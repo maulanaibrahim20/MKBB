@@ -83,7 +83,8 @@
                             <h5 class="font-weight-bold">Total</h5>
                             <h5 class="font-weight-bold" id="totalAmount">Rp. 0</h5>
                         </div>
-                        <a href="{{url('/checkout/'. $keranjang->pluck('id')->implode(','))}}" class="btn btn-block btn-dark my-3 py-3 text-white">Checkout</a>
+                        <a href="{{ url('/checkout/' . $keranjang->pluck('id')->implode(',')) }}"
+                            class="btn btn-block btn-dark my-3 py-3 text-white">Checkout</a>
                     </div>
                 </div>
             </div>
