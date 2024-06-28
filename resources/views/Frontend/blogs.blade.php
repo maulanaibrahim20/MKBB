@@ -23,11 +23,6 @@
                     <div class="position-relative mb-3">
                         <img class="img-fluid w-100" src="{{ asset('storage/'.blogs()->gambar) }}" style="object-fit: cover;">
                         <div class="bg-white border border-top-0 p-4">
-                            {{-- <div class="mb-3">
-                                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                    href="">Business</a>
-                                <a class="text-body" href="">Jan 01, 2045</a>
-                            </div> --}}
                             <h1 class="mb-3 text-secondary text-uppercase font-weight-bold">{{blogs()->judul}}</h1>
                             <p>{{blogs()->deskripsi}}</p>
                         </div>

@@ -26,7 +26,7 @@
                     </a>
                     <ul class="sidebar-dropdown-menu">
                         <li class="sidebar-dropdown-menu-item">
-                            <a href="produk.html">
+                            <a href="{{url('admin/produk')}}">
                                 Table Produk
                             </a>
                         </li>
@@ -54,8 +54,8 @@
                 </li>
             </ul>
         </li>
-        <li class="sidebar-menu-item {{ request()->is('admin/blog-test') ? 'active' : 'collapsed' }}">
-            <a href="{{ url('admin/blog-test') }}">
+        <li class="sidebar-menu-item {{ request()->is('admin/blog-test/*') ? 'active' : 'collapsed' }}">
+            <a href="{{ url('admin/blog-test/index') }}">
                 <i class="ri-pencil-line sidebar-menu-item-icon"></i>
                 Blogs test
             </a>

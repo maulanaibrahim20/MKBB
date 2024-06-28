@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AkunController;
+use App\Http\Controllers\Admin\ProdukController as ProdukControllerAdmin;
 use App\Http\Controllers\Admin\BlogsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController; // tambahkan use statement untuk FrontendController
@@ -67,8 +68,15 @@ Route::group(['middleware' => ['can:admin']], function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'admin']);
     Route::get('/admin/customer', [AkunController::class, 'customer']);
     Route::get('/admin/toko-penjual', [AkunController::class, 'penjual']);
-    Route::get('/admin/blog-test', [BlogsController::class, 'index']);
-    Route::put('/admin/blog-test/edit/{id}', [BlogsController::class, 'edit']);
+    // blog
+    Route::get('/admin/blog-test/index', [BlogsController::class, 'index']);
+    Route::get('/admin/blog-test/create', [BlogsController::class, 'create']);
+    Route::post('/admin/blog-test/store', [BlogsController::class, 'store']);
+    Route::get('/admin/blog-test/edit/{id}', [BlogsController::class, 'edit']);
+    Route::put('/admin/blog-test/update/{id}', [BlogsController::class, 'upload']);
+    Route::delete('/admin/blog-test/delete/{id}', [BlogsController::class, 'destroy']);
+    // produk
+    Route::get('/admin/produk', [ProdukControllerAdmin::class, 'index']);
 });
 
 Route::group(['middleware' => ['can:penjual']], function () {

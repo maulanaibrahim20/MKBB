@@ -47,32 +47,30 @@
             <!-- start: Content -->
             <div class="py-4">
                 <div class="container">
-                    <h2>Edit Blog</h2>
-                    <form action="{{ url('/admin/blog-test/edit/'.$blog->id) }}" method="POST"
+                    <h2>Create Blog</h2>
+                    <form action="{{ url('admin/blog-test/store/') }}" method="POST"
                         enctype="multipart/form-data">
                         {{ csrf_field() }}
-                        {{ method_field('PUT') }}
                         <div class="row">
                             <div class="col-md-6">
-
                                 <div class="mb-3">
                                     <label for="judul" class="form-label">Judul</label>
                                     <textarea class="form-control" cols="10" rows="2" id="judul"
-                                        name="judul">{{$blog->judul}}</textarea>
+                                        name="judul" required></textarea>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="deskripsi" class="form-label">Judul</label>
-                                    <textarea name="deskripsi" cols="30" rows="10"
-                                        class="form-control">{{$blog->deskripsi}}</textarea>
-                                </div>
+
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <img src="{{asset('storage/'.$blog->gambar)}}" alt="">
-                                </div>
-                                <div class="mb-3">
                                     <label for="gambar" class="form-label">Gambar</label>
-                                    <input type="file" class="form-control" id="gambar" name="gambar">
+                                    <input type="file" class="form-control" id="gambar" name="gambar" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="deskripsi" class="form-label">Dsekripsi</label>
+                                    <textarea name="deskripsi" cols="30" rows="10"
+                                        class="form-control" required></textarea>
                                 </div>
                             </div>
                         </div>

@@ -26,7 +26,7 @@
             <!-- start: Navbar -->
             <nav class="px-3 py-2 bg-white rounded shadow-sm">
                 <i class="ri-menu-line sidebar-toggle me-3 d-block d-md-none"></i>
-                <h5 class="fw-bold mb-0 me-auto">Data Produk</h5>
+                <h5 class="fw-bold mb-0 me-auto">Data Blog</h5>
                 <div class="dropdown">
                     <div class="d-flex align-items-center cursor-pointer dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -46,12 +46,11 @@
             <!-- start: Content -->
             <div class="py-4">
                 <div class="container">
-                    <h2>Data Produk</h2>
+                    <h2>Data Blog</h2>
                     <div class="card shadow-sm">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Data Produk</h5>
-                            {{-- <a href="{{ url('/admin/blog-test/create') }}" class="btn btn-primary">Tambah Blog</a>
-                            --}}
+                            <h5 class="mb-0">Data Blog</h5>
+                            <a href="{{ url('/admin/blog-test/create') }}" class="btn btn-primary">Tambah Blog</a>
                         </div>
                         <div class="card-body">
                             <table id="myTable" class="display">
@@ -59,54 +58,34 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Gambar</th>
-                                        <th>Produk</th>
+                                        <th>Judul</th>
                                         <th>Deskripsi</th>
-                                        <th>Slug</th>
-                                        <th>Status</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($produk as $data)
+                                    @foreach ($blogs as $data)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td><img src="{{ asset('storage/'.$data->gambar) }}"
+                                                style="height: 100px; width: 100px; " alt=""></td>
+                                        <td>{{ $data->judul }}</td>
+                                        <td>{{ truncateToSentences($data->deskripsi) }}</td>
                                         <td>
-                                            <div id="carouselExample{{ $data->id }}" class="carousel slide"
-                                                data-bs-ride="carousel">
-                                                <div class="carousel-inner">
-                                                    @foreach (gambarproduk($data->id) as $key => $gambarproduk)
-                                                    <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                                        <img src="{{ asset('storage/'.$gambarproduk->gambar) }}"
-                                                            class="d-block w-100" style="height: 100px; width: 100px;"
-                                                            alt="">
-                                                    </div>
-                                                    @endforeach
-                                                </div>
-                                                <button class="carousel-control-prev" type="button"
-                                                    data-bs-target="#carouselExample{{ $data->id }}"
-                                                    data-bs-slide="prev">
-                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Previous</span>
-                                                </button>
-                                                <button class="carousel-control-next" type="button"
-                                                    data-bs-target="#carouselExample{{ $data->id }}"
-                                                    data-bs-slide="next">
-                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Next</span>
-                                                </button>
-                                            </div>
+                                            <a href="{{ url('/admin/blog-test/edit/' . Crypt::encrypt($data->id)) }}"
+                                                type="button" class="btn br-7 btn-warning">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <form id="deleteForm{{ $data->id }}"
+                                                action="{{ url('/admin/blog-test/delete/' . Crypt::encrypt($data->id)) }}"
+                                                style="display: inline;" method="POST">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button type="button" class="btn btn-danger deleteBtn"
+                                                    data-id="{{ $data->id }}"><i
+                                                        class="fa fa-trash"></i></button>
+                                            </form>
                                         </td>
-                                        <td>
-                                            Nama Produk : {{ $data->namaProduk }} <br>
-                                            Kategori Produk : {{ $data->kategoriProduk }} <br>
-                                            Stok Produk : {{ $data->stok }} <br>
-                                            Harga Produk : {{ $data->harga }} <br>
-                                            Warna Produk :
-                                            <input type="color" value="{{ $data->warnaProduk }}" disabled
-                                                class="form-control-plaintext"> <br>
-                                        </td>
-                                        <td>{{ truncateToSentences($data->slug) }}</td>
-                                        <td>{{ truncateToSentences($data->deskripsiProduk) }}</td>
-                                        <td>{{ $data->statusProduk }}</td>
                                     </tr>
                                     @endforeach
 
