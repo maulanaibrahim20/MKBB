@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Penjual\PesananController;
 use App\Http\Controllers\Penjual\ProdukController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -103,6 +104,11 @@ Route::group(['middleware' => ['can:penjual']], function () {
     Route::get('/penjual/produk/edit/{id}', [ProdukController::class, 'edit']);
     Route::put('/penjual/produk/update/{id}', [ProdukController::class, 'update']);
     Route::delete('/penjual/produk/delete/{id}', [ProdukController::class, 'destroy']);
+
+    Route::get('/penjual/produk/checkout', [PesananController::class, 'index']);
+    Route::post('/penjual/produk/changeStatus/{id}', [PesananController::class, 'changeStatus']);
+
+    Route::get('/penjual/produk/pesananDikirim', [PesananController::class, 'pesananDikirim']);
 });
 
 Route::group(['middleware' => ['can:pembeli']], function () {

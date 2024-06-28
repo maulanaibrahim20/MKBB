@@ -99,6 +99,7 @@ class FrontendController extends Controller
         $params['tanggal'] = now();
         $params['totalHarga'] = $request->total;
         $params['status'] = $request->payment == 'COD' ? 'sudah bayar' : 'belum bayar';
+        $params['statusPengiriman'] = 'belum_dikirim';
 
         // Create checkout entry
         $checkout = Checkout::create($params);
@@ -128,7 +129,7 @@ class FrontendController extends Controller
         // Update status keranjang menjadi 'checkout'
         $keranjang->update(['status' => 'checkout']);
 
-        return back()->with('success', 'Checkout successful');
+        return redirect('/')->with('success', 'Checkout successful');
     }
 
     public function detail()

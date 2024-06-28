@@ -42,13 +42,13 @@
             </form>
         </div>
         <div class="col-lg-3 col-6 text-end">
-            <a href="" class="btn border">
-                <i class="bi bi-heart text-dark"></i>
-            </a>
-            <a href="{{ route('cart') }}" class="btn border">
-                <i class="bi bi-cart text-dark"></i>
-            </a>
             @auth
+                <a href="" class="btn border">
+                    <i class="bi bi-heart text-dark"></i>
+                </a>
+                <a href="{{ route('cart') }}" class="btn border">
+                    <i class="bi bi-cart text-dark"></i>
+                </a>
                 @if (Auth::user()->role == '2')
                     @if (Auth::user()->customer->status == 'penjual')
                         <a href="{{ url('/penjual/dashboard') }}" class="btn border">
