@@ -191,8 +191,25 @@
                                 <div class="card-footer d-flex justify-content-between bg-light border">
                                     <a href="{{ '/produk/detail/' . $produks['id'] }}" class="btn btn-sm text-dark p-0"><i
                                             class="bi bi-eye text-dark mr-1"></i>View Detail</a>
-                                    <a href="" class="btn btn-sm text-dark p-0"><i
-                                            class="bi bi-cart text-dark mr-1"></i>Add To Cart</a>
+                                    @auth
+                                        <form action="{{ url('/cart/post') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="produk_id" value="{{ $produks['id'] }}">
+                                            <input type="hidden" name="toko_id" value="{{ $produks['toko_id'] }}">
+                                            <input type="hidden" name="harga" value="{{ $produks['harga'] }}">
+                                            @if ($produks->stok == 0)
+                                                <p>kosong</p>
+                                            @else
+                                                <button type="submit" class="btn btn-sm text-dark p-0">
+                                                    <i class="bi bi-cart text-dark mr-1"></i>Add To Cart
+                                                </button>
+                                            @endif
+                                        </form>
+                                    @else
+                                        <button type="button" class="btn btn-sm text-dark p-0" onclick="showLoginAlert()">
+                                            <i class="bi bi-cart text-dark mr-1"></i>Add To Cart
+                                        </button>
+                                    @endauth
                                 </div>
                             </div>
                         </div>
@@ -240,6 +257,21 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showLoginAlert() {
+            Swal.fire({
+                title: 'Anda belum login',
+                text: 'Silakan login terlebih dahulu untuk menambahkan produk ke keranjang.',
+                icon: 'warning',
+                confirmButtonText: 'Login'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ url('/login') }}";
+                }
+            });
+        }
     </script>
     </body>
 

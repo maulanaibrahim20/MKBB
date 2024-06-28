@@ -32,12 +32,12 @@
                     </a>
                     <ul class="sidebar-dropdown-menu">
                         <li class="sidebar-dropdown-menu-item {{ request()->routeIs('pesanan') ? 'active' : '' }}">
-                            <a href="{{ url('pesanan') }}">
+                            <a href="{{ url('/penjual/produk/checkout') }}">
                                 Pesanan masuk
                             </a>
                         </li>
                         <li class="sidebar-dropdown-menu-item {{ request()->routeIs('pesanan2') ? 'active' : '' }}">
-                            <a href="{{ url('pesanan2') }}">
+                            <a href="{{ url('/penjual/produk/pesananDikirim') }}">
                                 Pesanan Dikirim
                             </a>
                         </li>

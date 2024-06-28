@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('customer_id');
             $table->integer('toko_id');
             $table->enum('status', ['belum bayar', 'sudah bayar', 'dikirim', 'selesai']);
+            $table->enum('statusPengiriman', ['belum_dikirim', 'dikirim', 'diterima'])->default('belum_dikirim');
             $table->timestamps();
         });
     }

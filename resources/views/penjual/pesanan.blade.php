@@ -11,6 +11,8 @@
     <!-- start: CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <!-- end: CSS -->
     <title>Penjual MKB</title>
 </head>
@@ -36,7 +38,7 @@
                     </div>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="#">Chat</a></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/logout') }}">Logout</a></li>
                     </ul>
                 </div>
             </nav>
@@ -45,14 +47,75 @@
             <!-- start: Content -->
             <div class="py-4">
                 <div class="container">
-                    <h3><strong>Pesanan:</strong></h3>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <a href="#" class="btn btn-primary w-100">Pesanan masuk</a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="#" class="btn btn-success w-100">Pesanan Dikirim</a>
+                    <h2>Pesanan Masuk</h2>
+                    <div class="card shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Pesanan Masuk</h5>
+                        </div>
+                        <div class="card-body">
+                            <table id="myTable" class="display">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Customer</th>
+                                        <th>Produk</th>
+                                        <th>Qty</th>
+                                        <th>Ukuran</th>
+                                        <th>Warna</th>
+                                        <th>Status Pembayaran</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($produk as $data)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $data['customer']['user']['name'] }}</td>
+                                            <td>
+                                                @foreach ($data['checkoutDetail'] as $checkout_detail)
+                                                    {{ $checkout_detail['produk']['namaProduk'] }}<br>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($data['checkoutDetail'] as $checkout_detail)
+                                                    {{ $checkout_detail['qtyProduk'] }}<br>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($data['checkoutDetail'] as $checkout_detail)
+                                                    {{ $checkout_detail['produk']['ukuran'] }}<br>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($data['checkoutDetail'] as $checkout_detail)
+                                                    {{ $checkout_detail['produk']['warnaProduk'] }}<br>
+                                                @endforeach
+                                            </td>
+                                            <td>{{ $data['status'] }}</td>
+                                            <td>
+                                                @if ($data['statusPengiriman'] == 'belum_dikirim')
+                                                    <form
+                                                        action="{{ url('/penjual/produk/changeStatus/' . $data['id']) }}"
+                                                        style="display: inline;" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-primary deleteBtn"
+                                                            data-id="{{ $data['id'] }}">
+                                                            <i class="fa fa-paper-plane"></i>
+                                                        </button>
+                                                    </form>
+                                                @elseif($data['statusPengiriman'] == 'dikirim')
+                                                    <p> Pesanan Sudah Dikirim</p>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="card-footer text-end">
+                            {{-- <button class="btn btn-secondary">Aksi Lainnya</button> --}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -63,9 +126,36 @@
 
     <!-- start: JS -->
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js" integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"
+        integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/script.js') }}"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    @if (session('success'))
+        <script type="text/javascript">
+            Swal.fire({
+                title: "Berhasil",
+                text: "{{ session('success') }}",
+                icon: "success"
+            });
+        </script>
+    @endif
+    @if (session('error'))
+        <script type="text/javascript">
+            Swal.fire({
+                title: "{{ session('error') }}",
+                icon: "error"
+            });
+        </script>
+    @endif
+
     <!-- end: JS -->
 </body>
 
