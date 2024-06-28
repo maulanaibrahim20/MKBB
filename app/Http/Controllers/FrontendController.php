@@ -105,23 +105,30 @@ class FrontendController extends Controller
 
         // Iterate through the product IDs and create checkout details
         foreach ($request->produkId as $produkId) {
-            $qtyProduk = KeranjangProduk::where('keranjang_id', $id)
+            $keranjangProduk = KeranjangProduk::where('keranjang_id', $id)
                 ->where('produk_id', $produkId)
                 ->firstOrFail();
+
+            // Reduce the stock of the product
+            $produk = Produk::findOrFail($produkId);
+            if ($produk->stok < $keranjangProduk->qty) {
+                return back()->with('error', 'Not enough stock for product: ' . $produk->namaProduk);
+            }
+            $produk->stok -= $keranjangProduk->qty;
+            $produk->save();
 
             CheckoutDetail::create([
                 'checkout_id' => $checkout->id,
                 'produk_id' => $produkId,
-                'qtyProduk' => $qtyProduk->qty,
-                'hargaProduk' => $qtyProduk->produk->harga,
+                'qtyProduk' => $keranjangProduk->qty,
+                'hargaProduk' => $keranjangProduk->produk->harga,
             ]);
         }
+
         // Update status keranjang menjadi 'checkout'
         $keranjang->update(['status' => 'checkout']);
-        
 
-
-        return back()->with('success', 'success');
+        return back()->with('success', 'Checkout successful');
     }
 
     public function detail()
