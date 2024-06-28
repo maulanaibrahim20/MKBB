@@ -33,7 +33,7 @@ Route::get('/cart', [FrontendController::class, 'cart'])->name('cart');
 Route::get('/cart/plus/{id}', [FrontendController::class, 'pluscart']);
 Route::get('/cart/minus/{id}', [FrontendController::class, 'minuscart']);
 
-Route::get('/checkout', [FrontendController::class, 'checkout'])->name('checkout');
+Route::get('/checkout/{id}', [FrontendController::class, 'checkout'])->name('checkout');
 
 Route::get('/detail', [FrontendController::class, 'detail'])->name('detail');
 Route::get('/product', [FrontendController::class, 'product'])->name('product');

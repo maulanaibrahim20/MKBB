@@ -71,9 +71,12 @@ class FrontendController extends Controller
         return back()->with('success', 'success');
     }
 
-    public function checkout()
+    public function checkout($id)
     {
-        return view('Frontend.chekout');
+        $keranjang = KeranjangProduk::where('keranjang_id', $id)->first();
+        // dd($keranjang);
+        $data['keranjang'] = $keranjang;
+        return view('Frontend.chekout',$data);
     }
 
     public function detail()
