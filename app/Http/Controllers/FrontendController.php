@@ -53,18 +53,15 @@ class FrontendController extends Controller
     public function pluscart(Request $request, $id)
     {
         // dd($request->quantity);
-
+        $produk = Produk::where('id', $id)->first();
         $keranjang = KeranjangProduk::where('produk_id', $id)->first();
         $params['qty'] = $keranjang->qty + 1;
-        $params['harga'] = $keranjang->harga * $params['qty'];
-        // dd($params['qty']);
+        $params['harga'] = $keranjang->harga + $produk->harga;
         $keranjang->update($params);
         return back()->with('success', 'success');
     }
     public function minuscart(Request $request, $id)
     {
-        // dd($request->quantity);
-
         $keranjang = KeranjangProduk::where('produk_id', $id)->first();
         $produk = Produk::where('id', $id)->first();
         $params['qty'] = $keranjang->qty - 1;

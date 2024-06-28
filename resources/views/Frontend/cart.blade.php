@@ -31,34 +31,33 @@
                         @forelse ($keranjang as $keranjangs)
                             @php
                                 $hargaProduk = $keranjangs->produk->harga;
-                                $jumlahStok = 1;
+                                $jumlahStok = $keranjangs->qty; // Menggunakan qty dari database
                                 $subtotal = $hargaProduk * $jumlahStok;
                             @endphp
                             <tr>
                                 <td class="align-middle"><img src="images/1.jpg" alt=""
-                                        style="width: 50px;">{{ $keranjangs->produk->namaProduk }}
-                                </td>
+                                        style="width: 50px;">{{ $keranjangs->produk->namaProduk }}</td>
                                 <td class="align-middle">Rp.{{ number_format($hargaProduk, 0, ',', '.') }}</td>
                                 <td class="align-middle">
                                     <div class="input-group quantity mx-auto" style="width: 100px;">
-
-                                        <a href="{{url('/cart/minus/'.$keranjangs->id)}}" class="btn btn-sm btn-dark btn-minus">
+                                        <a href="{{ url('/cart/minus/' . $keranjangs->id) }}"
+                                            class="btn btn-sm btn-dark btn-minus">
                                             <i class="bi bi-dash"></i>
                                         </a>
                                         <input id="quantity-{{ $keranjangs->id }}" type="text"
                                             class="form-control form-control-sm bg-secondary text-center quantity-input"
                                             value="{{ $jumlahStok }}" min="1" max="{{ $keranjangs->produk->stok }}"
                                             data-id="{{ $keranjangs->id }}" data-harga="{{ $hargaProduk }}">
-                                        <a href="{{url('/cart/plus/'.$keranjangs->id)}}" class="btn btn-sm btn-dark btn-plus">
+                                        <a href="{{ url('/cart/plus/' . $keranjangs->id) }}"
+                                            class="btn btn-sm btn-dark btn-plus">
                                             <i class="bi bi-plus"></i>
                                         </a>
                                     </div>
                                 </td>
-                                <td id="subtotal-{{ $keranjangs->id }}" class="align-middle">Rp.
-                                    {{ number_format($subtotal, 0, ',', '.') }}</td>
+                                <td id="subtotal-{{ $keranjangs->id }}" class="align-middle">
+                                    Rp.{{ number_format($subtotal, 0, ',', '.') }}</td>
                                 <td class="align-middle"><button class="btn btn-sm btn-dark"><i
-                                            class="bi bi-x"></i></button>
-                                </td>
+                                            class="bi bi-x"></i></button></td>
                             </tr>
                         @empty
                             <tr>

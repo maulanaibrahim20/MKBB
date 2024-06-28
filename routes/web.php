@@ -34,6 +34,7 @@ Route::get('/cart/plus/{id}', [FrontendController::class, 'pluscart']);
 Route::get('/cart/minus/{id}', [FrontendController::class, 'minuscart']);
 
 Route::get('/checkout', [FrontendController::class, 'checkout'])->name('checkout');
+
 Route::get('/detail', [FrontendController::class, 'detail'])->name('detail');
 Route::get('/product', [FrontendController::class, 'product'])->name('product');
 Route::get('/info', [FrontendController::class, 'info'])->name('info');
@@ -43,11 +44,19 @@ Route::get('/blogs', [FrontendController::class, 'blogs'])->name('blogs');
 //     return view('penjual.penjual');
 // });
 // Route::get('/penjualan', [PenjualController::class, 'penjualan'])->name('penjualan');
-Route::get('/pesanan', [PenjualController::class, 'pesanan'])->name('pesanan');
-Route::get('/pesanan2', [PenjualController::class, 'pesanan2'])->name('pesanan2');
-Route::get('/produk', [PenjualController::class, 'produk'])->name('produk');
-Route::get('/profil', [PenjualController::class, 'profil'])->name('profil');
-Route::get('/riwayat', [PenjualController::class, 'riwayat'])->name('riwayat');
+Route::get('/pesanan', function () {
+    return view('penjual.pesanan');
+});
+Route::get('/pesanan2', function () {
+    return view('penjual.pesanan2');
+});
+//edit profil
+Route::get('/profiltest', function () {
+    return view('penjual.profil');
+});
+Route::get('/riwayat', function () {
+    return view('penjual.riwayat');
+});
 
 // Route::middleware(['auth'])->group(function () {
 // Route::get('/admin', [AdminController::class, 'admin'])->name('admin')->middleware('admin');

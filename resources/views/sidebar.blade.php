@@ -32,17 +32,17 @@
                     </a>
                     <ul class="sidebar-dropdown-menu">
                         <li class="sidebar-dropdown-menu-item {{ request()->routeIs('pesanan') ? 'active' : '' }}">
-                            <a href="{{ route('pesanan') }}">
+                            <a href="{{ url('pesanan') }}">
                                 Pesanan masuk
                             </a>
                         </li>
                         <li class="sidebar-dropdown-menu-item {{ request()->routeIs('pesanan2') ? 'active' : '' }}">
-                            <a href="{{ route('pesanan2') }}">
+                            <a href="{{ url('pesanan2') }}">
                                 Pesanan Dikirim
                             </a>
                         </li>
                         <li class="sidebar-dropdown-menu-item {{ request()->routeIs('riwayat') ? 'active' : '' }}">
-                            <a href="{{ route('riwayat') }}">
+                            <a href="{{ url('riwayat') }}">
                                 Riwayat pesanan
                             </a>
                         </li>
@@ -71,7 +71,7 @@
             </ul>
         </li>
         <li class="sidebar-menu-item">
-            <a href="{{ route('profil') }}">
+            <a href="{{ url('profil') }}">
                 <i class="ri-user-line sidebar-menu-item-icon"></i>
                 Edit profil
             </a>
