@@ -114,4 +114,25 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', function(event) {
+            const paymentOptions = document.querySelectorAll('input[name="payment"]');
+            let isChecked = false;
+
+            paymentOptions.forEach(function(option) {
+                if (option.checked) {
+                    isChecked = true;
+                }
+            });
+
+            if (!isChecked) {
+                alert('Please select a payment method.');
+                event.preventDefault(); // Prevent form submission if no option is selected
+            }
+        });
+    });
+</script>
 @endsection

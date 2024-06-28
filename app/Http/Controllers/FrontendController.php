@@ -87,11 +87,13 @@ class FrontendController extends Controller
 
     public function checkoutProduk(Request $request, $id)
     {
-        // dd($request->all());
-        $params = $request->all();
+        if ($request->payment == null) {
+            return back()->with('error', 'pilih salah satu payment');
+        }
         $keranjang = Keranjang::where('id', $id)->firstOrFail();
 
         // Populate the parameters
+        $params = $request->all();
         $params['tipeTransaksi'] = $request->payment;
         $params['keranjang_id'] = $id;
         $params['customer_id'] = Auth::user()->customer->id;
@@ -100,16 +102,16 @@ class FrontendController extends Controller
         $params['totalHarga'] = $request->total;
         $params['status'] = $request->payment == 'COD' ? 'sudah bayar' : 'belum bayar';
 
-        // Create checkout entry
+        // Buat entri checkout
         $checkout = Checkout::create($params);
 
-        // Iterate through the product IDs and create checkout details
+        // Iterasi melalui ID produk dan buat detail checkout
         foreach ($request->produkId as $produkId) {
             $keranjangProduk = KeranjangProduk::where('keranjang_id', $id)
                 ->where('produk_id', $produkId)
                 ->firstOrFail();
 
-            // Reduce the stock of the product
+            // Kurangi stok produk
             $produk = Produk::findOrFail($produkId);
             if ($produk->stok < $keranjangProduk->qty) {
                 return back()->with('error', 'Not enough stock for product: ' . $produk->namaProduk);
@@ -130,7 +132,15 @@ class FrontendController extends Controller
 
         return back()->with('success', 'Checkout successful');
     }
+    public function deletecart($id)
+    {
+        KeranjangProduk::where('keranjang_id', $id)->delete();
 
+        // Menghapus record dari tabel 'keranjangs'
+        Keranjang::find($id)->delete();
+
+        return redirect()->back()->with('success', 'Item keranjang berhasil dihapus.');
+    }
     public function detail()
     {
         return view('frontend.detail');

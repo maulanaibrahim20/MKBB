@@ -32,6 +32,7 @@ Route::post('cart/post', [FrontendController::class, 'cartPost']);
 Route::get('/cart', [FrontendController::class, 'cart'])->name('cart');
 Route::get('/cart/plus/{id}', [FrontendController::class, 'pluscart']);
 Route::get('/cart/minus/{id}', [FrontendController::class, 'minuscart']);
+Route::delete('/cart/delete/{id}', [FrontendController::class, 'deletecart']);
 
 Route::get('/checkout/{id}', [FrontendController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/produk/{id}', [FrontendController::class, 'checkoutProduk'])->name('checkout');
@@ -107,4 +108,5 @@ Route::group(['middleware' => ['can:penjual']], function () {
 
 Route::group(['middleware' => ['can:pembeli']], function () {
     Route::get('/produk/detail/{id}', [AppController::class, 'produkDetail']);
+    Route::post('/toko', [AppController::class, 'buatToko']);
 });
