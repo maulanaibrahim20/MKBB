@@ -60,7 +60,9 @@
                                 </td>
                             </tr>
                         @empty
-                            <p>belum ada produk yang ditambahkan!</p>
+                            <tr>
+                                <p>belum ada produk yang ditambahkan!</p>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -73,13 +75,13 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3 pt-1">
                             <h6 class="font-weight-medium">Subtotal</h6>
-                            <h6 class="font-weight-medium" id="subtotalAmount">Rp. 70.000</h6>
+                            <h6 class="font-weight-medium" id="subtotalAmount">Rp. 0</h6>
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold" id="totalAmount">Rp. 70.000</h5>
+                            <h5 class="font-weight-bold" id="totalAmount">Rp. 0</h5>
                         </div>
                         <button class="btn btn-block btn-dark my-3 py-3 text-white">Checkout</button>
                     </div>
@@ -94,46 +96,37 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
     <script>
-        function incrementQuantity(maxStok) {
-            let quantityInput = document.getElementById('quantity');
+        function updateSubtotal(id, hargaProduk) {
+            let quantityInput = document.getElementById('quantity-' + id);
             let currentQuantity = parseInt(quantityInput.value);
-            if (currentQuantity < maxStok) {
-                quantityInput.value = currentQuantity + 1;
-                updateSubtotal(quantityInput.dataset.id, quantityInput.dataset
-                    .harga); // Update subtotal setelah menambah quantity
-            }
+
+            let subtotal = hargaProduk * currentQuantity;
+            document.getElementById('subtotal-' + id).innerText = 'Rp. ' + subtotal.toLocaleString();
+
+            updateTotal(); // Update total setelah subtotal berubah
         }
 
-        function decrementQuantity() {
-            let quantityInput = document.getElementById('quantity');
-            let currentQuantity = parseInt(quantityInput.value);
-            if (currentQuantity > 1) {
-                quantityInput.value = currentQuantity - 1;
-                updateSubtotal(quantityInput.dataset.id, quantityInput.dataset
-                    .harga); // Update subtotal setelah mengurangi quantity
-            }
+        function updateTotal() {
+            let subtotalElements = document.querySelectorAll('[id^="subtotal-"]');
+            let total = 0;
+
+            subtotalElements.forEach(function(element) {
+                let subtotalValue = parseInt(element.innerText.replace(/[^\d]/g, ''));
+                total += subtotalValue;
+            });
+
+            document.getElementById('subtotalAmount').innerText = 'Rp. ' + formatCurrency(total);
+            document.getElementById('totalAmount').innerText = 'Rp. ' + formatCurrency(total);
+        }
+
+        function formatCurrency(amount) {
+            return amount.toLocaleString('id-ID');
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            let quantityInputs = document.querySelectorAll('.quantity-input');
-            quantityInputs.forEach(function(input) {
-                input.addEventListener('change', function() {
-                    updateSubtotal(input.dataset.id, input.dataset.harga);
-                });
-            });
+            updateTotal(); // Panggil fungsi updateTotal saat halaman dimuat
 
-            let minusButtons = document.querySelectorAll('.btn-minus');
-            minusButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    let input = button.nextElementSibling;
-                    let currentValue = parseInt(input.value);
-                    if (currentValue > 1) {
-                        input.value = currentValue - 1;
-                        updateSubtotal(input.dataset.id, input.dataset.harga);
-                    }
-                });
-            });
-
+            // Event listener untuk tombol tambah
             let plusButtons = document.querySelectorAll('.btn-plus');
             plusButtons.forEach(function(button) {
                 button.addEventListener('click', function() {
@@ -146,15 +139,36 @@
                     }
                 });
             });
+
+            // Event listener untuk tombol kurang
+            let minusButtons = document.querySelectorAll('.btn-minus');
+            minusButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    let input = button.nextElementSibling;
+                    let currentValue = parseInt(input.value);
+                    if (currentValue > 1) {
+                        input.value = currentValue - 1;
+                        updateSubtotal(input.dataset.id, input.dataset.harga);
+                    }
+                });
+            });
+
+            // Event listener untuk perubahan nilai input
+            let quantityInputs = document.querySelectorAll('.quantity-input');
+            quantityInputs.forEach(function(input) {
+                input.addEventListener('change', function() {
+                    let newValue = parseInt(input.value);
+                    let maxValue = parseInt(input.getAttribute('max'));
+                    if (newValue < 1 || isNaN(newValue)) {
+                        input.value = 1;
+                        newValue = 1;
+                    } else if (newValue > maxValue) {
+                        input.value = maxValue;
+                        newValue = maxValue;
+                    }
+                    updateSubtotal(input.dataset.id, input.dataset.harga);
+                });
+            });
         });
-
-        function updateSubtotal(id, hargaProduk) {
-            let quantityInput = document.getElementById('quantity-' + id);
-            let currentQuantity = parseInt(quantityInput.value);
-
-            let subtotal = hargaProduk * currentQuantity;
-            document.getElementById('subtotal-' + id).innerText = 'Rp. ' + subtotal
-                .toLocaleString(); // Menggunakan toLocaleString() untuk format ribuan
-        }
     </script>
 @endsection
