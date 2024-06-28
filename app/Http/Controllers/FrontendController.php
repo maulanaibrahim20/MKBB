@@ -31,13 +31,16 @@ class FrontendController extends Controller
             $keranjangId = Keranjang::create([
                 'customer_id' => Auth::user()->customer->id,
                 'toko_id' =>  $request->toko_id,
-                'status' => 'keranjang'
+                'status' => 'keranjang',
+
             ]);
 
             KeranjangProduk::create([
                 'customer_id' => Auth::user()->customer->id,
                 'keranjang_id' => $keranjangId['id'],
                 'produk_id' => $request->produk_id,
+                'qty' => 1,
+                'harga' => $request->harga
             ]);
 
             DB::commit();
@@ -46,6 +49,29 @@ class FrontendController extends Controller
             DB::rollback();
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+    public function pluscart(Request $request, $id)
+    {
+        // dd($request->quantity);
+
+        $keranjang = KeranjangProduk::where('produk_id', $id)->first();
+        $params['qty'] = $keranjang->qty + 1;
+        $params['harga'] = $keranjang->harga * $params['qty'];
+        // dd($params['qty']);
+        $keranjang->update($params);
+        return back()->with('success', 'success');
+    }
+    public function minuscart(Request $request, $id)
+    {
+        // dd($request->quantity);
+
+        $keranjang = KeranjangProduk::where('produk_id', $id)->first();
+        $produk = Produk::where('id', $id)->first();
+        $params['qty'] = $keranjang->qty - 1;
+        $params['harga'] = $keranjang->harga - $produk->harga;
+        // dd($params['qty']);
+        $keranjang->update($params);
+        return back()->with('success', 'success');
     }
 
     public function checkout()

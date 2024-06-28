@@ -85,6 +85,7 @@
                                 @csrf
                                 <input type="hidden" name="produk_id" value="{{ $data['id'] }}">
                                 <input type="hidden" name="toko_id" value="{{ $data['toko_id'] }}">
+                                <input type="hidden" name="harga" value="{{ $data['harga'] }}">
                                 <button type="submit" class="btn btn-sm text-dark p-0">
                                     <i class="bi bi-cart text-dark mr-1"></i>Add To Cart
                                 </button>

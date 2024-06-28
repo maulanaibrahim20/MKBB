@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('customer_id');
             $table->integer('keranjang_id');
             $table->integer('produk_id');
+            $table->integer('qty');
+            $table->integer('harga');
             $table->timestamps();
         });
     }

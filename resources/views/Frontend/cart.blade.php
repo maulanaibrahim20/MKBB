@@ -41,16 +41,17 @@
                                 <td class="align-middle">Rp.{{ number_format($hargaProduk, 0, ',', '.') }}</td>
                                 <td class="align-middle">
                                     <div class="input-group quantity mx-auto" style="width: 100px;">
-                                        <button class="btn btn-sm btn-dark btn-minus">
+
+                                        <a href="{{url('/cart/minus/'.$keranjangs->id)}}" class="btn btn-sm btn-dark btn-minus">
                                             <i class="bi bi-dash"></i>
-                                        </button>
+                                        </a>
                                         <input id="quantity-{{ $keranjangs->id }}" type="text"
                                             class="form-control form-control-sm bg-secondary text-center quantity-input"
                                             value="{{ $jumlahStok }}" min="1" max="{{ $keranjangs->produk->stok }}"
                                             data-id="{{ $keranjangs->id }}" data-harga="{{ $hargaProduk }}">
-                                        <button class="btn btn-sm btn-dark btn-plus">
+                                        <a href="{{url('/cart/plus/'.$keranjangs->id)}}" class="btn btn-sm btn-dark btn-plus">
                                             <i class="bi bi-plus"></i>
-                                        </button>
+                                        </a>
                                     </div>
                                 </td>
                                 <td id="subtotal-{{ $keranjangs->id }}" class="align-middle">Rp.
