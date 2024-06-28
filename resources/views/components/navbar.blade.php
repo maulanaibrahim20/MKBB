@@ -55,6 +55,10 @@
                             <i class="bi bi-shop text-dark"></i>
                         </a>
                     @endif
+                @elseif (Auth::user()->role == '1')
+                    <a href="{{ url('/admin/dashboard') }}" class="btn border">
+                        <i class="bi bi-house text-dark"></i>
+                    </a>
                 @endif
             @endauth
         </div>
@@ -99,7 +103,6 @@
                     <div class="navbar-nav me-auto">
                         <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
                         <a href="{{ route('product') }}" class="nav-item nav-link">Produk</a>
-                        <a href="{{ route('detail') }}" class="nav-item nav-link">Shop Detail</a>
                         <a href="{{ route('blogs') }}" class="nav-item nav-link">Blogs</a>
                     </div>
                     <div class="navbar-nav ms-auto">

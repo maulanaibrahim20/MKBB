@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController; // tambahkan use statement untuk FrontendController
 use App\Http\Controllers\PenjualController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AppController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
@@ -24,7 +25,10 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
+
+Route::post('cart/post', [FrontendController::class, 'cartPost']);
 Route::get('/cart', [FrontendController::class, 'cart'])->name('cart');
+
 Route::get('/checkout', [FrontendController::class, 'checkout'])->name('checkout');
 Route::get('/detail', [FrontendController::class, 'detail'])->name('detail');
 Route::get('/product', [FrontendController::class, 'product'])->name('product');
@@ -76,4 +80,8 @@ Route::group(['middleware' => ['can:penjual']], function () {
     Route::get('/penjual/produk/edit/{id}', [ProdukController::class, 'edit']);
     Route::put('/penjual/produk/update/{id}', [ProdukController::class, 'update']);
     Route::delete('/penjual/produk/delete/{id}', [ProdukController::class, 'destroy']);
+});
+
+Route::group(['middleware' => ['can:pembeli']], function () {
+    Route::get('/produk/detail/{id}', [AppController::class, 'produkDetail']);
 });

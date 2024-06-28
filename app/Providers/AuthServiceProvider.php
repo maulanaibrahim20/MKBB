@@ -32,7 +32,14 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
         Gate::define("penjual", function ($user) {
-            if (empty($user->role)) {
+            if (empty($user->customer->status == "penjual")) {
+                return redirect("/logout");
+            } else {
+                return $user->role == 2;
+            }
+        });
+        Gate::define("pembeli", function ($user) {
+            if (empty($user->customer->status == "pembeli")) {
                 return redirect("/logout");
             } else {
                 return $user->role == 2;

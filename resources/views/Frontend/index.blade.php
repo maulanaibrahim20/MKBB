@@ -1,6 +1,5 @@
 @extends('index')
 @section('content')
-
     <!-- Page Header Start -->
     <div class="container-fluid bg-dark text-white mb-5">
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
@@ -51,152 +50,53 @@
             <h2 class="section-title px-5"><span class="px-2">Produk</span></h2>
         </div>
         <div class="row px-xl-5 pb-3">
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid product-img-custom" src="images/1.jpg" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Kaos Dimas Majantara</h6>
-                        <div class="d-flex justify-content-center">
-                                <h6>Rp.70.000</h6>
-                            <h6 class="text-muted ml-2"><del>Rp.90.000</del></h6>
+            @forelse ($produk as $data)
+                <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                    <div class="card product-item border-0 mb-4">
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                            @php
+                                $gambar = gambarproduk($data->id)->first();
+                            @endphp
+                            @if ($gambar)
+                                <img class="img-fluid product-img-custom" style="height: 480px; width:auto;"
+                                    src="{{ asset('storage/' . $gambar->gambar) }}" alt="">
+                            @else
+                                <img class="img-fluid product-img-custom" src="{{ asset('storage/default-image.jpg') }}"
+                                    alt="Default Image">
+                            @endif
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                            <h6 class="text-truncate mb-3">{{ $data['namaProduk'] }}</h6>
+                            <div class="d-flex justify-content-center">
+                                <h6>Rp. {{ number_format($data['harga'], 0, ',', '.') }}</h6>
+                                @php
+                                    $harga_diskon = $data['harga'] + 30000; // Menggunakan harga produk dan tambahan 30.000
+                                @endphp
+                                <h6 class="text-muted ml-2">
+                                    <del>Rp.{{ number_format($harga_diskon, 0, ',', '.') }}</del>
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between bg-light border">
+                            <a href="{{ url('/produk/detail/' . $data['id']) }}" class="btn btn-sm text-dark p-0"><i
+                                    class="bi bi-eye text-dark mr-1"></i>View
+                                Detail</a>
+                            <form action="{{ url('/cart/post') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="produk_id" value="{{ $data['id'] }}">
+                                <input type="hidden" name="toko_id" value="{{ $data['toko_id'] }}">
+                                <button type="submit" class="btn btn-sm text-dark p-0">
+                                    <i class="bi bi-cart text-dark mr-1"></i>Add To Cart
+                                </button>
+                            </form>
                         </div>
                     </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-eye text-dark mr-1"></i>View Detail</a>
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-cart text-dark mr-1"></i>Add To Cart</a>
-                    </div>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid product-img-custom" src="images/1.jpg" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Kaos Dimas Majantara</h6>
-                        <div class="d-flex justify-content-center">
-                                <h6>Rp.70.000</h6>
-                            <h6 class="text-muted ml-2"><del>Rp.90.000</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-eye text-dark mr-1"></i>View Detail</a>
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-cart text-dark mr-1"></i>Add To Cart</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid product-img-custom" src="images/1.jpg" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Kaos Dimas Majantara</h6>
-                        <div class="d-flex justify-content-center">
-                                <h6>Rp.70.000</h6>
-                            <h6 class="text-muted ml-2"><del>Rp.90.000</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-eye text-dark mr-1"></i>View Detail</a>
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-cart text-dark mr-1"></i>Add To Cart</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid product-img-custom" src="images/1.jpg" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Kaos Dimas Majantara</h6>
-                        <div class="d-flex justify-content-center">
-                                <h6>Rp.70.000</h6>
-                            <h6 class="text-muted ml-2"><del>Rp.90.000</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-eye text-dark mr-1"></i>View Detail</a>
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-cart text-dark mr-1"></i>Add To Cart</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid product-img-custom" src="images/1.jpg" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Kaos Dimas Majantara</h6>
-                        <div class="d-flex justify-content-center">
-                                <h6>Rp.70.000</h6>
-                            <h6 class="text-muted ml-2"><del>Rp.90.000</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-eye text-dark mr-1"></i>View Detail</a>
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-cart text-dark mr-1"></i>Add To Cart</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid product-img-custom" src="images/1.jpg" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Kaos Dimas Majantara</h6>
-                        <div class="d-flex justify-content-center">
-                                <h6>Rp.70.000</h6>
-                            <h6 class="text-muted ml-2"><del>Rp.90.000</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-eye text-dark mr-1"></i>View Detail</a>
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-cart text-dark mr-1"></i>Add To Cart</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid product-img-custom" src="images/1.jpg" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Kaos Dimas Majantara</h6>
-                        <div class="d-flex justify-content-center">
-                                <h6>Rp.70.000</h6>
-                            <h6 class="text-muted ml-2"><del>Rp.90.000</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-eye text-dark mr-1"></i>View Detail</a>
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-cart text-dark mr-1"></i>Add To Cart</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-                <div class="card product-item border-0 mb-4">
-                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-                        <img class="img-fluid product-img-custom" src="images/1.jpg" alt="">
-                    </div>
-                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                        <h6 class="text-truncate mb-3">Kaos Dimas Majantara</h6>
-                        <div class="d-flex justify-content-center">
-                                <h6>Rp.70.000</h6>
-                            <h6 class="text-muted ml-2"><del>Rp.90.000</del></h6>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between bg-light border">
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-eye text-dark mr-1"></i>View Detail</a>
-                        <a href="" class="btn btn-sm text-dark p-0"><i class="bi bi-cart text-dark mr-1"></i>Add To Cart</a>
-                    </div>
-                </div>
-            </div>
+            @empty
+                <p>Produk Tidak Tersedia</p>
+            @endforelse
+
         </div>
     </div>
     <!-- Products End -->
 @endsection
-    

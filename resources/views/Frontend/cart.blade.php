@@ -1,6 +1,5 @@
 @extends('index')
 @section('content')
-
     <!-- Page Header Start -->
     <div class="container-fluid bg-dark text-white mb-5">
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
@@ -13,7 +12,7 @@
         </div>
     </div>
     <!-- Page Header End -->
-    
+
     <!-- Cart Start -->
     <div class="container-fluid pt-5">
         <div class="row px-xl-5">
@@ -29,23 +28,40 @@
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                        <tr>
-                            <td class="align-middle"><img src="images/1.jpg" alt="" style="width: 50px;"> Kaos</td>
-                            <td class="align-middle">RP. 70.000</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <button class="btn btn-sm btn-dark btn-minus" onclick="decrementQuantity()">
-                                        <i class="bi bi-dash"></i>
-                                    </button>
-                                    <input id="quantity" type="text" class="form-control form-control-sm bg-secondary text-center" value="1">
-                                    <button class="btn btn-sm btn-dark btn-plus" onclick="incrementQuantity()">
-                                        <i class="bi bi-plus"></i>
-                                    </button>
-                                </div>
-                            </td>
-                            <td id="subtotal" class="align-middle">Rp. 70.000</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-dark"><i class="bi bi-x"></i></button></td>
-                        </tr>
+                        @forelse ($keranjang as $keranjangs)
+                            @php
+                                $hargaProduk = $keranjangs->produk->harga;
+                                $jumlahStok = 1;
+                                $subtotal = $hargaProduk * $jumlahStok;
+                            @endphp
+                            <tr>
+                                <td class="align-middle"><img src="images/1.jpg" alt=""
+                                        style="width: 50px;">{{ $keranjangs->produk->namaProduk }}
+                                </td>
+                                <td class="align-middle">Rp.{{ number_format($hargaProduk, 0, ',', '.') }}</td>
+                                <td class="align-middle">
+                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                        <button class="btn btn-sm btn-dark btn-minus">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                        <input id="quantity-{{ $keranjangs->id }}" type="text"
+                                            class="form-control form-control-sm bg-secondary text-center quantity-input"
+                                            value="{{ $jumlahStok }}" min="1" max="{{ $keranjangs->produk->stok }}"
+                                            data-id="{{ $keranjangs->id }}" data-harga="{{ $hargaProduk }}">
+                                        <button class="btn btn-sm btn-dark btn-plus">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td id="subtotal-{{ $keranjangs->id }}" class="align-middle">Rp.
+                                    {{ number_format($subtotal, 0, ',', '.') }}</td>
+                                <td class="align-middle"><button class="btn btn-sm btn-dark"><i
+                                            class="bi bi-x"></i></button>
+                                </td>
+                            </tr>
+                        @empty
+                            <p>belum ada produk yang ditambahkan!</p>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -74,35 +90,71 @@
     <!-- Cart End -->
 
 
-    
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
     <script>
-        function incrementQuantity() {
-            var quantityElement = document.getElementById('quantity');
-            var quantity = parseInt(quantityElement.value);
-            quantityElement.value = quantity + 1;
-            updateTotal();
-        }
-    
-        function decrementQuantity() {
-            var quantityElement = document.getElementById('quantity');
-            var quantity = parseInt(quantityElement.value);
-            if (quantity > 1) {
-                quantityElement.value = quantity - 1;
-                updateTotal();
+        function incrementQuantity(maxStok) {
+            let quantityInput = document.getElementById('quantity');
+            let currentQuantity = parseInt(quantityInput.value);
+            if (currentQuantity < maxStok) {
+                quantityInput.value = currentQuantity + 1;
+                updateSubtotal(quantityInput.dataset.id, quantityInput.dataset
+                    .harga); // Update subtotal setelah menambah quantity
             }
         }
-    
-        function updateTotal() {
-            var quantity = parseInt(document.getElementById('quantity').value);
-            var price = 70000; // Harga per item
-            var subtotal = quantity * price;
-            document.getElementById('subtotal').textContent = 'Rp. ' + subtotal.toLocaleString();
-            document.getElementById('subtotalAmount').textContent = 'Rp. ' + subtotal.toLocaleString();
-            document.getElementById('totalAmount').textContent = 'Rp. ' + subtotal.toLocaleString();
+
+        function decrementQuantity() {
+            let quantityInput = document.getElementById('quantity');
+            let currentQuantity = parseInt(quantityInput.value);
+            if (currentQuantity > 1) {
+                quantityInput.value = currentQuantity - 1;
+                updateSubtotal(quantityInput.dataset.id, quantityInput.dataset
+                    .harga); // Update subtotal setelah mengurangi quantity
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let quantityInputs = document.querySelectorAll('.quantity-input');
+            quantityInputs.forEach(function(input) {
+                input.addEventListener('change', function() {
+                    updateSubtotal(input.dataset.id, input.dataset.harga);
+                });
+            });
+
+            let minusButtons = document.querySelectorAll('.btn-minus');
+            minusButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    let input = button.nextElementSibling;
+                    let currentValue = parseInt(input.value);
+                    if (currentValue > 1) {
+                        input.value = currentValue - 1;
+                        updateSubtotal(input.dataset.id, input.dataset.harga);
+                    }
+                });
+            });
+
+            let plusButtons = document.querySelectorAll('.btn-plus');
+            plusButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    let input = button.previousElementSibling;
+                    let currentValue = parseInt(input.value);
+                    let maxValue = parseInt(input.getAttribute('max'));
+                    if (currentValue < maxValue) {
+                        input.value = currentValue + 1;
+                        updateSubtotal(input.dataset.id, input.dataset.harga);
+                    }
+                });
+            });
+        });
+
+        function updateSubtotal(id, hargaProduk) {
+            let quantityInput = document.getElementById('quantity-' + id);
+            let currentQuantity = parseInt(quantityInput.value);
+
+            let subtotal = hargaProduk * currentQuantity;
+            document.getElementById('subtotal-' + id).innerText = 'Rp. ' + subtotal
+                .toLocaleString(); // Menggunakan toLocaleString() untuk format ribuan
         }
     </script>
 @endsection
-

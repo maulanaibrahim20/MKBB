@@ -15,4 +15,9 @@ class Produk extends Model
     {
         return $this->hasMany(Gambar::class, 'produk_id', 'id');
     }
+
+    public function toko()
+    {
+        return $this->belongsTo(Toko::class, 'toko_id', 'id');
+    }
 }

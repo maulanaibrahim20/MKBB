@@ -168,7 +168,7 @@
                                         $gambar = gambarproduk($produks->id)->first(); // Assuming you want the first image
                                     @endphp
                                     @if ($gambar)
-                                        <img class="img-fluid product-img-custom"
+                                        <img class="img-fluid product-img-custom" style="height: 480px; width:auto;"
                                             src="{{ asset('storage/' . $gambar->gambar) }}" alt="">
                                     @else
                                         <img class="img-fluid product-img-custom"
@@ -189,7 +189,7 @@
                                     </div>
                                 </div>
                                 <div class="card-footer d-flex justify-content-between bg-light border">
-                                    <a href="" class="btn btn-sm text-dark p-0"><i
+                                    <a href="{{ '/produk/detail/' . $produks['id'] }}" class="btn btn-sm text-dark p-0"><i
                                             class="bi bi-eye text-dark mr-1"></i>View Detail</a>
                                     <a href="" class="btn btn-sm text-dark p-0"><i
                                             class="bi bi-cart text-dark mr-1"></i>Add To Cart</a>

@@ -6,7 +6,7 @@
     </div>
     <ul class="sidebar-menu d-flex flex-column p-3 m-0 mb-0 h-100">
         <li class="sidebar-menu-item">
-            <a href="index.html">
+            <a href="{{ url('/admin/dashboard') }}">
                 <i class="ri-dashboard-line sidebar-menu-item-icon"></i>
                 Dashboard
             </a>

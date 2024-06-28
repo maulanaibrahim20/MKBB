@@ -1,6 +1,5 @@
 @extends('index')
 @section('content')
-
     <!-- Page Header Start -->
     <div class="container-fluid bg-dark text-white mb-5">
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
@@ -20,27 +19,26 @@
             <div class="col-lg-5 pb-5">
                 <div id="product-carousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner border">
-                        <div class="carousel-item active">
-                            <img class="d-block w-100 h-100" src="images/1.jpg" alt="Gambar">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100 h-100" src="images/2.jpg" alt="Gambar">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100 h-100" src="images/3.jpg" alt="Gambar">
-                        </div>
+                        @foreach (gambarproduk($produkDetail['id']) as $index => $gambars)
+                            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                <img class="d-block w-100 h-100" src="{{ asset('storage/' . $gambars->gambar) }}"
+                                    alt="Gambar">
+                            </div>
+                        @endforeach
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#product-carousel" data-bs-slide="prev">
+                    <button class="carousel-control-prev" type="button" data-bs-target="#product-carousel"
+                        data-bs-slide="prev">
                         <span class="carousel-control-prev-icon"></span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#product-carousel" data-bs-slide="next">
+                    <button class="carousel-control-next" type="button" data-bs-target="#product-carousel"
+                        data-bs-slide="next">
                         <span class="carousel-control-next-icon"></span>
                     </button>
                 </div>
             </div>
 
             <div class="col-lg-7 pb-5">
-                <h3 class="font-weight-semi-bold">Kaos</h3>
+                <h3 class="font-weight-semi-bold">{{ $produkDetail['namaProduk'] }}</h3>
                 <div class="d-flex mb-3">
                     <div class="text-primary mr-2">
                         <i class="bi bi-star-fill"></i>
@@ -51,8 +49,8 @@
                     </div>
                     <small class="pt-1">(50 Ulasan)</small>
                 </div>
-                <h3 class="font-weight-semi-bold mb-4">Rp. 70.000</h3>
-                <p class="mb-4">Kami menghadirkan baju-baju berkualitas tinggi yang terbuat dari bahan pilihan, memberikan kenyamanan dan kepuasan dalam setiap pemakaian. Dibuat dengan tekad untuk menjaga kualitas dan gaya, setiap baju kami tidak hanya memberikan nilai yang luar biasa, tetapi juga mengekspresikan kepribadian Anda dengan cara yang unik.</p>
+                <h3 class="font-weight-semi-bold mb-4">Rp {{ number_format($produkDetail['harga'], 0, ',', '.') }}</h3>
+                <p class="mb-4">{{ $produkDetail['deskripsiProduk'] }}</p>
                 <div class="d-flex mb-3">
                     <p class="text-dark font-weight-medium mb-0 mr-3">Ukuran:</p>
                     <form>
@@ -108,7 +106,8 @@
                         <button class="btn btn-dark btn-minus">
                             <i class="bi bi-dash"></i>
                         </button>
-                        <input type="text" class="form-control bg-secondary text-center" value="1" id="quantity-input">
+                        <input type="text" class="form-control bg-secondary text-center" value="1"
+                            id="quantity-input">
                         <button class="btn btn-dark btn-plus">
                             <i class="bi bi-plus"></i>
                         </button>
@@ -137,63 +136,74 @@
         <div class="row px-xl-5">
             <div class="col">
                 <div class="nav nav-tabs justify-content-center border-secondary mb-4">
-                    <button class="nav-link active text-dark" data-bs-toggle="tab" data-bs-target="#tab-pane-1">Toko</button>
-                    <button class="nav-link text-dark" data-bs-toggle="tab" data-bs-target="#tab-pane-2">Deskripsi</button>
-                    <button class="nav-link text-dark" data-bs-toggle="tab" data-bs-target="#tab-pane-3">Informasi</button>
-                    <button class="nav-link text-dark" data-bs-toggle="tab" data-bs-target="#tab-pane-4">Ulasan (0)</button>
-                </div>                
+                    <button class="nav-link active text-dark" data-bs-toggle="tab"
+                        data-bs-target="#tab-pane-1">Toko</button>
+                    <button class="nav-link text-dark" data-bs-toggle="tab"
+                        data-bs-target="#tab-pane-2">Deskripsi</button>
+                    <button class="nav-link text-dark" data-bs-toggle="tab"
+                        data-bs-target="#tab-pane-3">Informasi</button>
+                    <button class="nav-link text-dark" data-bs-toggle="tab" data-bs-target="#tab-pane-4">Ulasan
+                        (0)</button>
+                </div>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tab-pane-1">
                         <!-- Foto Profil -->
                         <div class="text-center mb-3">
-                            <img src="images/6.jpg" alt="Foto Profil" style="width: 150px; height: 150px; border-radius: 50%;">
+                            <img src="images/6.jpg" alt="Foto Profil"
+                                style="width: 150px; height: 150px; border-radius: 50%;">
                         </div>
-                    
+
                         <!-- Nama, Alamat, Nomor Telepon -->
-                        <h4 class="text-center">Nama Toko</h4>
-                        <p class="text-center">Alamat Toko</p>
-                        <p class="text-center">Nomor Telepon Toko</p>
-                    
+                        <h4 class="text-center">{{ $produkDetail['toko']['namaToko'] }}</h4>
+                        <p class="text-center">{{ $produkDetail['toko']['alamat'] }}</p>
+                        <p class="text-center">{{ $produkDetail['toko']['noTelpToko'] }}</p>
+
                         <!-- Button Jumlah Pelanggan -->
                         <div class="text-center">
                             <button class="btn btn-primary">Jumlah Pelanggan</button>
                         </div>
-                    
+
                         <!-- Button Pesanan Diterima -->
                         <div class="text-center mt-3">
                             <button class="btn btn-success">Pesanan Diterima</button>
                         </div>
-                    
+
                         <!-- Button Informasi Bergabung -->
                         <div class="text-center mt-3">
                             <button class="btn btn-info">Informasi Bergabung</button>
                         </div>
                     </div>
-                    
+
                     <div class="tab-pane fade" id="tab-pane-2">
                         <h4 class="mb-3">Deskripsi Produk</h4>
-                        <p>Dapatkan gaya yang unik dan trendi dengan koleksi baju desain Majantara kami yang terbaru! Setiap potongan baju dirancang dengan penuh perhatian pada detailnya, menciptakan kombinasi sempurna antara gaya kontemporer dan motif tradisional Majantara yang ikonik.
-
-                            Dengan harga yang terjangkau, kami menghadirkan baju-baju berkualitas tinggi yang terbuat dari bahan pilihan, memberikan kenyamanan dan kepuasan dalam setiap pemakaian. Dibuat dengan tekad untuk menjaga kualitas dan gaya, setiap baju kami tidak hanya memberikan nilai yang luar biasa, tetapi juga mengekspresikan kepribadian Anda dengan cara yang unik.
-                            
-                            Saat Anda berbelanja di sini, Anda tidak hanya mendapatkan produk yang berkualitas, tetapi juga pengalaman belanja yang memuaskan. Jadi, jangan ragu untuk memilih baju desain Majantara kami sebagai tambahan yang sempurna untuk lemari pakaian Anda. Segera dapatkan gaya yang berbeda dan menarik dengan harga yang terjangkau hari ini!</p>
+                        <p>{{ $produkDetail['deskripsiProduk'] }}</p>
                     </div>
                     <div class="tab-pane fade" id="tab-pane-3">
                         <h4 class="mb-3">Informasi Tambahan</h4>
-                        <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam invidunt duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore diam stet rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no ut diam consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor accusam, ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem elitr sanctus eirmod takimata dolor ea invidunt.</p>
+                        <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam invidunt
+                            duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur
+                            invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore diam stet
+                            rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no ut diam
+                            consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor accusam,
+                            ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem elitr
+                            sanctus eirmod takimata dolor ea invidunt.</p>
                         <div class="row">
                             <div class="col-md-6">
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item px-0">
-                                       <strong>Desain Unik: </strong>Kaos desain Majantara menawarkan desain yang unik dan memikat, menciptakan penampilan yang berbeda dan menarik dari yang lain.
+                                        <strong>Desain Unik: </strong>Kaos desain Majantara menawarkan desain yang unik dan
+                                        memikat, menciptakan penampilan yang berbeda dan menarik dari yang lain.
                                     </li>
                                     <li class="list-group-item px-0">
-                                        <strong>Kualitas Terbaik: </strong>Dibuat dengan bahan berkualitas tinggi, kaos ini menawarkan kenyamanan maksimal saat dipakai sekaligus daya tahan yang luar biasa.
+                                        <strong>Kualitas Terbaik: </strong>Dibuat dengan bahan berkualitas tinggi, kaos ini
+                                        menawarkan kenyamanan maksimal saat dipakai sekaligus daya tahan yang luar biasa.
                                     </li>
                                     <li class="list-group-item px-0">
-                                        <strong>Harga Terjangkau:</strong> Meskipun menawarkan desain yang eksklusif dan kualitas yang tinggi, kaos desain Majantara tetap terjangkau, sehingga memungkinkan Anda untuk tampil bergaya tanpa perlu menguras dompet.
+                                        <strong>Harga Terjangkau:</strong> Meskipun menawarkan desain yang eksklusif dan
+                                        kualitas yang tinggi, kaos desain Majantara tetap terjangkau, sehingga memungkinkan
+                                        Anda untuk tampil bergaya tanpa perlu menguras dompet.
                                     </li>
-                                </ul> 
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -202,7 +212,8 @@
                             <div class="col-md-6">
                                 <h4 class="mb-4">1 ulasan untuk "Kemeja Gaya Berwarna-warni"</h4>
                                 <div class="media mb-4">
-                                    <img src="img/user.jpg" alt="Gambar" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                    <img src="img/user.jpg" alt="Gambar" class="img-fluid mr-3 mt-1"
+                                        style="width: 45px;">
                                     <div class="media-body">
                                         <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
                                         <div class="text-primary mb-2">
@@ -212,13 +223,15 @@
                                             <i class="bi bi-star-half"></i>
                                             <i class="bi bi-star"></i>
                                         </div>
-                                        <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+                                        <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no
+                                            at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <h4 class="mb-4">Tinggalkan ulasan</h4>
-                                <small>Alamat email Anda tidak akan dipublikasikan. Kolom yang wajib diisi ditandai *</small>
+                                <small>Alamat email Anda tidak akan dipublikasikan. Kolom yang wajib diisi ditandai
+                                    *</small>
                                 <div class="d-flex my-3">
                                     <p class="mb-0 mr-2">Penilaian Anda * :</p>
                                     <div class="text-primary">
@@ -243,7 +256,8 @@
                                         <input type="email" class="form-control" id="email">
                                     </div>
                                     <div class="form-group mb-0">
-                                        <input type="submit" value="Tinggalkan Ulasan Anda" class="btn btn-primary px-3">
+                                        <input type="submit" value="Tinggalkan Ulasan Anda"
+                                            class="btn btn-primary px-3">
                                     </div>
                                 </form>
                             </div>
@@ -263,30 +277,30 @@
 
 
 
-    
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelector('.btn-plus').addEventListener('click', function () {
-            let quantityInput = document.getElementById('quantity-input');
-            let currentValue = parseInt(quantityInput.value);
-            if (!isNaN(currentValue)) {
-                quantityInput.value = currentValue + 1;
-            }
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.btn-plus').addEventListener('click', function() {
+                let quantityInput = document.getElementById('quantity-input');
+                let currentValue = parseInt(quantityInput.value);
+                if (!isNaN(currentValue)) {
+                    quantityInput.value = currentValue + 1;
+                }
+            });
+
+            document.querySelector('.btn-minus').addEventListener('click', function() {
+                let quantityInput = document.getElementById('quantity-input');
+                let currentValue = parseInt(quantityInput.value);
+                if (!isNaN(currentValue) && currentValue > 1) {
+                    quantityInput.value = currentValue - 1;
+                }
+            });
         });
-
-        document.querySelector('.btn-minus').addEventListener('click', function () {
-            let quantityInput = document.getElementById('quantity-input');
-            let currentValue = parseInt(quantityInput.value);
-            if (!isNaN(currentValue) && currentValue > 1) {
-                quantityInput.value = currentValue - 1;
-            }
-        });
-    });
-</script>
+    </script>
 @endsection
-
-

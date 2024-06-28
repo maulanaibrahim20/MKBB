@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="author" content="Muhamad Nauval Azhar">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="Ini adalah template halaman login berbasis Bootstrap 5">
     <title>Halaman Pendaftaran Bootstrap 5</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body>
@@ -19,24 +22,36 @@
                     <div class="card shadow-lg">
                         <div class="card-body p-5">
                             <h1 class="fs-4 card-title fw-bold mb-4">Daftar</h1>
-                            @if(Session::has('success'))
+                            @if (Session::has('success'))
                                 <div class="alert alert-success" role="alert">
                                     {{ Session::get('success') }}
                                 </div>
                             @endif
-                            <form method="POST" action="{{ route('register.post') }}" class="needs-validation" novalidate="" autocomplete="off">
+                            @if ($errors->any())
+                                <div class="alert alert-danger" role="alert">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <form method="POST" action="{{ url('/register') }}" class="needs-validation" novalidate
+                                autocomplete="off">
                                 @csrf
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="name">Nama</label>
-                                    <input id="name" type="text" class="form-control" name="name" value="" required autofocus>
+                                    <input id="name" type="text" class="form-control" name="name"
+                                        value="{{ old('name') }}" required autofocus>
                                     <div class="invalid-feedback">
                                         Nama wajib diisi
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="mb-2 text-muted" for="email">Alamat E-Mail</label>
-                                    <input id="email" type="email" class="form-control" name="email" value="" required>
+                                    <label class="mb-2 text-muted" for="email">E-Mail</label>
+                                    <input id="email" type="email" class="form-control" name="email"
+                                        value="{{ old('email') }}" required>
                                     <div class="invalid-feedback">
                                         Email tidak valid
                                     </div>
@@ -51,8 +66,10 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="mb-2 text-muted" for="password_confirmation">Konfirmasi Kata Sandi</label>
-                                    <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" required>
+                                    <label class="mb-2 text-muted" for="password_confirmation">Konfirmasi Kata
+                                        Sandi</label>
+                                    <input id="password_confirmation" type="password" class="form-control"
+                                        name="password_confirmation" required>
                                     <div class="invalid-feedback">
                                         Konfirmasi kata sandi wajib diisi
                                     </div>
@@ -81,7 +98,28 @@
     </section>
 
     <script src="{{ asset('assets/js/login.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script type="text/javascript">
+            Swal.fire({
+                title: "Berhasil",
+                text: "{{ session('success') }}",
+                icon: "success"
+            });
+        </script>
+    @endif
+    @if (session('error'))
+        <script type="text/javascript">
+            Swal.fire({
+                title: "{{ session('error') }}",
+                icon: "error"
+            });
+        </script>
+    @endif
 
 </body>
+
 </html>
