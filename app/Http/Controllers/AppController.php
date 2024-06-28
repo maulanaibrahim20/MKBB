@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Produk;
 use App\Models\Toko;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,7 +28,9 @@ class AppController extends Controller
 
     public function buatToko(Request $request)
     {
-        $params = $request->only(['namaToko', 'slug', 'alamat', 'noTelpToko', 'id_customer']);
+        $params = $request->only(['namaToko', 'alamat', 'noTelpToko', 'id_customer']);
+        $params['slug'] = Str::slug($params['namaToko']);
+
         $customer = Customer::find(Auth::user()->customer->id);
 
         try {
