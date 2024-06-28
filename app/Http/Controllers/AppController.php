@@ -35,7 +35,7 @@ class AppController extends Controller
 
         try {
             Toko::create($params);
-            $customer->update(['status' => 'penjual']);
+            $customer->update(['status' => 'penjual'],);
 
             return back()->with('success', 'Toko berhasil dibuat dan status diperbarui.');
         } catch (\Exception $e) {

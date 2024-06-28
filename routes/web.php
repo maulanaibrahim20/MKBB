@@ -35,8 +35,8 @@ Route::get('/cart/plus/{id}', [FrontendController::class, 'pluscart']);
 Route::get('/cart/minus/{id}', [FrontendController::class, 'minuscart']);
 Route::delete('/cart/delete/{id}', [FrontendController::class, 'deletecart']);
 
-Route::get('/checkout/{id}', [FrontendController::class, 'checkout'])->name('checkout');
-Route::post('/checkout/produk/{id}', [FrontendController::class, 'checkoutProduk'])->name('checkout');
+Route::get('/checkout', [FrontendController::class, 'checkout'])->name('checkout');
+Route::post('/checkout/produk', [FrontendController::class, 'checkoutProduk'])->name('checkout');
 
 Route::get('/detail', [FrontendController::class, 'detail'])->name('detail');
 Route::get('/product', [FrontendController::class, 'product'])->name('product');

@@ -91,7 +91,7 @@
                             <h5 class="font-weight-bold" id="totalAmount">Rp. 0</h5>
                         </div>
                         @if ($keranjang->isNotEmpty())
-                            <a href="{{ url('/checkout/' . $keranjang->pluck('id')->implode(',')) }}"
+                            <a href="{{ url('/checkout' ) }}"
                                 class="btn btn-block btn-dark my-3 py-3 text-white">Checkout</a>
                         @else
                             <button class="btn btn-block btn-dark my-3 py-3 text-white" disabled>Belum ada barang</button>

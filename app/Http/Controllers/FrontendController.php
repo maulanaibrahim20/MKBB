@@ -77,25 +77,30 @@ class FrontendController extends Controller
         return back()->with('success', 'success');
     }
 
-    public function checkout($id)
+    public function checkout()
     {
-        $keranjang = KeranjangProduk::where('keranjang_id', $id)->first();
+        $keranjang = KeranjangProduk::where('customer_id', Auth::user()->customer->id)->first();
+        $customer = KeranjangProduk::where('customer_id', Auth::user()->customer->id)->get();
         // dd($keranjang);
-        $data['keranjang'] = $keranjang;
+        $data = [
+            'keranjang' => $keranjang,
+            'customer' => $customer,
+        ];
         return view('Frontend.chekout', $data);
     }
 
-    public function checkoutProduk(Request $request, $id)
+    public function checkoutProduk(Request $request)
     {
+        // dd($request->all());
         if ($request->payment == null) {
             return back()->with('error', 'pilih salah satu payment');
         }
-        $keranjang = Keranjang::where('id', $id)->firstOrFail();
+        $keranjang = Keranjang::where('customer_id', Auth::user()->customer->id)->firstOrFail();
 
         // Populate the parameters
         $params = $request->all();
         $params['tipeTransaksi'] = $request->payment;
-        $params['keranjang_id'] = $id;
+        $params['keranjang_id'] = 1;
         $params['customer_id'] = Auth::user()->customer->id;
         $params['toko_id'] = $keranjang->toko_id;
         $params['tanggal'] = now();
@@ -108,7 +113,7 @@ class FrontendController extends Controller
 
         // Iterasi melalui ID produk dan buat detail checkout
         foreach ($request->produkId as $produkId) {
-            $keranjangProduk = KeranjangProduk::where('keranjang_id', $id)
+            $keranjangProduk = KeranjangProduk::where('keranjang_id', 1)
                 ->where('produk_id', $produkId)
                 ->firstOrFail();
 

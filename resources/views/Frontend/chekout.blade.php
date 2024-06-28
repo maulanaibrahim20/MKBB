@@ -20,7 +20,8 @@
             <div class="mb-4">
                 <h4 class="font-weight-semi-bold mb-4">Billing Address</h4>
                 <div class="row">
-                    <form action="{{url('/checkout/produk/'.$keranjang->id)}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{url('checkout/produk')}}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="col-md-6 form-group">
                             <label>Nama Pembeli</label>
@@ -55,11 +56,11 @@
                     @php
                     $subtotal = 0;
                     @endphp
-                    @foreach (produk($keranjang->produk_id) as $produks)
+                    @foreach ($customer as $produks)
                     <div class="d-flex justify-content-between">
-                        <p>{{ $produks->namaProduk }}</p>
+                        <p>{{ $produks->produk->namaProduk }}</p>
                         <input type="hidden" name="produkId[]" value="{{ $produks->id }}">
-                        <p>{{ $produks->harga }} x {{$keranjang->qty}}</p>
+                        <p>{{ $produks->produk->harga }} x {{$keranjang->qty}}</p>
                         @php
                         $subtotal += $produks->harga * $keranjang->qty;
                         @endphp
@@ -96,7 +97,8 @@
                     </div>
                     <div class="form-group">
                         <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input" name="payment" value="onlinePayment" id="directcheck">
+                            <input type="radio" class="custom-control-input" name="payment" value="onlinePayment"
+                                id="directcheck">
                             <label class="custom-control-label" for="directcheck">Online Payment</label>
                         </div>
                     </div>
