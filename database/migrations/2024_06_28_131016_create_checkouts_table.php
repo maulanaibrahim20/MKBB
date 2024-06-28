@@ -18,6 +18,7 @@ return new class extends Migration
             $table->double('totalHarga');
             $table->integer('customer_id');
             $table->integer('toko_id');
+            $table->enum('status', ['belum bayar', 'sudah bayar', 'dikirim', 'selesai']);
             $table->timestamps();
         });
     }

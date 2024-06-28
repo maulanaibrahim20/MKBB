@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Checkout;
+use App\Models\CheckoutDetail;
 use App\Models\Keranjang;
 use App\Models\KeranjangProduk;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
 class FrontendController extends Controller
@@ -76,6 +79,41 @@ class FrontendController extends Controller
         // dd($keranjang);
         $data['keranjang'] = $keranjang;
         return view('Frontend.chekout', $data);
+    }
+
+    public function checkoutProduk(Request $request, $id)
+    {
+        // dd($request->all());
+        $params = $request->all();
+        $keranjang = Keranjang::where('id', $id)->firstOrFail();
+
+        // Populate the parameters
+        $params['tipeTransaksi'] = $request->payment;
+        $params['keranjang_id'] = $id;
+        $params['customer_id'] = Auth::user()->customer->id;
+        $params['toko_id'] = $keranjang->toko_id;
+        $params['tanggal'] = now();
+        $params['totalHarga'] = $request->total;
+        $params['status'] = $request->payment == 'COD' ? 'sudah bayar' : 'belum bayar';
+
+        // Create checkout entry
+        $checkout = Checkout::create($params);
+
+        // Iterate through the product IDs and create checkout details
+        foreach ($request->produkId as $produkId) {
+            $qtyProduk = KeranjangProduk::where('keranjang_id', $id)
+                ->where('produk_id', $produkId)
+                ->firstOrFail();
+
+            CheckoutDetail::create([
+                'checkout_id' => $checkout->id,
+                'produk_id' => $produkId,
+                'qtyProduk' => $qtyProduk->qty,
+                'hargaProduk' => $qtyProduk->produk->harga,
+            ]);
+        }
+
+        return back()->with('success', 'success');
     }
 
     public function detail()
