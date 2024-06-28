@@ -81,23 +81,44 @@
                             <a href="{{ url('/produk/detail/' . $data['id']) }}" class="btn btn-sm text-dark p-0"><i
                                     class="bi bi-eye text-dark mr-1"></i>View
                                 Detail</a>
-                            <form action="{{ url('/cart/post') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="produk_id" value="{{ $data['id'] }}">
-                                <input type="hidden" name="toko_id" value="{{ $data['toko_id'] }}">
-                                <input type="hidden" name="harga" value="{{ $data['harga'] }}">
-                                <button type="submit" class="btn btn-sm text-dark p-0">
+                            @auth
+                                <form action="{{ url('/cart/post') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="produk_id" value="{{ $data['id'] }}">
+                                    <input type="hidden" name="toko_id" value="{{ $data['toko_id'] }}">
+                                    <input type="hidden" name="harga" value="{{ $data['harga'] }}">
+                                    <button type="submit" class="btn btn-sm text-dark p-0">
+                                        <i class="bi bi-cart text-dark mr-1"></i>Add To Cart
+                                    </button>
+                                </form>
+                            @else
+                                <button type="button" class="btn btn-sm text-dark p-0" onclick="showLoginAlert()">
                                     <i class="bi bi-cart text-dark mr-1"></i>Add To Cart
                                 </button>
-                            </form>
+                            @endauth
                         </div>
                     </div>
                 </div>
             @empty
                 <p>Produk Tidak Tersedia</p>
             @endforelse
-
         </div>
     </div>
     <!-- Products End -->
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showLoginAlert() {
+            Swal.fire({
+                title: 'Anda belum login',
+                text: 'Silakan login terlebih dahulu untuk menambahkan produk ke keranjang.',
+                icon: 'warning',
+                confirmButtonText: 'Login'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ url('/login') }}";
+                }
+            });
+        }
+    </script>
 @endsection

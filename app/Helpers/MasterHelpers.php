@@ -2,6 +2,7 @@
 
 use App\Models\Blog;
 use App\Models\Gambar;
+use App\Models\Produk;
 
 if (!function_exists('blogs')) {
     function blogs()
@@ -15,6 +16,14 @@ if (!function_exists('gambarproduk')) {
     function gambarproduk($idproduk)
     {
         $results = Gambar::where('produk_id', $idproduk)->get();
+        return $results;
+    }
+}
+if (!function_exists('produk')) {
+    function produk($idProduk)
+    {
+        $results = Produk::where('id', $idProduk)
+            ->get();
         return $results;
     }
 }

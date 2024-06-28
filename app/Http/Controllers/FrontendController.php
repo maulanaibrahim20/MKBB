@@ -66,7 +66,6 @@ class FrontendController extends Controller
         $produk = Produk::where('id', $id)->first();
         $params['qty'] = $keranjang->qty - 1;
         $params['harga'] = $keranjang->harga - $produk->harga;
-        // dd($params['qty']);
         $keranjang->update($params);
         return back()->with('success', 'success');
     }
@@ -76,7 +75,7 @@ class FrontendController extends Controller
         $keranjang = KeranjangProduk::where('keranjang_id', $id)->first();
         // dd($keranjang);
         $data['keranjang'] = $keranjang;
-        return view('Frontend.chekout',$data);
+        return view('Frontend.chekout', $data);
     }
 
     public function detail()
