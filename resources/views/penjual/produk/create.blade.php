@@ -81,14 +81,52 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="stok" class="form-label">Stok</label>
-                                    <input type="number" class="form-control" id="stok" name="stok">
+                                    <label class="form-label">Ukuran</label>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="stokS"
+                                                name="ukuran[]" value="S">
+                                            <label class="form-check-label" for="ukuranS">S</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="ukuranM"
+                                                name="ukuran[]" value="M">
+                                            <label class="form-check-label" for="ukuranM">M</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="ukuranL"
+                                                name="ukuran[]" value="L">
+                                            <label class="form-check-label" for="ukuranL">L</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="ukuranL"
+                                                name="ukuran[]" value="XL">
+                                            <label class="form-check-label" for="ukuranL">XL</label>
+                                        </div>
+                                        <!-- Add more sizes as needed -->
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="warna" class="form-label">Warna</label>
-                                    <input type="color" class="form-control" id="warna" name="warnaProduk">
+                                    <label class="form-label">Warna</label>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="warnaMerah"
+                                                name="warnaProduk[]" value="Merah">
+                                            <label class="form-check-label" for="warnaMerah">Merah</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="warnaBiru"
+                                                name="warnaProduk[]" value="Biru">
+                                            <label class="form-check-label" for="warnaBiru">Biru</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="warnaHijau"
+                                                name="warnaProduk[]" value="Hijau">
+                                            <label class="form-check-label" for="warnaHijau">Hijau</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -105,23 +143,22 @@
                                         <option value="sweter">Sweter</option>
                                     </select>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="ukuran" class="form-label">Ukuran</label>
-                                    <select name="ukuran" id="ukuran" class="form-select">
-                                        <option value="">-- Pilih --</option>
-                                        <option value="S">S</option>
-                                        <option value="M">M</option>
-                                        <option value="L">L</option>
-                                        <option value="XL">XL</option>
-                                        <option value="XXL">XXL</option>
-                                    </select>
-                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="harga" class="form-label">Harga</label>
                                     <input type="number" class="form-control" id="harga" name="harga">
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="stok" class="form-label">Stok</label>
+                                    <input type="number" class="form-control" id="stok" name="stok">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="deskripsi" class="form-label">Deskripsi Produk</label>
                                     <textarea class="form-control" id="deskripsi" rows="3" name="deskripsiProduk"></textarea>

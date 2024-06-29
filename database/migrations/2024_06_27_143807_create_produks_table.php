@@ -20,8 +20,6 @@ return new class extends Migration
             $table->string('slug');
             $table->string('stok');
             $table->string('harga');
-            $table->enum('ukuran', ['S', 'M', 'L', 'XL', 'XXL']);
-            $table->string('warnaProduk');
             $table->enum('statusProduk', ['tersedia', 'habis']);
             $table->timestamps();
         });

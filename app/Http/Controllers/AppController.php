@@ -24,9 +24,18 @@ class AppController extends Controller
 
     public function produkDetail($id)
     {
-        $data['produkDetail'] = $this->produk::where('id', $id)->first();
+        $produkDetail = Produk::findOrFail($id);
+        $ukuran = $produkDetail->ukuran()->pluck('ukuran')->toArray();
+        $warnaProduk = $produkDetail->warna()->pluck('warna')->toArray();
+
+        $data = [
+            'produkDetail' => $produkDetail,
+            'ukuran' => $ukuran,
+            'warnaProduk' => $warnaProduk,
+        ];
         return view('frontend.detail', $data);
     }
+
 
     public function toko()
     {

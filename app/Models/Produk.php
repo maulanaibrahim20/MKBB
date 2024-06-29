@@ -20,4 +20,14 @@ class Produk extends Model
     {
         return $this->belongsTo(Toko::class, 'toko_id', 'id');
     }
+
+    public function ukuran()
+    {
+        return $this->hasMany(UkuranProduk::class, 'produk_id', 'id');
+    }
+
+    public function warna()
+    {
+        return $this->hasMany(WarnaProduk::class, 'produk_id', 'id');
+    }
 }

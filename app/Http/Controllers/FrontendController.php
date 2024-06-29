@@ -50,21 +50,33 @@ class FrontendController extends Controller
             $keranjang = Keranjang::where('customer_id', Auth::user()->customer->id)
                 ->where('status', 'keranjang')
                 ->first();
+
             if (!$keranjang) {
-                // Jika tidak ada, buat keranjang baru
                 $keranjang = Keranjang::create([
                     'customer_id' => Auth::user()->customer->id,
                     'status' => 'keranjang',
                 ]);
             }
-            KeranjangProduk::create([
-                'toko_id' => $request->toko_id,
-                'customer_id' => Auth::user()->customer->id,
-                'keranjang_id' => $keranjang->id,
-                'produk_id' => $request->produk_id,
-                'qty' => 1,
-                'harga' => $request->harga
-            ]);
+
+            $existingItem = KeranjangProduk::where('keranjang_id', $keranjang->id)
+                ->where('produk_id', $request->produk_id)
+                ->first();
+
+            if ($existingItem) {
+                $existingItem->qty += $request->has('qty') ? $request->qty : 1;
+                $existingItem->save();
+            } else {
+                $qty = $request->has('qty') ? $request->qty : 1;
+
+                KeranjangProduk::create([
+                    'toko_id' => $request->toko_id,
+                    'customer_id' => Auth::user()->customer->id,
+                    'keranjang_id' => $keranjang->id,
+                    'produk_id' => $request->produk_id,
+                    'qty' => $qty,
+                    'harga' => $request->harga,
+                ]);
+            }
 
             DB::commit();
             return back()->with('success', 'Produk berhasil ditambahkan ke keranjang');
@@ -73,7 +85,6 @@ class FrontendController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
 
 
     public function pluscart(Request $request, $id)
@@ -102,58 +113,71 @@ class FrontendController extends Controller
         try {
             DB::beginTransaction();
 
+            // Cari keranjang customer yang sedang login dengan status 'keranjang'
             $keranjang = Keranjang::where('customer_id', Auth::user()->customer->id)
                 ->where('status', 'keranjang')
                 ->firstOrFail();
-            $keranjangProduks = KeranjangProduk::where('keranjang_id', $keranjang->id)->get();
 
-            $checkout = Checkout::create([
-                'invoiceId' => 'INV-' . time(),
-                'tipeTransaksi' => $request->payment,
-                'keranjang_id' => $keranjang->id,
-                'customer_id' => Auth::user()->customer->id,
-                'statusPengiriman' => 'belum_dikirim',
-                'tanggal' => now(),
-                'totalHarga' => $request->totalHarga,
-            ]);
+            // Cek apakah sudah ada checkout dengan status "belum bayar" untuk keranjang ini
+            $existingCheckout = Checkout::where('keranjang_id', $keranjang->id)
+                ->where('status', 'belum bayar')
+                ->first();
 
-            foreach ($keranjangProduks as $keranjangProduk) {
-                $produk = Produk::findOrFail($keranjangProduk->produk_id);
+            if (!$existingCheckout) {
+                // Jika belum ada, buat checkout baru
+                $checkout = Checkout::create([
+                    'invoiceId' => 'INV-' . time(),
+                    'tipeTransaksi' => $request->payment,
+                    'keranjang_id' => $keranjang->id,
+                    'customer_id' => Auth::user()->customer->id,
+                    'statusPengiriman' => 'belum_dikirim',
+                    'tanggal' => now(),
+                    'totalHarga' => $request->totalHarga,
+                ]);
 
-                if ($produk->stok < $keranjangProduk->qty) {
-                    throw new \Exception('Stok tidak mencukupi untuk produk: ' . $produk->namaProduk);
+                // Ambil keranjang produk untuk dibuat checkout detail
+                $keranjangProduks = KeranjangProduk::where('keranjang_id', $keranjang->id)->get();
+
+                foreach ($keranjangProduks as $keranjangProduk) {
+                    $produk = Produk::findOrFail($keranjangProduk->produk_id);
+
+                    if ($produk->stok < $keranjangProduk->qty) {
+                        throw new \Exception('Stok tidak mencukupi untuk produk: ' . $produk->namaProduk);
+                    }
+
+                    $produk->stok -= $keranjangProduk->qty;
+                    $produk->save();
+
+                    CheckoutDetail::create([
+                        'toko_id' => $keranjangProduk->toko_id,
+                        'checkout_id' => $checkout->id,
+                        'produk_id' => $keranjangProduk->produk_id,
+                        'qtyProduk' => $keranjangProduk->qty,
+                        'hargaProduk' => $keranjangProduk->harga,
+                    ]);
                 }
 
-                $produk->stok -= $keranjangProduk->qty;
-                $produk->save();
+                // $keranjang->update(['status' => 'checkout']);
 
-                CheckoutDetail::create([
-                    'toko_id' => $keranjangProduks->pluck('toko_id')->first(), // Anda mungkin ingin mengambil toko_id yang sesuai
-                    'checkout_id' => $checkout->id,
-                    'produk_id' => $keranjangProduk->produk_id,
-                    'qtyProduk' => $keranjangProduk->qty,
-                    'hargaProduk' => $keranjangProduk->harga,
+                // Proses pembuatan invoice dengan Xendit
+                $amount = $checkout->totalHarga;
+                $params = [
+                    "external_id" => $checkout->invoiceId,
+                    "amount" => $amount,
+                    "description" => "Online Payment",
+                    "invoice_duration" => 1800,
+                    "currency" => "IDR",
+                    "success_redirect_url" => env("APP_URL") . "/"
+                ];
+
+                $createInvoiceRequest = \Xendit\Invoice::create($params);
+
+                // Update status dan Xendit ID pada checkout
+                $checkout->update([
+                    "status" => "belum bayar",
+                    "xenditId" => $createInvoiceRequest["id"]
                 ]);
             }
-
-            // $keranjang->update(['status' => 'checkout']);
-
-            $amount = $checkout['totalHarga'];
-            $params = [
-                "external_id" => $checkout["invoiceId"],
-                "amount" => $amount,
-                "description" => "Online Payment",
-                "invoice_duration" => 1800,
-                "currency" => "IDR",
-                "success_redirect_url" => env("APP_URL") . "/"
-            ];
-
-            $createInvoiceRequest = \Xendit\Invoice::create($params);
-
-            $this->checkout->where("id", $checkout["id"])->update([
-                "status" => "belum bayar",
-                "xenditId" => $createInvoiceRequest["id"]
-            ]);
 
             DB::commit();
             return redirect('/checkout')->with('success', 'Checkout berhasil.');
@@ -162,6 +186,7 @@ class FrontendController extends Controller
             return back()->with('error', 'Terjadi kesalahan saat checkout: ' . $e->getMessage());
         }
     }
+
 
     public function checkout()
     {

@@ -25,18 +25,15 @@
                             @csrf
                             <div class="col-md-6 form-group">
                                 <label>Nama Pembeli</label>
-                                <input class="form-control" type="text" value="{{ $pembeli->user->name }}"
-                                    readonly>
+                                <input class="form-control" type="text" value="{{ $pembeli->user->name }}" readonly>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>E-mail</label>
-                                <input class="form-control" type="text" value="{{ $pembeli->user->email }}"
-                                    readonly>
+                                <input class="form-control" type="text" value="{{ $pembeli->user->email }}" readonly>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Nomor Telepon</label>
-                                <input class="form-control" type="text" value="{{ $pembeli->noTelp }}"
-                                    readonly>
+                                <input class="form-control" type="text" value="{{ $pembeli->noTelp }}" readonly>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Alamat</label>
@@ -61,9 +58,9 @@
                             <div class="d-flex justify-content-between">
                                 <p>{{ $produks->produk->namaProduk }}</p>
                                 <input type="hidden" name="produkId[]" value="{{ $produks->id }}">
-                                <p>{{ $produks->produk->harga }} x {{ $keranjang->qty }}</p>
+                                <p>{{ $produks->produk->harga }} x {{ $produks->qty }}</p>
                                 @php
-                                    $subtotal += $produks->harga * $keranjang->qty;
+                                    $subtotal += $produks->harga * $produks->qty;
                                 @endphp
                             </div>
                         @endforeach
