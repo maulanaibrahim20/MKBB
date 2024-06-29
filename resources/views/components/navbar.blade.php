@@ -55,9 +55,9 @@
                             <i class="bi bi-shop text-dark"></i>
                         </a>
                     @elseif(Auth::user()->customer->status == 'pembeli')
-                        <button type="button" class="btn border" data-bs-toggle="modal" data-bs-target="#houseModal">
+                        <a href="{{ url('/buatToko') }}" class="btn border">
                             <i class="bi bi-shop text-dark"></i>
-                        </button>
+                        </a>
                     @endif
                 @elseif (Auth::user()->role == '1')
                     <a href="{{ url('/admin/dashboard') }}" class="btn border">
@@ -66,7 +66,7 @@
                 @endif
 
                 <!-- Modal -->
-                <div class="modal fade" id="houseModal" tabindex="-1" aria-labelledby="houseModalLabel" aria-hidden="true">
+                {{-- <div class="modal fade" id="houseModal" tabindex="-1" aria-labelledby="houseModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -100,7 +100,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             @endauth
         </div>
     </div>

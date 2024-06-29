@@ -10,10 +10,20 @@ use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Xendit\Xendit;
 use Illuminate\Support\Facades\DB;
 
 class FrontendController extends Controller
 {
+    protected $checkout, $checkoutDetail, $serverKey;
+
+    public function __construct(Checkout $checkout, CheckoutDetail $checkoutDetail)
+    {
+        $this->checkout = $checkout;
+        $this->serverKey = config("xendit.xendit_key");
+        $this->checkoutDetail = $checkoutDetail;
+    }
+
     public function index()
     {
         $data['produk'] = Produk::all();
@@ -99,6 +109,7 @@ class FrontendController extends Controller
 
     public function checkoutProduk(Request $request)
     {
+        Xendit::setApiKey('xnd_development_Pla36WiCzPX2ehj5YqRqwV9oa2j6CfIa4wbJYVL5Juo89EBNArv8WtYyyzXbfq9');
         try {
             DB::beginTransaction();
 
@@ -112,14 +123,14 @@ class FrontendController extends Controller
             $keranjangProduks = KeranjangProduk::where('keranjang_id', $keranjang->id)->get();
 
             $checkout = Checkout::create([
+                'invoiceId' => 'INV-' . time(),
                 'tipeTransaksi' => $request->payment,
                 'keranjang_id' => $keranjang->id,
                 'customer_id' => Auth::user()->customer->id,
-                'toko_id' => $keranjangProduks->pluck('toko_id')->first(), // Anda mungkin ingin mengambil toko_id yang sesuai
                 'statusPengiriman' => 'belum_dikirim',
                 'tanggal' => now(),
                 'totalHarga' => $request->total,
-                'status' => $request->payment == 'COD' ? 'sudah bayar' : 'belum bayar',
+                'tipeTransaksi' => $request->payment
             ]);
 
             foreach ($keranjangProduks as $keranjangProduk) {
@@ -133,6 +144,7 @@ class FrontendController extends Controller
                 $produk->save();
 
                 CheckoutDetail::create([
+                    'toko_id' => $keranjangProduks->pluck('toko_id')->first(), // Anda mungkin ingin mengambil toko_id yang sesuai
                     'checkout_id' => $checkout->id,
                     'produk_id' => $keranjangProduk->produk_id,
                     'qtyProduk' => $keranjangProduk->qty,
@@ -141,6 +153,23 @@ class FrontendController extends Controller
             }
 
             $keranjang->update(['status' => 'checkout']);
+
+            $amount = $checkout['totalHarga'];
+            $params = [
+                "external_id" => $checkout["invoiceId"],
+                "amount" => $amount,
+                "description" => "Online Payment",
+                "invoice_duration" => 1800,
+                "currency" => "IDR",
+                "success_redirect_url" => env("APP_URL") . "/"
+            ];
+
+            $createInvoiceRequest = \Xendit\Invoice::create($params);
+
+            $this->checkout->where("id", $checkout["id"])->update([
+                "status" => "belum bayar",
+                "xenditId" => $createInvoiceRequest["id"]
+            ]);
 
             DB::commit();
             return redirect('/')->with('success', 'Checkout berhasil.');
