@@ -55,6 +55,16 @@ class PesananController extends Controller
             ->where('checkouts.statusPengiriman', 'diterima')
             ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman') // Pilih kolom yang ingin Anda ambil
             ->get();
-        return view('penjual.riwayat',$data);
+        return view('penjual.riwayat', $data);
+    }
+    public function hasilPenjualan()
+    {
+        $data['produk'] = CheckoutDetail::where('checkout_details.toko_id', Auth::user()->customer->toko->id)
+            ->join('checkouts', 'checkout_details.checkout_id', '=', 'checkouts.id')
+            ->where('checkouts.status', 'selesai')
+            ->where('checkouts.statusPengiriman', 'diterima')
+            ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman') // Pilih kolom yang ingin Anda ambil
+            ->get();
+        return view('penjual.hasil', $data);
     }
 }

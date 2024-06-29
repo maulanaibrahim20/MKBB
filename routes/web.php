@@ -116,6 +116,7 @@ Route::group(['middleware' => ['can:penjual']], function () {
     Route::get('/penjual/produk/pesananDikirim', [PesananController::class, 'pesananDikirim']);
 
     Route::get('/penjual/riwayat/pensanan', [PesananController::class, 'riwayatPesanan']);
+    Route::get('/penjual/hasilPenjualan', [PesananController::class, 'hasilPenjualan']);
 });
 
 Route::group(['middleware' => ['can:pembeli']], function () {

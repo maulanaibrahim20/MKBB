@@ -82,12 +82,12 @@
                     </div>
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <div class="input-group quantity mx-3" style="width: 130px;">
-                            <button class="btn btn-dark btn-minus">
+                            <button class="btn btn-dark btn-minus" onclick="updateQuantity(-1)">
                                 <i class="bi bi-dash"></i>
                             </button>
                             <input type="text" class="form-control bg-secondary text-center" value="1"
-                                name="qty" id="quantity-input">
-                            <button class="btn btn-dark btn-plus">
+                                name="qty" id="quantity-input" readonly>
+                            <button class="btn btn-dark btn-plus" onclick="updateQuantity(1)">
                                 <i class="bi bi-plus"></i>
                             </button>
                         </div>
@@ -125,21 +125,22 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.btn-plus').addEventListener('click', function() {
-                let quantityInput = document.getElementById('quantity-input');
-                let currentValue = parseInt(quantityInput.value);
-                if (!isNaN(currentValue)) {
-                    quantityInput.value = currentValue + 1;
-                }
-            });
+            const quantityInput = document.getElementById('quantity-input');
+            const maxQuantity = {{$produkDetail['stok']}};
 
-            document.querySelector('.btn-minus').addEventListener('click', function() {
-                let quantityInput = document.getElementById('quantity-input');
-                let currentValue = parseInt(quantityInput.value);
-                if (!isNaN(currentValue) && currentValue > 1) {
-                    quantityInput.value = currentValue - 1;
+            function updateQuantity(change) {
+                let currentQuantity = parseInt(quantityInput.value) + change;
+
+                if (currentQuantity < 1) {
+                    currentQuantity = 1;
+                } else if (currentQuantity > maxQuantity) {
+                    currentQuantity = maxQuantity;
                 }
-            });
+
+                quantityInput.value = currentQuantity;
+            }
+
+            window.updateQuantity = updateQuantity;
         });
     </script>
 @endsection
