@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Checkout;
 use App\Models\Customer;
 use App\Models\Produk;
 use App\Models\Toko;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +47,37 @@ class AppController extends Controller
 
     public function profile()
     {
-        $data['profile'] = Customer::where('user_id', Auth::user()->id)->first();
+        $profile = Customer::where('user_id', Auth::user()->id)->first();
+        $checkout = Checkout::where('customer_id', Auth::user()->customer->id)->get();
+        $data = [
+            'profile' => $profile,
+            'checkout' => $checkout,
+        ];
+        // dd($data);
         return view('Frontend.info', $data);
+    }
+    public function updateprofile(Request $request)
+    {
+        // dd($request->all());
+        $customer = Customer::find(Auth::user()->customer->id);
+        $user = User::find(Auth::user()->id);
+        try {
+            $customer->update(
+                [
+                    'alamat' => $request->alamat,
+                    'noTelp' => $request->noTelp,
+                ]
+            );
+            $user->update(
+                [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                ]
+            );
+
+            return back()->with('success', 'Data Berhasil Di Update.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat Edit Profile: ' . $e->getMessage());
+        }
     }
 }
