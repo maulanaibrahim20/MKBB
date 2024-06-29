@@ -17,7 +17,7 @@
 
 <body>
 
-@include('sidebar')
+    @include('sidebar')
 
     <!-- start: Main -->
     <main class="bg-light">
@@ -53,7 +53,7 @@
                                 <i class="ri-shopping-cart-2-line summary-icon bg-primary mb-2"></i>
                                 <div>Produk yang di upload</div>
                             </div>
-                            <h4>5</h4>
+                            <h4>{{ $produkYangDiUpload }}</h4>
                         </a>
                     </div>
                     <div class="col-12 col-sm-6 col-lg-3">
@@ -63,7 +63,7 @@
                                 <i class="ri-shopping-cart-2-line summary-icon bg-indigo mb-2"></i>
                                 <div>Produk Yang diterima</div>
                             </div>
-                            <h4>1</h4>
+                            <h4>{{ $produkYangDiTerima }}</h4>
                         </a>
                     </div>
                     <div class="col-12 col-sm-6 col-lg-3">
@@ -73,7 +73,7 @@
                                 <i class="ri-shopping-cart-2-line summary-icon bg-success mb-2"></i>
                                 <div>produk yang kirim</div>
                             </div>
-                            <h4>1</h4>
+                            <h4>{{ $produkYangDiKirim }}</h4>
                         </a>
                     </div>
                     <div class="col-12 col-sm-6 col-lg-3">
@@ -83,7 +83,7 @@
                                 <i class="ri-shopping-cart-2-line summary-icon bg-danger mb-2"></i>
                                 <div>Total produk yang telah kejual</div>
                             </div>
-                            <h4>1</h4>
+                            <h4>{{ $produkYangTelahTerjual }}</h4>
                         </a>
                     </div>
                 </div>
@@ -120,7 +120,9 @@
 
     <!-- start: JS -->
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js" integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"
+        integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/script.js') }}"></script>
     <!-- end: JS -->
