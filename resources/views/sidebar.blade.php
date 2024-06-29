@@ -42,7 +42,7 @@
                             </a>
                         </li>
                         <li class="sidebar-dropdown-menu-item {{ request()->routeIs('riwayat') ? 'active' : '' }}">
-                            <a href="{{ url('riwayat') }}">
+                            <a href="{{ url('/penjual/riwayat/pensanan') }}">
                                 Riwayat pesanan
                             </a>
                         </li>

@@ -7,6 +7,7 @@ use App\Models\Checkout;
 use App\Models\CheckoutDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 
 class PesananController extends Controller
 {
@@ -28,6 +29,7 @@ class PesananController extends Controller
 
             $checkout->update([
                 'statusPengiriman' => 'dikirim',
+                'tanggalPengiriman' => Date::now(),
             ]);
 
             return redirect()->back()->with('success', 'Status pesanan berhasil diubah.');
@@ -44,5 +46,15 @@ class PesananController extends Controller
             ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman') // Pilih kolom yang ingin Anda ambil
             ->get();
         return view('penjual.pesanan2', $data);
+    }
+    public function riwayatPesanan()
+    {
+        $data['produk'] = CheckoutDetail::where('checkout_details.toko_id', Auth::user()->customer->toko->id)
+            ->join('checkouts', 'checkout_details.checkout_id', '=', 'checkouts.id')
+            ->where('checkouts.status', 'selesai')
+            ->where('checkouts.statusPengiriman', 'diterima')
+            ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman') // Pilih kolom yang ingin Anda ambil
+            ->get();
+        return view('penjual.riwayat',$data);
     }
 }

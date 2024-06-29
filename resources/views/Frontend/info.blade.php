@@ -90,216 +90,319 @@
             </div>
         </div>
         <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
-            <div class="container ">
-                @forelse ($checkout as $belumBayar )
-                @if ($belumBayar->status == 'belum bayar')
-                <div class="row">
-                    <div class="col">
-                        <div class="card mt-3" style="height: auto; width:700px;">
-                            <div class="card-body">
-                                <div class="container">
-                                    <div class="row">
-                                        @foreach (checkoutproduk($belumBayar->id) as $produk)
-                                        <div class="col-md-12">
-                                            <h4 style="border-bottom: 1px solid black;">{{$produk->toko->namaToko}}</h4>
-                                            <div class="row">
-                                                <div class="col-md-5">
-                                                    <p style="margin-bottom: 5px;">Nama Produk</p>
-                                                    <p style="margin-bottom: 5px;">Harga Produk</p>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <p style="margin-bottom: 5px;">|</p>
-                                                    <p style="margin-bottom: 5px;">|</p>
-                                                </div>
-                                                <div class="col-md-5">
-                                                    <p style="margin-bottom: 5px;">{{$produk->produk->namaProduk}} x
-                                                        {{$produk->qtyProduk}}</p>
-                                                    <p style="margin-bottom: 5px;">{{$produk->produk->harga}} x
-                                                        {{$produk->qtyProduk}}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                        <div class="col-md-12">
-                                            <h4 style="border-bottom: 1px solid black;"></h4>
-                                            <div class="row">
-                                                <div class="col-md-7">
-                                                    <h4>Total Harga</h4>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <h4>{{ formatRupiah($belumBayar->totalHarga) }}</h4>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <button class="btn btn-success">Bayar</button>
-                                                </div>
-                                            </div>
-                                        </div>
+            <div class="card mt-3 overflow-auto" style="height: 400px; width:800px;">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row justify-content-md-center">
+                            @forelse ($checkout as $belumBayar )
+                            @if ($belumBayar->status == 'belum bayar')
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card mt-3" style="height: auto; width:700px;">
+                                        <div class="card-body">
+                                            <div class="container">
+                                                <div class="row">
+                                                    @foreach (checkoutproduk($belumBayar->id) as $produk)
+                                                    <div class="col-md-12">
+                                                        <h4 style="border-bottom: 1px solid black;">
+                                                            {{$produk->toko->namaToko}}</h4>
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <p style="margin-bottom: 5px;">Nama Produk</p>
+                                                                <p style="margin-bottom: 5px;">Harga Produk</p>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <p style="margin-bottom: 5px;">|</p>
+                                                                <p style="margin-bottom: 5px;">|</p>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <p style="margin-bottom: 5px;">
+                                                                    {{$produk->produk->namaProduk}} x
+                                                                    {{$produk->qtyProduk}}</p>
+                                                                <p style="margin-bottom: 5px;">
+                                                                    {{$produk->produk->harga}} x
+                                                                    {{$produk->qtyProduk}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
+                                                    <div class="col-md-12">
+                                                        <h4 style="border-bottom: 1px solid black;"></h4>
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <h4>Total Harga</h4>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <h4>{{ formatRupiah($belumBayar->totalHarga) }}</h4>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <button class="btn btn-success">Bayar</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                @endif
-                @empty
-                <div class="row">
-                    <div class="col">
-                        <div class="card mt-3" style="height: auto; width:700px;">
-                            <div class="card-body">
-                                <!-- Konten untuk tab alamat -->
-                                <h5 class="card-title text-center">Tidak Ada Data Pembayaran</h5>
-                                <!-- Tambahkan form atau konten lainnya di sini -->
+                            @endif
+                            @empty
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card mt-3" style="height: auto; width:700px;">
+                                        <div class="card-body">
+                                            <!-- Konten untuk tab alamat -->
+                                            <h5 class="card-title text-center">Tidak Ada Data Pembayaran</h5>
+                                            <!-- Tambahkan form atau konten lainnya di sini -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
-                @endforelse
             </div>
         </div>
 
         <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
-            @forelse ($checkout as $sudahBayar )
-            @if ($sudahBayar->status == 'sudah bayar' && $sudahBayar->statusPengiriman == 'belum_dikirim')
-            <div class="row">
-                <div class="col">
-                    <div class="card mt-3" style="height: auto; width:700px;">
-                        <div class="card-body">
-                            <div class="container">
-                                <div class="row">
-                                    @foreach (checkoutproduk($sudahBayar->id) as $produk)
-                                    <div class="col-md-12">
-                                        <h4 style="border-bottom: 1px solid black;">{{$produk->toko->namaToko}}</h4>
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <p style="margin-bottom: 5px;">Nama Produk</p>
-                                                <p style="margin-bottom: 5px;">Harga Produk</p>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <p style="margin-bottom: 5px;">|</p>
-                                                <p style="margin-bottom: 5px;">|</p>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <p style="margin-bottom: 5px;">{{$produk->produk->namaProduk}} x
-                                                    {{$produk->qtyProduk}}</p>
-                                                <p style="margin-bottom: 5px;">{{formatRupiah($produk->produk->harga)}}
-                                                    x
-                                                    {{$produk->qtyProduk}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                    <div class="col-md-12">
-                                        <h4 style="border-bottom: 1px solid black;"></h4>
-                                        <div class="row">
-                                            <div class="col-md-7">
-                                                <p style="margin-bottom: 5px;">Harga Ongkir</p>
-                                                <h4 style="margin-bottom: 5px;">Total Harga</h4>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <p style="margin-bottom: 5px;">Rp 10.000</p>
-                                                <h4 style="margin-bottom: 5px;">{{ formatRupiah($sudahBayar->totalHarga)
-                                                    }}</h4>
+            <div class="card mt-3 overflow-auto" style="height: 400px; width:800px;">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row justify-content-md-center">
+                            @forelse ($checkout as $sudahBayar )
+                            @if ($sudahBayar->status == 'sudah bayar' && $sudahBayar->statusPengiriman ==
+                            'belum_dikirim')
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card mt-3" style="height: auto; width:700px;">
+                                        <div class="card-body">
+                                            <div class="container">
+                                                <div class="row">
+                                                    @foreach (checkoutproduk($sudahBayar->id) as $produk)
+                                                    <div class="col-md-12">
+                                                        <h4 style="border-bottom: 1px solid black;">
+                                                            {{$produk->toko->namaToko}}</h4>
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <p style="margin-bottom: 5px;">Nama Produk</p>
+                                                                <p style="margin-bottom: 5px;">Harga Produk</p>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <p style="margin-bottom: 5px;">|</p>
+                                                                <p style="margin-bottom: 5px;">|</p>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <p style="margin-bottom: 5px;">
+                                                                    {{$produk->produk->namaProduk}} x
+                                                                    {{$produk->qtyProduk}}</p>
+                                                                <p style="margin-bottom: 5px;">
+                                                                    {{formatRupiah($produk->produk->harga)}}
+                                                                    x
+                                                                    {{$produk->qtyProduk}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
+                                                    <div class="col-md-12">
+                                                        <h4 style="border-bottom: 1px solid black;"></h4>
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <p style="margin-bottom: 5px;">Harga Ongkir</p>
+                                                                <h4 style="margin-bottom: 5px;">Total Harga</h4>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <p style="margin-bottom: 5px;">Rp 10.000</p>
+                                                                <h4 style="margin-bottom: 5px;">{{
+                                                                    formatRupiah($sudahBayar->totalHarga)
+                                                                    }}</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            @endif
+                            @empty
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card mt-3" style="height: auto; width:700px;">
+                                        <div class="card-body">
+                                            <!-- Konten untuk tab alamat -->
+                                            <h5 class="card-title text-center">Tidak Ada Data</h5>
+                                            <!-- Tambahkan form atau konten lainnya di sini -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
             </div>
-            @endif
-            @empty
-            <div class="row">
-                <div class="col">
-                    <div class="card mt-3" style="height: auto; width:700px;">
-                        <div class="card-body">
-                            <!-- Konten untuk tab alamat -->
-                            <h5 class="card-title text-center">Tidak Ada Data</h5>
-                            <!-- Tambahkan form atau konten lainnya di sini -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endforelse
         </div>
 
         <div class="tab-pane fade" id="bank" role="tabpanel" aria-labelledby="bank-tab">
-            @forelse ( $checkout as $pesanan )
-            @if ($pesanan->status == 'sudah bayar' && $pesanan->statusPengiriman == 'dikirim')
-            <div class="row">
-                <div class="col">
-                    <div class="card mt-3" style="height: auto; width:700px;">
-                        <div class="card-body">
-                            <div class="container">
-                                <div class="row">
-                                    @foreach (checkoutproduk($pesanan->id) as $produk)
-                                    <div class="col-md-12">
-                                        <h4 style="border-bottom: 1px solid black;">{{$produk->toko->namaToko}}</h4>
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <p style="margin-bottom: 5px;">Nama Produk</p>
-                                                <p style="margin-bottom: 5px;">Harga Produk</p>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <p style="margin-bottom: 5px;">|</p>
-                                                <p style="margin-bottom: 5px;">|</p>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <p style="margin-bottom: 5px;">{{$produk->produk->namaProduk}} x
-                                                    {{$produk->qtyProduk}}</p>
-                                                <p style="margin-bottom: 5px;">{{formatRupiah($produk->produk->harga)}}
-                                                    x
-                                                    {{$produk->qtyProduk}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                    <div class="col-md-12">
-                                        <h4 style="border-bottom: 1px solid black;"></h4>
-                                        <div class="row">
-                                            <div class="col-md-7">
-                                                <p style="margin-bottom: 5px;">Harga Ongkir</p>
-                                                <h4 style="margin-bottom: 5px;">Total Harga</h4>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <p style="margin-bottom: 5px;">Rp 10.000</p>
-                                                <h4 style="margin-bottom: 5px;">{{ formatRupiah($belumBayar->totalHarga) }}</h4>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <a type="submit" class="btn btn-success">Selesai</a>
+            <div class="card mt-3 overflow-auto" style="height: 400px; width:800px;">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row justify-content-md-center">
+                            @forelse ($checkout as $pesanan)
+                            @if ($pesanan->status == 'sudah bayar' && $pesanan->statusPengiriman == 'dikirim')
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card mt-3" style="height: auto; width:700px;">
+                                        <div class="card-body">
+                                            <div class="container">
+                                                <div class="row">
+                                                    @foreach (checkoutproduk($pesanan->id) as $produk)
+                                                    <div class="col-md-12">
+                                                        <h4 style="border-bottom: 1px solid black;">
+                                                            {{$produk->toko->namaToko}}</h4>
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <p style="margin-bottom: 5px;">Nama Produk</p>
+                                                                <p style="margin-bottom: 5px;">Harga Produk</p>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <p style="margin-bottom: 5px;">|</p>
+                                                                <p style="margin-bottom: 5px;">|</p>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <p style="margin-bottom: 5px;">
+                                                                    {{$produk->produk->namaProduk}} x
+                                                                    {{$produk->qtyProduk}}</p>
+                                                                <p style="margin-bottom: 5px;">
+                                                                    {{formatRupiah($produk->produk->harga)}}
+                                                                    x {{$produk->qtyProduk}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
+                                                    <div class="col-md-12">
+                                                        <h4 style="border-bottom: 1px solid black;"></h4>
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <p style="margin-bottom: 5px;">Harga Ongkir</p>
+                                                                <h4 style="margin-bottom: 5px;">Total Harga</h4>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <p style="margin-bottom: 5px;">Rp 10.000</p>
+                                                                <h4 style="margin-bottom: 5px;">{{
+                                                                    formatRupiah($pesanan->totalHarga) }}
+                                                                </h4>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <a href="{{url('selesai/'.$produk->id)}}" type="submit"
+                                                                    class="btn btn-success">Selesai</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            @endif
+                            @empty
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card mt-3" style="height: auto; width:700px;">
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center">Tidak Ada Data</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        @endif
-        @empty
-        <div class="row">
-            <div class="col">
-                <div class="card mt-3" style="height: auto; width:700px;">
-                    <div class="card-body">
-                        <!-- Konten untuk tab alamat -->
-                        <h5 class="card-title text-center">Tidak Ada Data</h5>
-                        <!-- Tambahkan form atau konten lainnya di sini -->
+
+        <div class="tab-pane fade" id="notif" role="tabpanel" aria-labelledby="notif-tab">
+            <div class="card mt-3 overflow-auto" style="height: 400px; width:800px;">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row justify-content-md-center">
+                            @forelse ($checkout as $sudahBayar )
+                            @if ($sudahBayar->status == 'selesai' && $sudahBayar->statusPengiriman == 'diterima')
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card mt-3" style="height: auto; width:700px;">
+                                        <div class="card-body">
+                                            <div class="container">
+                                                <div class="row">
+                                                    @foreach (checkoutproduk($sudahBayar->id) as $produk)
+                                                    <div class="col-md-12">
+                                                        <h4 style="border-bottom: 1px solid black;">
+                                                            {{$produk->toko->namaToko}}</h4>
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <p style="margin-bottom: 5px;">Nama Produk</p>
+                                                                <p style="margin-bottom: 5px;">Harga Produk</p>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <p style="margin-bottom: 5px;">|</p>
+                                                                <p style="margin-bottom: 5px;">|</p>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <p style="margin-bottom: 5px;">
+                                                                    {{$produk->produk->namaProduk}} x
+                                                                    {{$produk->qtyProduk}}</p>
+                                                                <p style="margin-bottom: 5px;">
+                                                                    {{formatRupiah($produk->produk->harga)}}
+                                                                    x
+                                                                    {{$produk->qtyProduk}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
+                                                    <div class="col-md-12">
+                                                        <h4 style="border-bottom: 1px solid black;"></h4>
+                                                        <div class="row">
+                                                            <div class="col-md-7">
+                                                                <p style="margin-bottom: 5px;">Harga Ongkir</p>
+                                                                <h4 style="margin-bottom: 5px;">Total Harga</h4>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <p style="margin-bottom: 5px;">Rp 10.000</p>
+                                                                <h4 style="margin-bottom: 5px;">{{
+                                                                    formatRupiah($sudahBayar->totalHarga)
+                                                                    }}</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                            @empty
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card mt-3" style="height: auto; width:700px;">
+                                        <div class="card-body">
+                                            <!-- Konten untuk tab alamat -->
+                                            <h5 class="card-title text-center">Tidak Ada Data</h5>
+                                            <!-- Tambahkan form atau konten lainnya di sini -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforelse
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        @endforelse
-    </div>
-    <div class="tab-pane fade" id="notif" role="tabpanel" aria-labelledby="notif-tab">
-        <div class="card mt-3">
-            <div class="card-body">
-                <!-- Konten untuk tab notifikasi -->
-                <h5 class="card-title text-center">Notifikasi</h5>
-                <!-- Tambahkan form atau konten lainnya di sini -->
             </div>
         </div>
     </div>

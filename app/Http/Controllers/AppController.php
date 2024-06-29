@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Checkout;
+use App\Models\CheckoutDetail;
 use App\Models\Customer;
 use App\Models\Produk;
 use App\Models\Toko;
@@ -10,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 
 class AppController extends Controller
 {
@@ -82,6 +84,25 @@ class AppController extends Controller
             return back()->with('success', 'Data Berhasil Di Update.');
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan saat Edit Profile: ' . $e->getMessage());
+        }
+    }
+
+    public function selesaiPesanan($id)
+    {
+        try {
+            $checkout = Checkout::findOrFail($id);
+
+            $checkout->update([
+                'status' => 'selesai',
+                'statusPengiriman' => 'diterima',
+            ]);
+            return back()->with('success', 'Pesanan Telah Selesai.');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Mengembalikan respons dengan pesan kesalahan jika pesanan tidak ditemukan
+            return back()->with('error', 'Pesanan tidak ditemukan.');
+        } catch (\Exception $e) {
+            // Mengembalikan respons dengan pesan kesalahan umum
+            return back()->with('error', 'Terjadi kesalahan Pesanan Selesai: ' . $e->getMessage());
         }
     }
 }

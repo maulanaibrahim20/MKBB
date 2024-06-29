@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum("tipeTransaksi", ["COD", "ONLINE_PAYMENT"])->nullable();
             $table->integer('keranjang_id');
             $table->date('tanggal');
+            $table->date('tanggalPengiriman')->nullable();
             $table->double('totalHarga');
             $table->integer('customer_id');
             $table->enum('status', ['belum bayar', 'sudah bayar', 'dikirim', 'selesai']);

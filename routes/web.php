@@ -114,6 +114,8 @@ Route::group(['middleware' => ['can:penjual']], function () {
     Route::post('/penjual/produk/changeStatus/{id}', [PesananController::class, 'changeStatus']);
 
     Route::get('/penjual/produk/pesananDikirim', [PesananController::class, 'pesananDikirim']);
+
+    Route::get('/penjual/riwayat/pensanan', [PesananController::class, 'riwayatPesanan']);
 });
 
 Route::group(['middleware' => ['can:pembeli']], function () {
@@ -122,4 +124,5 @@ Route::group(['middleware' => ['can:pembeli']], function () {
     Route::get('/profile', [AppController::class, 'profile']);
     Route::put('/profile/update', [AppController::class, 'updateprofile']);
     Route::get('/buatToko', [AppController::class, 'toko']);
+    Route::get('/selesai/{id}', [AppController::class, 'selesaiPesanan']);
 });
