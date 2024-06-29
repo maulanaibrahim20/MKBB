@@ -29,13 +29,14 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', [FrontendController::class, 'index'])->name('home');
 
-Route::post('cart/post', [FrontendController::class, 'cartPost']);
+Route::post('/cart/post', [FrontendController::class, 'cartPost']);
 Route::get('/cart', [FrontendController::class, 'cart'])->name('cart');
 Route::get('/cart/plus/{id}', [FrontendController::class, 'pluscart']);
 Route::get('/cart/minus/{id}', [FrontendController::class, 'minuscart']);
 Route::delete('/cart/delete/{id}', [FrontendController::class, 'deletecart']);
 
 Route::get('/checkout', [FrontendController::class, 'checkout'])->name('checkout');
+Route::post('/checkoutPayment/{id}', [FrontendController::class, 'checkoutPayment'])->name('checkout');
 Route::post('/checkout/produk', [FrontendController::class, 'checkoutProduk'])->name('checkout');
 
 Route::get('/detail', [FrontendController::class, 'detail'])->name('detail');

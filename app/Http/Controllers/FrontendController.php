@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Checkout;
 use App\Models\CheckoutDetail;
+use App\Models\Customer;
 use App\Models\Keranjang;
 use App\Models\KeranjangProduk;
 use App\Models\Produk;
@@ -95,27 +96,11 @@ class FrontendController extends Controller
         return back()->with('success', 'success');
     }
 
-    public function checkout()
-    {
-        $keranjang = KeranjangProduk::where('customer_id', Auth::user()->customer->id)->first();
-        $customer = KeranjangProduk::where('customer_id', Auth::user()->customer->id)->get();
-        // dd($keranjang);
-        $data = [
-            'keranjang' => $keranjang,
-            'customer' => $customer,
-        ];
-        return view('Frontend.chekout', $data);
-    }
-
     public function checkoutProduk(Request $request)
     {
         Xendit::setApiKey('xnd_development_Pla36WiCzPX2ehj5YqRqwV9oa2j6CfIa4wbJYVL5Juo89EBNArv8WtYyyzXbfq9');
         try {
             DB::beginTransaction();
-
-            if ($request->payment == null) {
-                return back()->with('error', 'Pilih salah satu metode pembayaran.');
-            }
 
             $keranjang = Keranjang::where('customer_id', Auth::user()->customer->id)
                 ->where('status', 'keranjang')
@@ -129,8 +114,7 @@ class FrontendController extends Controller
                 'customer_id' => Auth::user()->customer->id,
                 'statusPengiriman' => 'belum_dikirim',
                 'tanggal' => now(),
-                'totalHarga' => $request->total,
-                'tipeTransaksi' => $request->payment
+                'totalHarga' => $request->totalHarga,
             ]);
 
             foreach ($keranjangProduks as $keranjangProduk) {
@@ -152,7 +136,7 @@ class FrontendController extends Controller
                 ]);
             }
 
-            $keranjang->update(['status' => 'checkout']);
+            // $keranjang->update(['status' => 'checkout']);
 
             $amount = $checkout['totalHarga'];
             $params = [
@@ -172,12 +156,61 @@ class FrontendController extends Controller
             ]);
 
             DB::commit();
-            return redirect('/')->with('success', 'Checkout berhasil.');
+            return redirect('/checkout')->with('success', 'Checkout berhasil.');
         } catch (\Exception $e) {
             DB::rollback();
             return back()->with('error', 'Terjadi kesalahan saat checkout: ' . $e->getMessage());
         }
     }
+
+    public function checkout()
+    {
+        $keranjang = Keranjang::where('status', 'keranjang')->first();
+        $pembeli = Customer::where('id', Auth::user()->customer->id)->first();
+        $customer = KeranjangProduk::where('customer_id', Auth::user()->customer->id)
+            ->where('keranjang_id', $keranjang->id)
+            ->first();
+        $customer = KeranjangProduk::where('customer_id', Auth::user()->customer->id)
+            ->where('keranjang_id', $keranjang->id)
+            ->get();
+        $xenditId = Checkout::where('keranjang_id', $keranjang->id)->pluck('xenditId')->first();
+        $data = [
+            'keranjang' => $keranjang,
+            'customer' => $customer,
+            'pembeli' => $pembeli,
+            'xenditId' => $xenditId
+        ];
+        return view('Frontend.chekout', $data);
+    }
+
+
+    public function checkoutPayment(Request $request, $id)
+    {
+        try {
+            DB::beginTransaction();
+            $checkout = Checkout::where('keranjang_id', $id)->first();
+            $keranjang = Keranjang::where('id', $checkout->keranjang_id)->first();
+            $paymentChannel = $request->payment;
+
+            if ($paymentChannel === 'COD') {
+                $tipeTransaksi = 'COD';
+                $xenditId = null;
+            }
+            $keranjang->update(['status' => 'checkout']);
+            $checkout->update([
+                'status' => 'sudah bayar',
+                'tipeTransaksi' => $tipeTransaksi,
+                'xenditId' => $xenditId,
+            ]);
+
+            DB::commit();
+
+            return redirect('/')->with('success', 'Checkout berhasil. Silahkan tunggu konfirmasi dari penjual.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat checkout: ' . $e->getMessage());
+        }
+    }
+
 
 
     public function deletecart($id)

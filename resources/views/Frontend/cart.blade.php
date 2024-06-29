@@ -91,8 +91,11 @@
                             <h5 class="font-weight-bold" id="totalAmount">Rp. 0</h5>
                         </div>
                         @if ($keranjang->isNotEmpty())
-                            <a href="{{ url('/checkout' ) }}"
-                                class="btn btn-block btn-dark my-3 py-3 text-white">Checkout</a>
+                            <form action="{{ url('/checkout/produk') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="totalHarga" id="totalHargaInput" value="">
+                                <button type="submit" class="btn btn-block btn-dark my-3 py-3 text-white">Checkout</button>
+                            </form>
                         @else
                             <button class="btn btn-block btn-dark my-3 py-3 text-white" disabled>Belum ada barang</button>
                         @endif
@@ -129,6 +132,7 @@
 
             document.getElementById('subtotalAmount').innerText = 'Rp. ' + formatCurrency(total);
             document.getElementById('totalAmount').innerText = 'Rp. ' + formatCurrency(total);
+            document.getElementById('totalHargaInput').value = total;
         }
 
         function formatCurrency(amount) {
