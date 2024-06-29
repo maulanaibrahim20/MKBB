@@ -120,5 +120,6 @@ Route::group(['middleware' => ['can:pembeli']], function () {
     Route::get('/produk/detail/{id}', [AppController::class, 'produkDetail']);
     Route::post('/toko', [AppController::class, 'buatToko']);
     Route::get('/profile', [AppController::class, 'profile']);
+    Route::put('/profile/update', [AppController::class, 'updateprofile']);
     Route::get('/buatToko', [AppController::class, 'toko']);
 });

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Blog;
+use App\Models\CheckoutDetail;
 use App\Models\Gambar;
 use App\Models\Produk;
 
@@ -23,6 +24,15 @@ if (!function_exists('produk')) {
     function produk($idProduk)
     {
         $results = Produk::where('id', $idProduk)
+            ->get();
+        return $results;
+    }
+}
+
+if (!function_exists('checkoutproduk')) {
+    function checkoutproduk($idCheckout)
+    {
+        $results = CheckoutDetail::where('checkout_id', $idCheckout)
             ->get();
         return $results;
     }
