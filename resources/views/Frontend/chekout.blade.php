@@ -20,27 +20,28 @@
                 <div class="mb-4">
                     <h4 class="font-weight-semi-bold mb-4">Billing Address</h4>
                     <div class="row">
-                        <form action="{{ url('checkout/produk') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ url('checkoutPayment', $keranjang->id) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             <div class="col-md-6 form-group">
                                 <label>Nama Pembeli</label>
-                                <input class="form-control" type="text" value="{{ $keranjang->customer->user->name }}"
+                                <input class="form-control" type="text" value="{{ $pembeli->user->name }}"
                                     readonly>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>E-mail</label>
-                                <input class="form-control" type="text" value="{{ $keranjang->customer->user->email }}"
+                                <input class="form-control" type="text" value="{{ $pembeli->user->email }}"
                                     readonly>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Nomor Telepon</label>
-                                <input class="form-control" type="text" value="{{ $keranjang->customer->noTelp }}"
+                                <input class="form-control" type="text" value="{{ $pembeli->noTelp }}"
                                     readonly>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Alamat</label>
                                 <textarea class="form-control">
-                                {{ $keranjang->customer->alamat }}
+                                {{ $pembeli->alamat }}
                             </textarea>
                             </div>
                     </div>
@@ -105,9 +106,9 @@
                         </div>
                     </div>
                     <div class="card-footer border-secondary bg-transparent">
-                        <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Place Order</button>
+                        <button class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" id="placeOrderBtn">Place
+                            Order</button>
                     </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -154,6 +155,27 @@
                     event.preventDefault(); // Prevent form submission if no option is selected
                 }
             });
+        });
+    </script>
+    <script>
+        document.getElementById('placeOrderBtn').addEventListener('click', function(e) {
+            var paymentMethods = document.getElementsByName('payment');
+            var selectedMethod;
+            for (var i = 0; i < paymentMethods.length; i++) {
+                if (paymentMethods[i].checked) {
+                    selectedMethod = paymentMethods[i].value;
+                    break;
+                }
+            }
+
+            if (selectedMethod === 'ONLINE_PAYMENT') {
+                e.preventDefault(); // Prevent form submission
+                var xenditUrl = "{{ config('xendit.url') }}{{ $xenditId }}";
+                window.location.href = xenditUrl;
+            } else {
+                // Handle other payment methods, e.g., COD
+                alert('You have chosen COD. Proceeding with order placement.');
+            }
         });
     </script>
 @endsection

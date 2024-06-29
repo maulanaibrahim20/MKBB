@@ -30,8 +30,8 @@ class CallbackController extends Controller
                 if ($request->status == 'PAID' || $request->status == 'SETTLED') {
                     $transaksi = $this->transaksi->where("xenditId", $request->id)->first();
                     $transaksi["tipeTransaksi"] = "ONLINE_PAYMENT";
-                    $transaksi["statusOrder"] = $request->status;
-                    $transaksi["tanggalBayar"] = date("Y-m-d H:i:s");
+                    $transaksi["status"] = 'sudah bayar';
+                    $transaksi["tanggal"] = date("Y-m-d H:i:s");
                     $transaksi["paymentChannel"] = $request->payment_channel;
                     $transaksi->update();
                 }
