@@ -91,7 +91,7 @@
         </div>
         <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
             <div class="container text-center">
-                @foreach ($checkout as $belumBayar )
+                @forelse ($checkout as $belumBayar )
                 @if ($belumBayar->status == 'belum bayar')
                 <div class="row">
                     <div class="col">
@@ -117,12 +117,24 @@
                     </div>
                 </div>
                 @endif
-                @endforeach
+                @empty
+                <div class="row">
+                    <div class="col">
+                        <div class="card mt-3" style="height: auto; width:700px;">
+                            <div class="card-body">
+                                <!-- Konten untuk tab alamat -->
+                                <h5 class="card-title text-center">Tidak Ada Data Pembayaran</h5>
+                                <!-- Tambahkan form atau konten lainnya di sini -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforelse
             </div>
         </div>
 
         <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
-            @foreach ($checkout as $sudahBayar )
+            @forelse ($checkout as $sudahBayar )
             @if ($sudahBayar->status == 'sudah bayar')
             <div class="row">
                 <div class="col">
@@ -132,9 +144,37 @@
                                 <div class="row">
                                     @foreach (checkoutproduk($sudahBayar->id) as $produk)
                                     <div class="col-md-12">
-                                        <p>{{$sudahBayar->toko->namaToko}}</p>
+                                        <h4 style="border-bottom: 1px solid black;">{{$produk->toko->namaToko}}</h4>
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <p style="margin-bottom: 5px;">Nama Produk</p>
+                                                <p style="margin-bottom: 5px;">Harga Produk</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <p style="margin-bottom: 5px;">|</p>
+                                                <p style="margin-bottom: 5px;">|</p>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <p style="margin-bottom: 5px;">{{$produk->produk->namaProduk}} x
+                                                    {{$produk->qtyProduk}}</p>
+                                                <p style="margin-bottom: 5px;">{{$produk->produk->harga}} x
+                                                    {{$produk->qtyProduk}}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                     @endforeach
+                                    <div class="col-md-12">
+                                        <h4 style="border-bottom: 1px solid black;"></h4>
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <h4>Total Harga</h4>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <h4>{{ formatRupiah($sudahBayar->totalHarga) }}</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -154,9 +194,27 @@
                 </div>
             </div>
             @endif
-            @endforeach
+            @empty
+            <div class="row">
+                <div class="col">
+                    <div class="card mt-3" style="height: auto; width:700px;">
+                        <div class="card-body">
+                            <!-- Konten untuk tab alamat -->
+                            <h5 class="card-title text-center">Tidak Ada Data</h5>
+                            <!-- Tambahkan form atau konten lainnya di sini -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforelse
         </div>
+
         <div class="tab-pane fade" id="bank" role="tabpanel" aria-labelledby="bank-tab">
+            @forelse ( $checkout as $pesanan )
+
+            @empty
+
+            @endforelse
             <div class="card mt-3">
                 <div class="card-body">
                     <!-- Konten untuk tab bank -->

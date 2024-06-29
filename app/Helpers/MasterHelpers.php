@@ -51,3 +51,9 @@ if (!function_exists('truncateToSentences')) {
         return implode(' ', $truncated);
     }
 }
+if (!function_exists('formatRupiah')) {
+    function formatRupiah($angka)
+    {
+        return 'Rp ' . number_format($angka, 0, ',', '.');
+    }
+}

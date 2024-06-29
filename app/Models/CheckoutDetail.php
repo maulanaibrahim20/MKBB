@@ -15,4 +15,8 @@ class CheckoutDetail extends Model
     {
         return $this->belongsTo(Produk::class, 'produk_id');
     }
+    public function toko()
+    {
+        return $this->belongsTo(Toko::class, 'toko_id');
+    }
 }
