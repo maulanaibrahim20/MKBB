@@ -101,9 +101,22 @@ class UserSeeder extends Seeder
             'slug' => 'kaos-bergambar',
             'stok' => '5',
             'harga' => '500000',
-            'ukuran' => 'S',
-            'warnaProduk' => 'Merah',
         ]);
+
+        $warnaProduks = ['Merah', 'Biru', 'Hijau']; // Data dummy warna produk
+        foreach ($warnaProduks as $warna) {
+            $produk->warna()->create([
+                'warna' => $warna,
+            ]);
+        }
+
+        // Simpan ukuran produk
+        $ukuranProduks = ['S', 'M', 'L', 'XL']; // Data dummy ukuran produk
+        foreach ($ukuranProduks as $ukuran) {
+            $produk->ukuran()->create([
+                'ukuran' => $ukuran,
+            ]);
+        }
 
         foreach ($destinationPaths as $gambarPath) {
             Gambar::create([
