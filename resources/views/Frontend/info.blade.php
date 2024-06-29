@@ -173,8 +173,8 @@
                     <div class="container">
                         <div class="row justify-content-md-center">
                             @forelse ($checkout as $sudahBayar )
-                            @if ($sudahBayar->status == 'sudah bayar' && $sudahBayar->statusPengiriman ==
-                            'belum_dikirim')
+                            @if ($sudahBayar->status == 'sudah bayar' && $sudahBayar->statusPengiriman
+                            == 'belum_dikirim')
                             <div class="row">
                                 <div class="col">
                                     <div class="card mt-3" style="height: auto; width:700px;">
