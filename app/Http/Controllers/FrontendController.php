@@ -215,10 +215,9 @@ class FrontendController extends Controller
 
     public function deletecart($id)
     {
-        KeranjangProduk::where('keranjang_id', $id)->delete();
+        KeranjangProduk::where('id', $id)->delete();
 
-        // Menghapus record dari tabel 'keranjangs'
-        Keranjang::find($id)->delete();
+        // Keranjang::find($id)->delete();
 
         return redirect()->back()->with('success', 'Item keranjang berhasil dihapus.');
     }

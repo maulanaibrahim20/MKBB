@@ -70,30 +70,22 @@
                                     @foreach ($produk as $data)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $data['customer']['user']['name'] }}</td>
+                                            <td>{{ $data['checkout']['customer']['user']['name'] }}</td>
                                             <td>
-                                                @foreach ($data['checkoutDetail'] as $checkout_detail)
-                                                    {{ $checkout_detail['produk']['namaProduk'] }}<br>
-                                                @endforeach
+                                                    {{ $data['produk']['namaProduk'] }}<br>
                                             </td>
                                             <td>
-                                                @foreach ($data['checkoutDetail'] as $checkout_detail)
-                                                    {{ $checkout_detail['qtyProduk'] }}<br>
-                                                @endforeach
+                                                    {{ $data['qtyProduk'] }}<br>
                                             </td>
                                             <td>
-                                                @foreach ($data['checkoutDetail'] as $checkout_detail)
-                                                    {{ $checkout_detail['produk']['ukuran'] }}<br>
-                                                @endforeach
+                                                    {{ $data['produk']['ukuran'] }}<br>
                                             </td>
                                             <td>
-                                                @foreach ($data['checkoutDetail'] as $checkout_detail)
-                                                    {{ $checkout_detail['produk']['warnaProduk'] }}<br>
-                                                @endforeach
+                                                    {{ $data['produk']['warnaProduk'] }}<br>
                                             </td>
                                             <td>{{ $data['status'] }}</td>
                                             <td>
-                                                @if ($data['statusPengiriman'] == 'belum_dikirim')
+                                                {{-- @if ($data['statusPengiriman'] == 'belum_dikirim') --}}
                                                     <form
                                                         action="{{ url('/penjual/produk/changeStatus/' . $data['id']) }}"
                                                         style="display: inline;" method="POST">
@@ -103,9 +95,9 @@
                                                             <i class="fa fa-paper-plane"></i>
                                                         </button>
                                                     </form>
-                                                @elseif($data['statusPengiriman'] == 'dikirim')
+                                                {{-- @elseif($data['statusPengiriman'] == 'dikirim')
                                                     <p> Pesanan Sudah Dikirim</p>
-                                                @endif
+                                                @endif --}}
                                             </td>
                                         </tr>
                                     @endforeach
