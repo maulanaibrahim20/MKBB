@@ -98,7 +98,7 @@
                         </div>
                         <div class="form-group">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" value="onlinePayment"
+                                <input type="radio" class="custom-control-input" name="payment" value="ONLINE_PAYMENT"
                                     id="directcheck">
                                 <label class="custom-control-label" for="directcheck">Online Payment</label>
                             </div>

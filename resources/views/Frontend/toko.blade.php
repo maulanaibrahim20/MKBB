@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrasi Buka Toko</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        body, html {
+        body,
+        html {
             height: 100%;
             margin: 0;
             font-family: Arial, Helvetica, sans-serif;
@@ -15,10 +18,10 @@
         .bg {
             /* The image used */
             background-image: url('images/R.jpeg');
-            
+
             /* Full height */
-            height: 100%; 
-            
+            height: 100%;
+
             /* Center and scale the image nicely */
             background-position: center;
             background-repeat: no-repeat;
@@ -36,12 +39,14 @@
         }
 
         .card {
-            opacity: 0.95; /* Optional: to make the card slightly transparent */
+            opacity: 0.95;
+            /* Optional: to make the card slightly transparent */
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .card-header, .card-body {
+        .card-header,
+        .card-body {
             border-radius: 15px;
         }
 
@@ -51,6 +56,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="bg">
         <div class="container">
@@ -59,20 +65,24 @@
                     <h2 class="text-center">Registrasi Buka Toko</h2>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form action="{{ url('/toko') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="name" placeholder="Masukkan nama Anda">
+                            <label for="name" class="form-label">Nama Toko</label>
+                            <input type="text" class="form-control" id="name" name="namaToko"
+                                placeholder="Masukkan nama Anda">
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="form-label">No Telepon</label>
-                            <input type="tel" class="form-control" id="phone" placeholder="Masukkan nomor telepon Anda">
+                            <input type="number" class="form-control" name="noTelpToko" id="phone"
+                                placeholder="Masukkan nomor telepon Anda">
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Alamat</label>
-                            <input type="text" class="form-control" id="address" placeholder="Masukkan alamat Anda">
+                            <input type="text" class="form-control" name="alamat" id="address"
+                                placeholder="Masukkan alamat Anda">
                         </div>
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="digitalBank" class="form-label">Bank Digital</label>
                             <select class="form-select" id="digitalBank">
                                 <option selected disabled>Pilih Bank Digital</option>
@@ -92,7 +102,7 @@
                                 <option value="GOPAY">GOPAY</option>
                                 <option value="LinkAja">LinkAja</option>
                             </select>
-                        </div>
+                        </div> --}}
                         <button type="submit" class="btn btn-primary w-100">Daftar</button>
                     </form>
                 </div>
@@ -102,5 +112,24 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script type="text/javascript">
+            Swal.fire({
+                title: "Berhasil",
+                text: "{{ session('success') }}",
+                icon: "success"
+            });
+        </script>
+    @endif
+    @if (session('error'))
+        <script type="text/javascript">
+            Swal.fire({
+                title: "{{ session('error') }}",
+                icon: "error"
+            });
+        </script>
+    @endif
 </body>
+
 </html>

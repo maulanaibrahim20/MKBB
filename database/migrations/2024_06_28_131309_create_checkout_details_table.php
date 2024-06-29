@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('produk_id');
             $table->integer('qtyProduk');
             $table->double('hargaProduk');
+            $table->integer('toko_id');
             $table->timestamps();
         });
     }
