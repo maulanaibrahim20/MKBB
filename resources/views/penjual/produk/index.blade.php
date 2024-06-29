@@ -61,8 +61,8 @@
                                         <th>Deskripsi</th>
                                         <th>Qty</th>
                                         <th>Ukuran</th>
-                                        <th>warna</th>
-                                        <th>status</th>
+                                        <th>Warna</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -70,31 +70,41 @@
                                     @foreach ($produk as $data)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $data['namaProduk'] }}</td>
-                                            <td>{{ $data['deskripsiProduk'] }}</td>
-                                            <td>{{ $data['stok'] }}</td>
-                                            <td>{{ $data['ukuran'] }}</td>
-                                            <td>{{ $data['warnaProduk'] }}</td>
-                                            <td>{{ $data['statusProduk'] }}</td>
+                                            <td>{{ $data->namaProduk }}</td>
+                                            <td>{{ $data->deskripsiProduk }}</td>
+                                            <td>{{ $data->stok }}</td>
                                             <td>
-                                                <a href="{{ url('/penjual/produk/edit/' . $data['id']) }}"
-                                                    type="button" class="btn br-7 btn-warning">
+                                                @foreach ($data->ukuran as $ukuran)
+                                                    {{ $ukuran->ukuran }}
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($data->warna as $warna)
+                                                    {{ $warna->warna }}
+                                                @endforeach
+                                            </td>
+                                            <td>{{ $data->statusProduk }}</td>
+                                            <td>
+                                                <a href="{{ url('/penjual/produk/edit/' . $data->id) }}" type="button"
+                                                    class="btn br-7 btn-warning">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
-                                                <form id="deleteForm{{ $data['id'] }}"
-                                                    action="{{ url('/penjual/produk/delete/' . $data['id']) }}"
+                                                <form id="deleteForm{{ $data->id }}"
+                                                    action="{{ url('/penjual/produk/delete/' . $data->id) }}"
                                                     style="display: inline;" method="POST">
                                                     @method('DELETE')
                                                     @csrf
                                                     <button type="button" class="btn btn-danger deleteBtn"
-                                                        data-id="{{ $data['id'] }}"><i
-                                                            class="fa fa-trash"></i></button>
+                                                        data-id="{{ $data->id }}">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+
                         </div>
                         <div class="card-footer text-end">
                             <button class="btn btn-secondary">Aksi Lainnya</button>

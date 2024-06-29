@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class UkuranProduk extends Model
 {
     use HasFactory;
+    protected $guarded = [''];
 }

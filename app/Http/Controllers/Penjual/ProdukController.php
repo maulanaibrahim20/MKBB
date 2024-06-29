@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Penjual;
 use App\Http\Controllers\Controller;
 use App\Models\Gambar;
 use App\Models\Produk;
+use App\Models\UkuranProduk;
+use App\Models\WarnaProduk;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +23,14 @@ class ProdukController extends Controller
     }
     public function index()
     {
-        $data['produk'] = $this->produk->where('toko_id', Auth::user()->customer->toko->id)->get();
-        return view('penjual.produk.index', $data);
+        $produk = $this->produk
+            ->where('toko_id', Auth::user()->customer->toko->id)
+            ->with('ukuran', 'warna')
+            ->get();
+
+        return view('penjual.produk.index', compact('produk'));
     }
+
 
     public function create()
     {
@@ -37,10 +44,10 @@ class ProdukController extends Controller
             'namaProduk' => 'required|string|max:255',
             'deskripsiProduk' => 'required|string',
             'harga' => 'required|numeric',
-            'ukuran' => 'required|in:S,M,L,XL,XXL',
             'stok' => 'required|integer',
-            'warnaProduk' => 'required|string|max:7',
             'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'ukuran' => 'required|array',
+            'warnaProduk' => 'required|array',
         ]);
 
         try {
@@ -54,11 +61,23 @@ class ProdukController extends Controller
                 'deskripsiProduk' => $request->deskripsiProduk,
                 'slug' => Str::slug($request->namaProduk),
                 'harga' => $request->harga,
-                'ukuran' => $request->ukuran,
                 'stok' => $request->stok,
-                'warnaProduk' => $request->warnaProduk,
                 'statusProduk' => 'tersedia',
             ]);
+            foreach ($request->ukuran as $ukuran) {
+                UkuranProduk::create([
+                    'produk_id' => $produk->id,
+                    'ukuran' => $ukuran,
+                ]);
+            }
+
+            // Simpan warna produk
+            foreach ($request->warnaProduk as $warna) {
+                WarnaProduk::create([
+                    'produk_id' => $produk->id,
+                    'warna' => $warna,
+                ]);
+            }
 
             Gambar::create([
                 'produk_id' => $produk->id,
@@ -98,10 +117,10 @@ class ProdukController extends Controller
             'namaProduk' => 'required|string|max:255',
             'deskripsiProduk' => 'required|string',
             'harga' => 'required|numeric',
-            'ukuran' => 'required|in:S,M,L,XL,XXL',
             'stok' => 'required|integer',
-            'warnaProduk' => 'required|string|max:7',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'ukuran' => 'required|array',
+            'warnaProduk' => 'required|array',
         ]);
 
         try {
@@ -126,15 +145,34 @@ class ProdukController extends Controller
                 'deskripsiProduk' => $request->deskripsiProduk,
                 'slug' => Str::slug($request->namaProduk),
                 'harga' => $request->harga,
-                'ukuran' => $request->ukuran,
                 'stok' => $request->stok,
-                'warnaProduk' => $request->warnaProduk,
                 'statusProduk' => 'tersedia',
             ]);
 
-            Gambar::where('produk_id', $produk->id)->update([
-                'gambar' => $fotoProduk,
-            ]);
+            // Update ukuran produk
+            $produk->ukuran()->delete(); // Hapus semua ukuran produk terkait
+            foreach ($request->ukuran as $ukuran) {
+                UkuranProduk::create([
+                    'produk_id' => $produk->id,
+                    'ukuran' => $ukuran,
+                ]);
+            }
+
+            // Update warna produk
+            $produk->warna()->delete(); // Hapus semua warna produk terkait
+            foreach ($request->warnaProduk as $warna) {
+                WarnaProduk::create([
+                    'produk_id' => $produk->id,
+                    'warna' => $warna,
+                ]);
+            }
+
+            // Simpan gambar baru jika ada
+            if ($request->hasFile('gambar')) {
+                Gambar::where('produk_id', $produk->id)->update([
+                    'gambar' => $fotoProduk,
+                ]);
+            }
 
             DB::commit();
             return redirect('/penjual/produk/index')->with('success', 'Produk berhasil diperbarui');
@@ -143,6 +181,7 @@ class ProdukController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
 
     private function deleteFotoProduk($filename)
     {

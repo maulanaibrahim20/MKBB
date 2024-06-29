@@ -67,36 +67,56 @@
                             </ul>
                         </div>
                     @endif
-                    <form action="{{ url('/penjual/produk/update/' . $produk['id']) }}" method="POST"
+                    <form action="{{ url('/penjual/produk/update/' . $produk->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">
                             <label for="foto-produk" class="form-label">Tambahkan Foto</label>
                             <input type="file" class="form-control" id="foto-produk" name="gambar">
-                            @foreach (gambarproduk($produk['id']) as $gambars)
-                                <img src="{{ asset('storage/' . $gambars->gambar) }}" style="height: 100px; width:auto;"
+                            @foreach (gambarproduk($produk->id) as $gambar)
+                                <img src="{{ asset('storage/' . $gambar->gambar) }}" style="height: 100px; width:auto;"
                                     alt="">
                             @endforeach
                         </div>
                         <div class="mb-3">
                             <label for="namaProduk" class="form-label">Nama Produk</label>
                             <input type="text" class="form-control" id="namaProduk" name="namaProduk"
-                                value="{{ $produk['namaProduk'] }}">
+                                value="{{ $produk->namaProduk }}">
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="stok" class="form-label">Stok</label>
-                                    <input type="number" class="form-control" id="stok" name="stok"
-                                        value="{{ $produk['stok'] }}">
+                                    <label class="form-label">Ukuran</label>
+                                    <div>
+                                        @foreach (['S', 'M', 'L', 'XL'] as $size)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="ukuran{{ $size }}" name="ukuran[]"
+                                                    value="{{ $size }}"
+                                                    {{ in_array($size, $produk->ukuran->pluck('ukuran')->toArray()) ? 'checked' : '' }}>
+                                                <label class="form-check-label"
+                                                    for="ukuran{{ $size }}">{{ $size }}</label>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="warna" class="form-label">Warna</label>
-                                    <input type="color" class="form-control" id="warna" name="warnaProduk"
-                                        value="{{ $produk['warnaProduk'] }}">
+                                    <label class="form-label">Warna</label>
+                                    <div>
+                                        @foreach (['Merah', 'Biru', 'Hijau'] as $color)
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="warna{{ $color }}" name="warnaProduk[]"
+                                                    value="{{ $color }}"
+                                                    {{ in_array($color, $produk->warna->pluck('warna')->toArray()) ? 'checked' : '' }}>
+                                                <label class="form-check-label"
+                                                    for="warna{{ $color }}">{{ $color }}</label>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -107,38 +127,17 @@
                                     <select name="kategoriProduk" id="kategoriProduk" class="form-select">
                                         <option value="">-- Pilih --</option>
                                         <option value="kaos-gambar"
-                                            {{ $produk['kategoriProduk'] == 'kaos-gambar' ? 'selected' : '' }}>
-                                            Kaos
+                                            {{ $produk->kategoriProduk == 'kaos-gambar' ? 'selected' : '' }}>Kaos
                                             Bergambar</option>
                                         <option value="kaos-polos"
-                                            {{ $produk['kategoriProduk'] == 'kaos-polos' ? 'selected' : '' }}>
-                                            Kaos Polo
-                                        </option>
+                                            {{ $produk->kategoriProduk == 'kaos-polos' ? 'selected' : '' }}>Kaos
+                                            Polo</option>
                                         <option value="kemeja"
-                                            {{ $produk['kategoriProduk'] == 'kemeja' ? 'selected' : '' }}>Kemeja
-                                        </option>
-                                        <option value="jake"
-                                            {{ $produk['kategoriProduk'] == 'jake' ? 'selected' : '' }}>
-                                            Jaket</option>
+                                            {{ $produk->kategoriProduk == 'kemeja' ? 'selected' : '' }}>Kemeja</option>
+                                        <option value="jaket"
+                                            {{ $produk->kategoriProduk == 'jaket' ? 'selected' : '' }}>Jaket</option>
                                         <option value="sweter"
-                                            {{ $produk['kategoriProduk'] == 'sweter' ? 'selected' : '' }}>Sweter
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="ukuran" class="form-label">Ukuran</label>
-                                    <select name="ukuran" id="ukuran" class="form-select">
-                                        <option value="">-- Pilih --</option>
-                                        <option value="S" {{ $produk['ukuran'] == 'S' ? 'selected' : '' }}>S
-                                        </option>
-                                        <option value="M" {{ $produk['ukuran'] == 'M' ? 'selected' : '' }}>M
-                                        </option>
-                                        <option value="L" {{ $produk['ukuran'] == 'L' ? 'selected' : '' }}>L
-                                        </option>
-                                        <option value="XL" {{ $produk['ukuran'] == 'XL' ? 'selected' : '' }}>XL
-                                        </option>
-                                        <option value="XXL" {{ $produk['ukuran'] == 'XXL' ? 'selected' : '' }}>XXL
-                                        </option>
+                                            {{ $produk->kategoriProduk == 'sweter' ? 'selected' : '' }}>Sweter</option>
                                     </select>
                                 </div>
                             </div>
@@ -146,11 +145,22 @@
                                 <div class="mb-3">
                                     <label for="harga" class="form-label">Harga</label>
                                     <input type="number" class="form-control" id="harga" name="harga"
-                                        value="{{ $produk['harga'] }}">
+                                        value="{{ $produk->harga }}">
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="stok" class="form-label">Stok</label>
+                                    <input type="number" class="form-control" id="stok" name="stok"
+                                        value="{{ $produk->stok }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="deskripsi" class="form-label">Deskripsi Produk</label>
-                                    <textarea class="form-control" id="deskripsi" rows="3" name="deskripsiProduk">{{ $produk['deskripsiProduk'] }}</textarea>
+                                    <textarea class="form-control" id="deskripsi" rows="3" name="deskripsiProduk">{{ $produk->deskripsiProduk }}</textarea>
                                 </div>
                             </div>
                         </div>

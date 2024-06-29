@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class WarnaProduk extends Model
 {
     use HasFactory;
+
+    protected $guarded = [''];
 }
