@@ -20,4 +20,9 @@ class Keranjang extends Model
     {
         return $this->hasOne(Checkout::class);
     }
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'customer_id');
+    }
 }

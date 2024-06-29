@@ -57,7 +57,7 @@ class RegisterController extends Controller
             ]);
 
             DB::commit();
-            return redirect('/login')->with('success', 'Register Berhasil');
+            return redirect('/')->with('success', 'Register Berhasil');
         } catch (\Exception $e) {
             DB::rollback();
             return back()->with('error', 'Register Gagal: ' . $e->getMessage());

@@ -42,4 +42,10 @@ class AppController extends Controller
             return back()->with('error', 'Terjadi kesalahan saat membuat toko: ' . $e->getMessage());
         }
     }
+
+    public function profile()
+    {
+        $data['profile'] = Customer::where('user_id', Auth::user()->id)->first();
+        return view('Frontend.info', $data);
+    }
 }

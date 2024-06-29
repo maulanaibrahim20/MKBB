@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('keranjangs', function (Blueprint $table) {
             $table->id();
             $table->integer('customer_id');
-            $table->integer('toko_id');
             $table->enum('status', ['keranjang', 'checkout'])->default('keranjang');
             $table->timestamps();
         });

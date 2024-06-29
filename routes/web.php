@@ -60,6 +60,9 @@ Route::get('/profiltest', function () {
 Route::get('/riwayat', function () {
     return view('penjual.riwayat');
 });
+Route::get('/toko', function () {
+    return view('Frontend.info');
+});
 
 // Route::middleware(['auth'])->group(function () {
 // Route::get('/admin', [AdminController::class, 'admin'])->name('admin')->middleware('admin');
@@ -115,4 +118,5 @@ Route::group(['middleware' => ['can:penjual']], function () {
 Route::group(['middleware' => ['can:pembeli']], function () {
     Route::get('/produk/detail/{id}', [AppController::class, 'produkDetail']);
     Route::post('/toko', [AppController::class, 'buatToko']);
+    Route::get('/profile', [AppController::class, 'profile']);
 });

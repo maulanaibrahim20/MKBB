@@ -46,19 +46,24 @@ class UserSeeder extends Seeder
             'alamat' => 'Jl. Raya No. 1',
             'noTelpToko' => '081234567890',
         ]);
-
-        //customer only
         $user = User::create([
-            'name' => 'customer Only',
-            'email' => 'customerOnly@gmail.com',
+            'name' => 'customer Penjual 2',
+            'email' => 'customer2@gmail.com',
             'role' => '2',
             'password' => bcrypt('password'),
         ]);
         $customer = Customer::create([
             'user_id' => $user['id'],
-            'alamat' => 'Jl. Raya No. 2',
-            'noTelp' => '081234567891',
-            'status' => 'pembeli',
+            'alamat' => 'Jl. Raya No. 1',
+            'noTelp' => '081234567890',
+            'status' => 'penjual',
+        ]);
+        $toko = Toko::create([
+            'id_customer' => $customer['id'],
+            'namaToko' => 'Toko MKBBBBB',
+            'slug' => 'toko-mkbb',
+            'alamat' => 'Jl. Raya No. 1',
+            'noTelpToko' => '081234567890',
         ]);
 
         $sourcePaths = [
@@ -106,5 +111,22 @@ class UserSeeder extends Seeder
                 'gambar' => $gambarPath,
             ]);
         }
+
+
+
+
+        //customer only
+        $user = User::create([
+            'name' => 'customer Only',
+            'email' => 'customerOnly@gmail.com',
+            'role' => '2',
+            'password' => bcrypt('password'),
+        ]);
+        $customer = Customer::create([
+            'user_id' => $user['id'],
+            'alamat' => 'Jl. Raya No. 2',
+            'noTelp' => '081234567891',
+            'status' => 'pembeli',
+        ]);
     }
 }

@@ -156,7 +156,7 @@
                                 <a href="#" class="nav-link dropdown-toggle"
                                     data-bs-toggle="dropdown">{{ Auth::user()->name }}</a>
                                 <div class="dropdown-menu bg-light border-0 rounded-0 rounded-bottom m-0">
-                                    <a href="#" class="dropdown-item">Profil</a>
+                                    <a href="{{ url('/profile') }}" class="dropdown-item">Profil</a>
                                     <a href="{{ url('logout') }}" class="dropdown-item">Logout</a>
                                 </div>
                             </div>

@@ -34,18 +34,22 @@ class FrontendController extends Controller
     public function cartPost(Request $request)
     {
         try {
-            DB::begintransaction();
+            DB::beginTransaction();
 
-            $keranjangId = Keranjang::create([
-                'customer_id' => Auth::user()->customer->id,
-                'toko_id' =>  $request->toko_id,
-                'status' => 'keranjang',
-
-            ]);
-
+            $keranjang = Keranjang::where('customer_id', Auth::user()->customer->id)
+                ->where('status', 'keranjang')
+                ->first();
+            if (!$keranjang) {
+                // Jika tidak ada, buat keranjang baru
+                $keranjang = Keranjang::create([
+                    'customer_id' => Auth::user()->customer->id,
+                    'status' => 'keranjang',
+                ]);
+            }
             KeranjangProduk::create([
+                'toko_id' => $request->toko_id,
                 'customer_id' => Auth::user()->customer->id,
-                'keranjang_id' => $keranjangId['id'],
+                'keranjang_id' => $keranjang->id,
                 'produk_id' => $request->produk_id,
                 'qty' => 1,
                 'harga' => $request->harga
@@ -58,19 +62,23 @@ class FrontendController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+
+
     public function pluscart(Request $request, $id)
     {
         $produk = Produk::pluck('harga')->first();
-        $keranjang = KeranjangProduk::where('keranjang_id', $id)->first();
+        $keranjang = KeranjangProduk::where('id', $id)->first();
         $params['qty'] = $keranjang->qty + 1;
         $params['harga'] = $keranjang->harga + $produk;
         $keranjang->update($params);
         return back()->with('success', 'success');
     }
+
     public function minuscart(Request $request, $id)
     {
-        $keranjang = KeranjangProduk::where('keranjang_id', $id)->first();
         $produk = Produk::pluck('harga')->first();
+        $keranjang = KeranjangProduk::where('id', $id)->first();
         $params['qty'] = $keranjang->qty - 1;
         $params['harga'] = $keranjang->harga - $produk;
         $keranjang->update($params);
@@ -91,53 +99,58 @@ class FrontendController extends Controller
 
     public function checkoutProduk(Request $request)
     {
-        // dd($request->all());
-        if ($request->payment == null) {
-            return back()->with('error', 'pilih salah satu payment');
-        }
-        $keranjang = Keranjang::where('customer_id', Auth::user()->customer->id)->firstOrFail();
+        try {
+            DB::beginTransaction();
 
-        // Populate the parameters
-        $params = $request->all();
-        $params['tipeTransaksi'] = $request->payment;
-        $params['keranjang_id'] = 1;
-        $params['customer_id'] = Auth::user()->customer->id;
-        $params['toko_id'] = $keranjang->toko_id;
-        $params['tanggal'] = now();
-        $params['totalHarga'] = $request->total;
-        $params['status'] = $request->payment == 'COD' ? 'sudah bayar' : 'belum bayar';
-        $params['statusPengiriman'] = 'belum_dikirim';
-
-        // Buat entri checkout
-        $checkout = Checkout::create($params);
-
-        // Iterasi melalui ID produk dan buat detail checkout
-        foreach ($request->produkId as $produkId) {
-            $keranjangProduk = KeranjangProduk::where('keranjang_id', 1)
-                ->where('produk_id', $produkId)
-                ->firstOrFail();
-
-            // Kurangi stok produk
-            $produk = Produk::findOrFail($produkId);
-            if ($produk->stok < $keranjangProduk->qty) {
-                return back()->with('error', 'Not enough stock for product: ' . $produk->namaProduk);
+            if ($request->payment == null) {
+                return back()->with('error', 'Pilih salah satu metode pembayaran.');
             }
-            $produk->stok -= $keranjangProduk->qty;
-            $produk->save();
 
-            CheckoutDetail::create([
-                'checkout_id' => $checkout->id,
-                'produk_id' => $produkId,
-                'qtyProduk' => $keranjangProduk->qty,
-                'hargaProduk' => $keranjangProduk->produk->harga,
+            $keranjang = Keranjang::where('customer_id', Auth::user()->customer->id)
+                ->where('status', 'keranjang')
+                ->firstOrFail();
+            $keranjangProduks = KeranjangProduk::where('keranjang_id', $keranjang->id)->get();
+
+            $checkout = Checkout::create([
+                'tipeTransaksi' => $request->payment,
+                'keranjang_id' => $keranjang->id,
+                'customer_id' => Auth::user()->customer->id,
+                'toko_id' => $keranjangProduks->pluck('toko_id')->first(), // Anda mungkin ingin mengambil toko_id yang sesuai
+                'statusPengiriman' => 'belum_dikirim',
+                'tanggal' => now(),
+                'totalHarga' => $request->total,
+                'status' => $request->payment == 'COD' ? 'sudah bayar' : 'belum bayar',
             ]);
+
+            foreach ($keranjangProduks as $keranjangProduk) {
+                $produk = Produk::findOrFail($keranjangProduk->produk_id);
+
+                if ($produk->stok < $keranjangProduk->qty) {
+                    throw new \Exception('Stok tidak mencukupi untuk produk: ' . $produk->namaProduk);
+                }
+
+                $produk->stok -= $keranjangProduk->qty;
+                $produk->save();
+
+                CheckoutDetail::create([
+                    'checkout_id' => $checkout->id,
+                    'produk_id' => $keranjangProduk->produk_id,
+                    'qtyProduk' => $keranjangProduk->qty,
+                    'hargaProduk' => $keranjangProduk->harga,
+                ]);
+            }
+
+            $keranjang->update(['status' => 'checkout']);
+
+            DB::commit();
+            return redirect('/')->with('success', 'Checkout berhasil.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', 'Terjadi kesalahan saat checkout: ' . $e->getMessage());
         }
-
-        // Update status keranjang menjadi 'checkout'
-        $keranjang->update(['status' => 'checkout']);
-
-        return redirect('/')->with('success', 'Checkout successful');
     }
+
+
     public function deletecart($id)
     {
         KeranjangProduk::where('keranjang_id', $id)->delete();
