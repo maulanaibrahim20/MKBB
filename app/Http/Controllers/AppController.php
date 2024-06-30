@@ -40,11 +40,10 @@ class AppController extends Controller
             'ukuran' => $ukuran,
             'warnaProduk' => $warnaProduk,
             'user_toko_id' => $user_toko_id,
+            'kategoriProduk' => $produkDetail->kategoriProduk, // Mengirim data kategoriProduk
         ];
         return view('frontend.detail', $data);
     }
-
-
 
     public function toko()
     {

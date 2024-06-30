@@ -82,6 +82,14 @@
                         @endforeach
                     </div>
 
+                    @if ($kategoriProduk == 'kaos-polos')
+                        <div class="mb-3">
+                            <label for="designFile" class="form-label">Upload Design</label>
+                            <input class="form-control" type="file" id="designFile" name="designFile" accept="image/*"
+                                required>
+                        </div>
+                    @endif
+
                     @if ($produkDetail['toko_id'] == $user_toko_id)
                         <p>Produk Anda</p>
                     @else
@@ -119,9 +127,9 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
+
 
 
     <!-- Detail Toko Selesai -->
@@ -133,7 +141,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const quantityInput = document.getElementById('quantity-input');
-            const maxQuantity = {{$produkDetail['stok']}};
+            const maxQuantity = {{ $produkDetail['stok'] }};
 
             function updateQuantity(change) {
                 let currentQuantity = parseInt(quantityInput.value) + change;

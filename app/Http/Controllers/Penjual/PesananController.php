@@ -16,9 +16,10 @@ class PesananController extends Controller
         $data['produk'] = CheckoutDetail::where('checkout_details.toko_id', Auth::user()->customer->toko->id)
             ->join('checkouts', 'checkout_details.checkout_id', '=', 'checkouts.id')
             ->where('checkouts.statusPengiriman', 'belum_dikirim')
-            ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman') // Pilih kolom yang ingin Anda ambil
+            ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman')
+            ->with(['produk.ukuran', 'produk.warna', 'checkout.customer.user', 'produk.designBaju'])
             ->get();
-        // dd($data);
+
         return view('penjual.pesanan', $data);
     }
 

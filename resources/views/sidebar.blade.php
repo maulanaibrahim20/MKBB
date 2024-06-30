@@ -58,24 +58,24 @@
                 <i class="ri-arrow-down-s-line sidebar-menu-item-accordion ms-auto"></i>
             </a>
             <ul class="sidebar-dropdown-menu">
-                <li class="sidebar-dropdown-menu-item">
+                {{-- <li class="sidebar-dropdown-menu-item">
                     <a href="{{ url('/penjualan') }}">
                         Riwayat penjualan
                     </a>
-                </li>
+                </li> --}}
                 <li class="sidebar-dropdown-menu-item">
-                    <a href="{{url('penjual/hasilPenjualan')}}">
+                    <a href="{{ url('penjual/hasilPenjualan') }}">
                         Hasil Penjualan
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="sidebar-menu-item">
+        {{-- <li class="sidebar-menu-item">
             <a href="{{ url('profil') }}">
                 <i class="ri-user-line sidebar-menu-item-icon"></i>
                 Edit profil
             </a>
-        </li>
+        </li> --}}
         <!-- Element spacer untuk mendorong elemen logout ke bawah -->
         <div class="flex-grow-1"></div>
         <li class="sidebar-menu-item">

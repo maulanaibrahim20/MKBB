@@ -31,7 +31,7 @@
                 <div class="dropdown">
                     <div class="d-flex align-items-center cursor-pointer dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        <span class="me-2 d-none d-sm-block">John Doe</span>
+                        <span class="me-2 d-none d-sm-block">{{ Auth::user()->name }}</span>
                         <img class="navbar-profile-image"
                             src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
                             alt="Image">
@@ -62,6 +62,7 @@
                                         <th>Qty</th>
                                         <th>Ukuran</th>
                                         <th>Warna</th>
+                                        <th>Design</th>
                                         <th>Status Pembayaran</th>
                                         <th>Action</th>
                                     </tr>
@@ -70,40 +71,42 @@
                                     @foreach ($produk as $data)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $data['checkout']['customer']['user']['name'] }}</td>
+                                            <td>{{ $data->checkout->customer->user->name }}</td>
+                                            <td>{{ $data->produk->namaProduk }}</td>
+                                            <td>{{ $data->qty }}</td>
                                             <td>
-                                                    {{ $data['produk']['namaProduk'] }}<br>
+                                                @foreach ($data->produk->ukuran as $ukuran)
+                                                    {{ $ukuran->ukuran }}
+                                                @endforeach
                                             </td>
                                             <td>
-                                                    {{ $data['qtyProduk'] }}<br>
+                                                @foreach ($data->produk->warna as $warna)
+                                                    {{ $warna->warna }}
+                                                @endforeach
                                             </td>
                                             <td>
-                                                    {{ $data['produk']['ukuran'] }}<br>
+                                                @if ($data->produk->kategoriProduk == 'kaos-polos' && $data->produk->designBaju)
+                                                    <img src="{{ asset('storage/designs/' . $data->produk->designBaju->gambar_id) }}"
+                                                        alt="Design Image" width="100">
+                                                @else
+                                                    Tidak ada design
+                                                @endif
                                             </td>
+                                            <td>{{ $data->checkout->status }}</td>
                                             <td>
-                                                    {{ $data['produk']['warnaProduk'] }}<br>
-                                            </td>
-                                            <td>{{ $data['status'] }}</td>
-                                            <td>
-                                                {{-- @if ($data['statusPengiriman'] == 'belum_dikirim') --}}
-                                                    <form
-                                                        action="{{ url('/penjual/produk/changeStatus/' . $data['id']) }}"
-                                                        style="display: inline;" method="POST">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-primary deleteBtn"
-                                                            data-id="{{ $data['id'] }}">
-                                                            <i class="fa fa-paper-plane"></i>
-                                                        </button>
-                                                    </form>
-                                                {{-- @elseif($data['statusPengiriman'] == 'dikirim')
-                                                    <p> Pesanan Sudah Dikirim</p>
-                                                @endif --}}
+                                                <form action="{{ url('/penjual/produk/changeStatus/' . $data->id) }}"
+                                                    style="display: inline;" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary deleteBtn"
+                                                        data-id="{{ $data->id }}">
+                                                        <i class="fa fa-paper-plane"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-
                         </div>
                         <div class="card-footer text-end">
                             {{-- <button class="btn btn-secondary">Aksi Lainnya</button> --}}
@@ -111,6 +114,8 @@
                     </div>
                 </div>
             </div>
+
+
             <!-- end: Content -->
         </div>
     </main>

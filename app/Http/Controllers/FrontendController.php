@@ -6,6 +6,7 @@ use App\Models\Blog;
 use App\Models\Checkout;
 use App\Models\CheckoutDetail;
 use App\Models\Customer;
+use App\Models\DesignBaju;
 use App\Models\Keranjang;
 use App\Models\KeranjangProduk;
 use App\Models\Produk;
@@ -34,7 +35,6 @@ class FrontendController extends Controller
         if ($user && $user->customer && $user->customer->toko) {
             $user_toko_id = $user->customer->toko->id;
         }
-
         $data['produk'] = Produk::all();
         $data['user_toko_id'] = $user_toko_id; // Mengambil toko_id user atau null jika tidak login
         return view('frontend.index', $data);
@@ -86,6 +86,19 @@ class FrontendController extends Controller
                     'produk_id' => $request->produk_id,
                     'qty' => $qty,
                     'harga' => $request->harga,
+                ]);
+            }
+
+            if ($request->hasFile('designFile')) {
+                $file = $request->file('designFile');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('public/designs', $filename);
+
+                DesignBaju::create([
+                    'produk_id' => $request->produk_id,
+                    'namaDesign' => $file->getClientOriginalName(),
+                    'gambar_id' => $filename,
+                    'user_id' => Auth::user()->id,
                 ]);
             }
 

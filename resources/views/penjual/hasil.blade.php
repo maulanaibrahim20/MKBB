@@ -29,14 +29,14 @@
                 <div class="dropdown">
                     <div class="d-flex align-items-center cursor-pointer dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        <span class="me-2 d-none d-sm-block">John Doe</span>
+                        <span class="me-2 d-none d-sm-block">{{ Auth::user()->name }}</span>
                         <img class="navbar-profile-image"
                             src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
                             alt="Image">
                     </div>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="#">Chat</a></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/logout') }}">Logout</a></li>
                     </ul>
                 </div>
             </nav>
@@ -59,13 +59,13 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        @foreach ($produk as $pesanan )
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>
-                                            {{$pesanan->produk->namaProduk}}
-                                        </td>
-                                        <td>{{$pesanan->checkout->tanggal}}</td>
-                                        <td>{{$pesanan->produk->harga}}</td>
+                                        @foreach ($produk as $pesanan)
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>
+                                                {{ $pesanan->produk->namaProduk }}
+                                            </td>
+                                            <td>{{ $pesanan->checkout->tanggal }}</td>
+                                            <td>{{ $pesanan->produk->harga }}</td>
                                         @endforeach
                                     </tr>
                                     <!-- Add more rows as needed -->

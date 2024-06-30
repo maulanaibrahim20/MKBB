@@ -30,4 +30,8 @@ class Produk extends Model
     {
         return $this->hasMany(WarnaProduk::class, 'produk_id', 'id');
     }
+    public function designBaju()
+    {
+        return $this->hasOne(DesignBaju::class, 'produk_id');
+    }
 }
