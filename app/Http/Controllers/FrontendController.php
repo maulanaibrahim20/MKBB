@@ -29,10 +29,19 @@ class FrontendController extends Controller
     public function index()
     {
         $user = auth()->user(); // Mengambil data user yang sedang login
+        $user_toko_id = null;
+
+        if ($user && $user->customer && $user->customer->toko) {
+            $user_toko_id = $user->customer->toko->id;
+        }
+
         $data['produk'] = Produk::all();
-        $data['user_toko_id'] = $user ? $user->customer->toko->id : null; // Mengambil toko_id user atau null jika tidak login
+        $data['user_toko_id'] = $user_toko_id; // Mengambil toko_id user atau null jika tidak login
         return view('frontend.index', $data);
     }
+
+
+
     public function cart()
     {
         $data['keranjang'] = KeranjangProduk::select('keranjang_produks.*')
