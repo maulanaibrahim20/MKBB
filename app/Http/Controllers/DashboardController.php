@@ -24,17 +24,17 @@ class DashboardController extends Controller
             'produkYangDiTerima' => CheckoutDetail::where('checkout_details.toko_id', Auth::user()->customer->toko->id)
                 ->join('checkouts', 'checkout_details.checkout_id', '=', 'checkouts.id')
                 ->where('checkouts.statusPengiriman', 'diterima')
-                ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman') // Pilih kolom yang ingin Anda ambil
+                ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman')
                 ->count(),
             'produkYangDiKirim' => CheckoutDetail::where('checkout_details.toko_id', Auth::user()->customer->toko->id)
                 ->join('checkouts', 'checkout_details.checkout_id', '=', 'checkouts.id')
                 ->where('checkouts.statusPengiriman', 'dikirim')
-                ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman') // Pilih kolom yang ingin Anda ambil
+                ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman')
                 ->count(),
             'produkYangTelahTerjual' => CheckoutDetail::where('checkout_details.toko_id', Auth::user()->customer->toko->id)
                 ->join('checkouts', 'checkout_details.checkout_id', '=', 'checkouts.id')
                 ->where('checkouts.status', 'selesai')
-                ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman') // Pilih kolom yang ingin Anda ambil
+                ->select('checkout_details.*', 'checkouts.totalHarga', 'checkouts.status', 'checkouts.statusPengiriman')
                 ->count(),
         ];
         return view('penjual.penjual', $data);

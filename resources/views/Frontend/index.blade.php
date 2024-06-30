@@ -79,22 +79,25 @@
                         </div>
                         <div class="card-footer d-flex justify-content-between bg-light border">
                             <a href="{{ url('/produk/detail/' . $data['id']) }}" class="btn btn-sm text-dark p-0"><i
-                                    class="bi bi-eye text-dark mr-1"></i>View
-                                Detail</a>
+                                    class="bi bi-eye text-dark mr-1"></i>View Detail</a>
                             @auth
-                                <form action="{{ url('/cart/post') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="produk_id" value="{{ $data['id'] }}">
-                                    <input type="hidden" name="toko_id" value="{{ $data['toko_id'] }}">
-                                    <input type="hidden" name="harga" value="{{ $data['harga'] }}">
-                                    @if ($data->stok == 0)
-                                        <p>kosong</p>
-                                    @else
-                                        <button type="submit" class="btn btn-sm text-dark p-0">
-                                            <i class="bi bi-cart text-dark mr-1"></i>Add To Cart
-                                        </button>
-                                    @endif
-                                </form>
+                                @if ($data->toko_id == $user_toko_id)
+                                    <p>Produk Anda</p>
+                                @else
+                                    <form action="{{ url('/cart/post') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="produk_id" value="{{ $data['id'] }}">
+                                        <input type="hidden" name="toko_id" value="{{ $data['toko_id'] }}">
+                                        <input type="hidden" name="harga" value="{{ $data['harga'] }}">
+                                        @if ($data->stok == 0)
+                                            <p>kosong</p>
+                                        @else
+                                            <button type="submit" class="btn btn-sm text-dark p-0">
+                                                <i class="bi bi-cart text-dark mr-1"></i>Add To Cart
+                                            </button>
+                                        @endif
+                                    </form>
+                                @endif
                             @else
                                 <button type="button" class="btn btn-sm text-dark p-0" onclick="showLoginAlert()">
                                     <i class="bi bi-cart text-dark mr-1"></i>Add To Cart
@@ -107,6 +110,7 @@
                 <p>Produk Tidak Tersedia</p>
             @endforelse
         </div>
+
     </div>
     <!-- Products End -->
 

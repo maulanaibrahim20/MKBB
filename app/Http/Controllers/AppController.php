@@ -28,10 +28,14 @@ class AppController extends Controller
         $ukuran = $produkDetail->ukuran()->pluck('ukuran')->toArray();
         $warnaProduk = $produkDetail->warna()->pluck('warna')->toArray();
 
+        $user = auth()->user(); // Mengambil data user yang sedang login
+        $user_toko_id = $user ? $user->customer->toko->id : null; // Mengambil toko_id user atau null jika tidak login
+
         $data = [
             'produkDetail' => $produkDetail,
             'ukuran' => $ukuran,
             'warnaProduk' => $warnaProduk,
+            'user_toko_id' => $user_toko_id,
         ];
         return view('frontend.detail', $data);
     }
