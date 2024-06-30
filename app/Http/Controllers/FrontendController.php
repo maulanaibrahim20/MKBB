@@ -189,8 +189,64 @@ class FrontendController extends Controller
                     "xenditId" => $createInvoiceRequest["id"]
                 ]);
             } elseif ($existingCheckout) {
-                $checkoutDetail = CheckoutDetail::where('checkout_id', $existingCheckout->id)->where('produk_id', $request->idProduk)->first();
-                dd($checkoutDetail);
+                if (is_array($request->idProduk)) {
+                    $totalHarga = 0;
+                    foreach ($request->idProduk as $produkId) {
+                        $produk = KeranjangProduk::where('produk_id', $produkId)
+                            ->where('keranjang_id', $keranjang->id)
+                            ->firstOrFail();
+
+                        $checkoutDetail = CheckoutDetail::where('checkout_id', $existingCheckout->id)
+                            ->where('produk_id', $produkId)
+                            ->first();
+
+                        if ($checkoutDetail) {
+                            $checkoutDetail->update([
+                                'qtyProduk' => $produk->qty,
+                            ]);
+                        } else {
+                            CheckoutDetail::create([
+                                'toko_id' => $produk->toko_id,
+                                'checkout_id' => $existingCheckout->id,
+                                'produk_id' => $produk->produk_id,
+                                'qtyProduk' => $produk->qty,
+                                'hargaProduk' => $produk->harga,
+                            ]);
+                        }
+
+                        $totalHarga += $produk->qty * $produk->harga;
+                    }
+
+                    $existingCheckout->update([
+                        'totalHarga' => $totalHarga,
+                    ]);
+                } else {
+                    $produk = KeranjangProduk::where('produk_id', $request->idProduk)
+                        ->where('keranjang_id', $keranjang->id)
+                        ->firstOrFail();
+
+                    $checkoutDetail = CheckoutDetail::where('checkout_id', $existingCheckout->id)
+                        ->where('produk_id', $request->idProduk)
+                        ->first();
+
+                    if ($checkoutDetail) {
+                        $checkoutDetail->update([
+                            'qtyProduk' => $produk->qty,
+                        ]);
+                    } else {
+                        CheckoutDetail::create([
+                            'toko_id' => $produk->toko_id,
+                            'checkout_id' => $existingCheckout->id,
+                            'produk_id' => $produk->produk_id,
+                            'qtyProduk' => $produk->qty,
+                            'hargaProduk' => $produk->harga,
+                        ]);
+                    }
+
+                    $existingCheckout->update([
+                        'totalHarga' => $request->totalHarga,
+                    ]);
+                }
             }
 
             DB::commit();
@@ -200,6 +256,7 @@ class FrontendController extends Controller
             return back()->with('error', 'Terjadi kesalahan saat checkout: ' . $e->getMessage());
         }
     }
+
 
 
     public function checkout()

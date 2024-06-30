@@ -136,7 +136,7 @@
                                                                 <h4>{{ formatRupiah($belumBayar->totalHarga) }}</h4>
                                                             </div>
                                                             <div class="col-md-2">
-                                                                <button class="btn btn-success">Bayar</button>
+                                                                <a href="{{url('/checkout')}}" class="btn btn-success">Bayar</a>
                                                             </div>
                                                         </div>
                                                     </div>
