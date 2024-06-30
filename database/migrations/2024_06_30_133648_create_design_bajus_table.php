@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('design_bajus', function (Blueprint $table) {
             $table->id();
             $table->integer('produk_id');
+            $table->integer('keranjang_id');
             $table->string('namaDesign');
             $table->string('gambar_id');
             $table->integer('user_id');

@@ -96,6 +96,7 @@ class FrontendController extends Controller
 
                 DesignBaju::create([
                     'produk_id' => $request->produk_id,
+                    'keranjang_id' => $keranjang->id,
                     'namaDesign' => $file->getClientOriginalName(),
                     'gambar_id' => $filename,
                     'user_id' => Auth::user()->id,
