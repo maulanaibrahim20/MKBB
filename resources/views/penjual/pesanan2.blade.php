@@ -72,16 +72,20 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $data['checkout']['customer']['user']['name'] }}</td>
                                             <td>
-                                                    {{ $data['produk']['namaProduk'] }}<br>
+                                                {{ $data['produk']['namaProduk'] }}<br>
                                             </td>
                                             <td>
-                                                    {{ $data['qtyProduk'] }}<br>
+                                                {{ $data['qtyProduk'] }}<br>
                                             </td>
                                             <td>
-                                                    {{ $data['produk']['ukuran'] }}<br>
+                                                @foreach ($data->produk->ukuran as $ukuran)
+                                                    {{ $ukuran->ukuran }}
+                                                @endforeach
                                             </td>
                                             <td>
-                                                    {{ $data['produk']['warnaProduk'] }}<br>
+                                                @foreach ($data->produk->warna as $warna)
+                                                    {{ $warna->warna }}
+                                                @endforeach
                                             </td>
                                             <td>{{ $data['status'] }}</td>
                                             <td>
