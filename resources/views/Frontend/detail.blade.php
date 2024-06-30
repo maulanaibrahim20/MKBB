@@ -132,21 +132,22 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.btn-plus').addEventListener('click', function() {
-                let quantityInput = document.getElementById('quantity-input');
-                let currentValue = parseInt(quantityInput.value);
-                if (!isNaN(currentValue)) {
-                    quantityInput.value = currentValue + 1;
-                }
-            });
+            const quantityInput = document.getElementById('quantity-input');
+            const maxQuantity = {{$produkDetail['stok']}};
 
-            document.querySelector('.btn-minus').addEventListener('click', function() {
-                let quantityInput = document.getElementById('quantity-input');
-                let currentValue = parseInt(quantityInput.value);
-                if (!isNaN(currentValue) && currentValue > 1) {
-                    quantityInput.value = currentValue - 1;
+            function updateQuantity(change) {
+                let currentQuantity = parseInt(quantityInput.value) + change;
+
+                if (currentQuantity < 1) {
+                    currentQuantity = 1;
+                } else if (currentQuantity > maxQuantity) {
+                    currentQuantity = maxQuantity;
                 }
-            });
+
+                quantityInput.value = currentQuantity;
+            }
+
+            window.updateQuantity = updateQuantity;
         });
     </script>
 @endsection

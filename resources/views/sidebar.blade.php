@@ -64,7 +64,7 @@
                     </a>
                 </li>
                 <li class="sidebar-dropdown-menu-item">
-                    <a href="#">
+                    <a href="{{url('penjual/hasilPenjualan')}}">
                         Hasil Penjualan
                     </a>
                 </li>

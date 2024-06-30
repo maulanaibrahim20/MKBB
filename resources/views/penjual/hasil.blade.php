@@ -35,6 +35,7 @@
                             alt="Image">
                     </div>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="#">Chat</a></li>
                         <li><a class="dropdown-item" href="#">Logout</a></li>
                     </ul>
                 </div>
@@ -43,27 +44,28 @@
 
             <!-- start: Content -->
             <div class="py-4">
-                <h4><strong>Riwayat pesanan:</strong></h4>
+                <h4><strong>Hasil Penjualan:</strong></h4>
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Informasi Pesanan</th>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Produk</th>
                                         <th scope="col">Tanggal Pesanan Masuk</th>
-                                        <th scope="col">Tanggal Pesanan Dikirim</th>
+                                        <th scope="col">Harga</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         @foreach ($produk as $pesanan )
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>
-                                            Nama Produk : {{$pesanan->produk->namaProduk}} <br>
-                                            Nama Customer : {{$pesanan->checkout->customer->user->name}} <br>
+                                            {{$pesanan->produk->namaProduk}}
                                         </td>
                                         <td>{{$pesanan->checkout->tanggal}}</td>
-                                        <td>{{$pesanan->checkout->tanggalPengiriman}}</td>
+                                        <td>{{$pesanan->produk->harga}}</td>
                                         @endforeach
                                     </tr>
                                     <!-- Add more rows as needed -->
