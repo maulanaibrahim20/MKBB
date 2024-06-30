@@ -251,10 +251,26 @@ class FrontendController extends Controller
 
     public function deletecart($id)
     {
-        KeranjangProduk::where('id', $id)->delete();
+        $keranjang = KeranjangProduk::where('id', $id)->first();
 
-        // Keranjang::find($id)->delete();
+        if ($keranjang) {
+            $checkoutDetail = CheckoutDetail::where('produk_id', $keranjang->produk->id)->first();
 
+            if ($checkoutDetail === null) {
+                // Jika checkoutDetail adalah null, hanya hapus keranjang
+                $keranjang->delete();
+            } else if ($checkoutDetail->checkout->status == 'belum bayar' && $checkoutDetail->checkout->statusPengiriman == 'belum_dikirim') {
+                $checkout = Checkout::where('id', $checkoutDetail->checkout_id)->first();
+
+
+                $kurangiTotal = $checkout->totalHarga - $checkoutDetail->produk->harga;
+                $checkout->update(['totalHarga' => $kurangiTotal]);
+                $keranjang->delete();
+                $checkoutDetail->delete();
+            } else {
+                $keranjang->delete();
+            }
+        }
         return redirect()->back()->with('success', 'Item keranjang berhasil dihapus.');
     }
     public function detail()
