@@ -137,7 +137,7 @@
                                     <select name="kategoriProduk" id="kategoriProduk" class="form-select">
                                         <option value="">-- Pilih --</option>
                                         <option value="kaos-gambar">Kaos Bergambar</option>
-                                        <option value="kaos-polos">Kaos Polo</option>
+                                        <option value="kaos-polos">Kaos Polos</option>
                                         <option value="kemeja">Kemeja</option>
                                         <option value="jake">Jaket</option>
                                         <option value="sweter">Sweter</option>
