@@ -59,6 +59,7 @@
                     <input type="hidden" name="produk_id" value="{{ $produkDetail['id'] }}">
                     <input type="hidden" name="toko_id" value="{{ $produkDetail['toko_id'] }}">
                     <input type="hidden" name="harga" value="{{ $produkDetail['harga'] }}">
+
                     <div class="d-flex mb-3">
                         <p class="text-dark font-weight-medium mb-0 mr-3">Ukuran:</p>
                         @foreach ($ukuran as $size)
@@ -80,20 +81,25 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="d-flex align-items-center mb-4 pt-2">
-                        <div class="input-group quantity mx-3" style="width: 130px;">
-                            <button class="btn btn-dark btn-minus">
-                                <i class="bi bi-dash"></i>
-                            </button>
-                            <input type="text" class="form-control bg-secondary text-center" value="1"
-                                name="qty" id="quantity-input">
-                            <button class="btn btn-dark btn-plus">
-                                <i class="bi bi-plus"></i>
-                            </button>
+
+                    @if ($produkDetail['toko_id'] == $user_toko_id)
+                        <p>Produk Anda</p>
+                    @else
+                        <div class="d-flex align-items-center mb-4 pt-2">
+                            <div class="input-group quantity mx-3" style="width: 130px;">
+                                <button class="btn btn-dark btn-minus">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                                <input type="text" class="form-control bg-secondary text-center" value="1"
+                                    name="qty" id="quantity-input">
+                                <button class="btn btn-dark btn-plus">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </div>
+                            <button type="submit" class="btn btn-dark px-3"><i class="bi bi-cart3 mr-1"></i> Tambahkan ke
+                                Keranjang</button>
                         </div>
-                        <button type="submit" class="btn btn-dark px-3"><i class="bi bi-cart3 mr-1"></i> Tambahkan ke
-                            Keranjang</button>
-                    </div>
+                    @endif
                 </form>
                 <div class="d-flex pt-2">
                     <p class="text-dark font-weight-medium mb-0 mr-2">Bagikan di:</p>
@@ -113,6 +119,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use App\Models\Checkout;
 use App\Models\CheckoutDetail;
 use App\Models\Customer;
@@ -27,10 +28,11 @@ class FrontendController extends Controller
 
     public function index()
     {
+        $user = auth()->user(); // Mengambil data user yang sedang login
         $data['produk'] = Produk::all();
+        $data['user_toko_id'] = $user ? $user->customer->toko->id : null; // Mengambil toko_id user atau null jika tidak login
         return view('frontend.index', $data);
     }
-
     public function cart()
     {
         $data['keranjang'] = KeranjangProduk::select('keranjang_produks.*')
@@ -259,7 +261,8 @@ class FrontendController extends Controller
 
     public function blogs()
     {
-        return view('frontend.blogs');
+        $data['blogs'] = Blog::all();
+        return view('frontend.blogs', $data);
     }
 
     public function info()
