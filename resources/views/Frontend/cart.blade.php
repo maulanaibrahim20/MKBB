@@ -106,6 +106,9 @@
                     <form action="{{ url('/checkout/produk') }}" method="POST">
                         @csrf
                         <input type="hidden" name="totalHarga" id="totalHargaInput" value="">
+                        @foreach ( $keranjang as $produk )
+                        <input type="hidden" name="idProduk"  value="{{$produk->produk->id}}">
+                        @endforeach
                         <button type="submit" class="btn btn-block btn-dark my-3 py-3 text-white">Checkout</button>
                     </form>
                     @else

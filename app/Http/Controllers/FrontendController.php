@@ -188,6 +188,9 @@ class FrontendController extends Controller
                     "status" => "belum bayar",
                     "xenditId" => $createInvoiceRequest["id"]
                 ]);
+            } elseif ($existingCheckout) {
+                $checkoutDetail = CheckoutDetail::where('checkout_id', $existingCheckout->id)->where('produk_id', $request->idProduk)->first();
+                dd($checkoutDetail);
             }
 
             DB::commit();
