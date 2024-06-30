@@ -85,8 +85,8 @@
                                                 @endforeach
                                             </td>
                                             <td>
-                                                @if ($data->produk->kategoriProduk == 'kaos-polos' && $data->produk->designBaju)
-                                                    <img src="{{ asset('storage/designs/' . $data->produk->designBaju->gambar_id) }}"
+                                                @if ($data->produk->kategoriProduk == 'kaos-polos' )
+                                                    <img src="{{ asset('storage/designs/' . desainbaju($data->keranjang_id)->gambar_id) }}"
                                                         alt="Design Image" width="100">
                                                 @else
                                                     Tidak ada design

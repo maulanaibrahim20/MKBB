@@ -2,6 +2,7 @@
 
 use App\Models\Blog;
 use App\Models\CheckoutDetail;
+use App\Models\DesignBaju;
 use App\Models\Gambar;
 use App\Models\Produk;
 
@@ -34,6 +35,14 @@ if (!function_exists('checkoutproduk')) {
     {
         $results = CheckoutDetail::where('checkout_id', $idCheckout)
             ->get();
+        return $results;
+    }
+}
+if (!function_exists('desainbaju')) {
+    function desainbaju($idkeranjang)
+    {
+        $results = DesignBaju::where('keranjang_id', $idkeranjang)
+            ->first();
         return $results;
     }
 }
